@@ -1,0 +1,16 @@
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.auth/
+.env
+.env.local
+*.log
+
+# Generated test run exports — never commit; publish only from live staging runs
+e2e/data/results-sheets/
+e2e/data/test-results-merged.json
+e2e/data/test-results-history.json
+e2e/data/test-results-latest.json
+meera-500407-7ed504955ec2.json

@@ -1,0 +1,10 @@
+"TC ID","Test Case Name","Preconditions","Test Steps","Expected Result","Priority","","","","","","","","","","","","","","","","","","","",""
+"TC-PF-001","Dashboard load time < 3s","Fresh page load","1. Open dashboard2. Measure load time (Lighthouse/DevTools)","Dashboard loads in < 3 seconds on 4G connection","High","","","","","","","","","","","","","","","","","","","",""
+"TC-PF-002","ASR first-byte latency < 500ms","Active call","1. Speak
+2. Measure time to first transcription token","First transcript token appears within 500ms","High","","","","","","","","","","","","","","","","","","","",""
+"TC-PF-003","End-to-end response latency (STT+LLM+TTS) < 2s","Active call","1. Speak a question
+2. Measure time to first spoken response","Full round-trip latency under 2 seconds","High","","","","","","","","","","","","","","","","","","","",""
+"TC-PF-004","50 concurrent calls stability","Load test setup","1. Spin up 50 concurrent test calls","All calls served; no crashes; latency stays within SLA","High","","","","","","","","","","","","","","","","","","","",""
+"TC-PF-005","Large KB document (100MB PDF) indexing time","KB configured","1. Upload 100MB PDF
+2. Wait for indexing complete","Indexing completes in < 5 min; no timeout error","Medium","","","","","","","","","","","","","","","","","","","",""
+"TC-PF-006","API response time under load","Load test tool","1. Send 100 req/sec to /agents endpoint","P95 latency < 500ms; no 5xx errors under load","High","","","","","","","","","","","","","","","","","","","",""

@@ -1,0 +1,13 @@
+"TC ID","Test Case Name","Preconditions","Test Steps","Expected Result","Priority","Test Case Type","","","","","","","","","","","","","","","","","","",""
+"TC-IN-001","Configure and test webhook endpoint","Admin user","1. Enter valid HTTPS webhook URL
+2. Send test event","Webhook receives test payload; 200 response confirmed","High","Positive","","","","","","","","","","","","","","","","","","",""
+"TC-IN-002","CRM integration triggers on call end","CRM integrated (e.g. Salesforce)","1. Complete a call
+2. Check CRM","New activity/contact record created in CRM","High","Positive","","","","","","","","","","","","","","","","","","",""
+"TC-IN-003","Zapier/n8n integration triggers","Zap configured for call end event","1. Complete a call","Zap fires; action executed in connected tool","Medium","Positive","","","","","","","","","","","","","","","","","","",""
+"TC-IN-004","API key generation","Admin user","1. Go to API settings
+2. Click Generate Key","New API key generated; displayed once only","High","Positive","","","","","","","","","","","","","","","","","","",""
+"TC-IN-005","API key revocation","API key exists","1. Click Revoke on API key","Key immediately invalidated; subsequent requests with it fail","High","Positive","","","","","","","","","","","","","","","","","","",""
+"TC-IN-201","Webhook signature validation","Webhook configured","1. Send payload without valid HMAC signature","Webhook server rejects unverified payload","High","Security","","","","","","","","","","","","","","","","","","",""
+"TC-IN-202","Webhook to internal IP (SSRF)","Webhook config access","1. Set webhook URL to 10.x.x.x or 127.0.0.1","SSRF protection blocks internal IP webhooks","Critical","Security","","","","","","","","","","","","","","","","","","",""
+"TC-IN-203","API key transmitted in URL parameter","API usage","1. Check if API key is ever sent as ?api_key=... in URLs","API key sent via Authorization header only; never in URL","High","Security","","","","","","","","","","","","","","","","","","",""
+"TC-IN-204","Overprivileged API key scope","API key with minimal scope","1. Use read-only API key to perform write operation","Write operation blocked; scope enforced","High","Security","","","","","","","","","","","","","","","","","","",""

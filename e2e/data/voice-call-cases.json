@@ -1,0 +1,191 @@
+[
+  {
+    "id": "TC-VC-001",
+    "name": "Inbound call received and answered by agent",
+    "preconditions": "Agent active, phone number assigned",
+    "steps": "1. Call assigned phone number",
+    "expected": "Agent answers; plays greeting; STT begins transcribing",
+    "priority": "Critical",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-002",
+    "name": "Agent understands clear Hindi speech",
+    "preconditions": "Hindi STT model configured",
+    "steps": "1. Speak a clear question in Hindi",
+    "expected": "Agent transcribes and responds correctly in Hindi",
+    "priority": "High",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-003",
+    "name": "Agent understands Hinglish (code-switched)",
+    "preconditions": "Hinglish model configured",
+    "steps": "1. Speak mixed Hindi-English sentence",
+    "expected": "Agent handles code-switching; correct intent detected",
+    "priority": "High",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-004",
+    "name": "Agent responds via TTS in correct language",
+    "preconditions": "TTS configured",
+    "steps": "1. Agent receives user utterance",
+    "expected": "Response spoken aloud in configured language and voice",
+    "priority": "High",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-005",
+    "name": "Call ends gracefully on user hangup",
+    "preconditions": "Active call",
+    "steps": "1. User hangs up mid-conversation",
+    "expected": "Call ends cleanly; transcript saved; no dangling session",
+    "priority": "High",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-006",
+    "name": "Agent escalates to human agent",
+    "preconditions": "Escalation configured",
+    "steps": "1. Say escalation trigger phrase",
+    "expected": "Agent informs user and transfers to configured number",
+    "priority": "High",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-007",
+    "name": "Outbound call initiated via API",
+    "preconditions": "Agent and API key ready",
+    "steps": "1. POST to /calls with phone number\n2. Agent calls number",
+    "expected": "Call placed; agent initiates conversation on pickup",
+    "priority": "High",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-008",
+    "name": "DTMF/keypad input handled",
+    "preconditions": "Active call",
+    "steps": "1. Press keys during call",
+    "expected": "Agent/IVR processes key press correctly",
+    "priority": "Medium",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-009",
+    "name": "Call recording is saved",
+    "preconditions": "Recording enabled",
+    "steps": "1. Complete a call",
+    "expected": "Recording accessible in dashboard/logs after call",
+    "priority": "High",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-010",
+    "name": "Low-bandwidth call completes",
+    "preconditions": "Network throttled to 3G",
+    "steps": "1. Initiate call on slow network",
+    "expected": "Call connects; latency noted; audio remains intelligible",
+    "priority": "Medium",
+    "type": "Positive"
+  },
+  {
+    "id": "TC-VC-101",
+    "name": "Call to invalid phone number",
+    "preconditions": "Outbound configured",
+    "steps": "1. Initiate call to malformed number (e.g. 123)",
+    "expected": "Error: \"Invalid phone number\"; call not placed",
+    "priority": "High",
+    "type": "Negative"
+  },
+  {
+    "id": "TC-VC-102",
+    "name": "Agent receives call with no audio",
+    "preconditions": "Active call",
+    "steps": "1. Call agent but don't speak",
+    "expected": "Agent handles silence; prompts user or ends gracefully",
+    "priority": "High",
+    "type": "Negative"
+  },
+  {
+    "id": "TC-VC-103",
+    "name": "Very noisy/background audio call",
+    "preconditions": "Active call",
+    "steps": "1. Speak with heavy background noise",
+    "expected": "ASR degrades gracefully; agent asks for repeat if unclear",
+    "priority": "High",
+    "type": "Negative"
+  },
+  {
+    "id": "TC-VC-104",
+    "name": "Extremely long utterance (5 min speech)",
+    "preconditions": "Active call",
+    "steps": "1. Speak continuously for 5 minutes",
+    "expected": "System does not crash; utterance truncated or handled gracefully",
+    "priority": "Medium",
+    "type": "Negative"
+  },
+  {
+    "id": "TC-VC-105",
+    "name": "Call with non-supported language",
+    "preconditions": "Agent set to English only",
+    "steps": "1. Speak in an unsupported language",
+    "expected": "Agent responds in configured language; does not break",
+    "priority": "Medium",
+    "type": "Negative"
+  },
+  {
+    "id": "TC-VC-106",
+    "name": "Two concurrent calls on same agent",
+    "preconditions": "Agent configured",
+    "steps": "1. Place two simultaneous calls to same agent number",
+    "expected": "Both calls handled independently; no cross-contamination of context",
+    "priority": "High",
+    "type": "Negative"
+  },
+  {
+    "id": "TC-VC-201",
+    "name": "PII in call transcripts — encryption at rest",
+    "preconditions": "Call completed with PII spoken",
+    "steps": "1. Inspect stored transcript in DB or storage",
+    "expected": "Transcript encrypted at rest; not stored in plaintext",
+    "priority": "Critical",
+    "type": "Security"
+  },
+  {
+    "id": "TC-VC-202",
+    "name": "Call recording access without auth",
+    "preconditions": "Recording stored",
+    "steps": "1. Try to access recording URL without authentication",
+    "expected": "403 or signed URL expires; no public access to recordings",
+    "priority": "Critical",
+    "type": "Security"
+  },
+  {
+    "id": "TC-VC-203",
+    "name": "Caller ID spoofing handling",
+    "preconditions": "Inbound call",
+    "steps": "1. Spoof caller ID to impersonate trusted number",
+    "expected": "System does not grant elevated privilege based on caller ID alone",
+    "priority": "High",
+    "type": "Security"
+  },
+  {
+    "id": "TC-VC-204",
+    "name": "SSRF via webhook callback URL",
+    "preconditions": "Admin access to webhook config",
+    "steps": "1. Set webhook URL to internal IP (e.g. 169.254.x.x)\n2. Trigger call",
+    "expected": "SSRF blocked; internal metadata not accessible via webhook",
+    "priority": "Critical",
+    "type": "Security"
+  },
+  {
+    "id": "TC-VC-205",
+    "name": "Mass outbound call abuse via API",
+    "preconditions": "API key obtained",
+    "steps": "1. Rapidly POST 1000 outbound call requests",
+    "expected": "Rate limiting enforced; abuse detected and blocked",
+    "priority": "Critical",
+    "type": "Security"
+  }
+]
