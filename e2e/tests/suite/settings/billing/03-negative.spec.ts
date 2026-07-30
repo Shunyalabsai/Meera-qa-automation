@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { openBilling, isBillingEmptyState } from "../../../../helpers/billing.helper";
+import { STAGING_EMPTY_SKIP } from "../../../../helpers/staging-profile";
 import { BILLING_COPY } from "../../../../data/billing-data";
 
 test.describe("SETTINGS › Billing — Negative @journey @new-user @billing @negative", () => {
@@ -15,7 +16,7 @@ test.describe("SETTINGS › Billing — Negative @journey @new-user @billing @ne
   test("TC-BL-N102 @medium @negative — Last 30 days with no usage keeps empty state", async ({
     page,
   }) => {
-    test.skip(!(await isBillingEmptyState(page)), "Usage data exists — empty state not shown");
+    test.skip(!(await isBillingEmptyState(page)), STAGING_EMPTY_SKIP.billing);
     const billing = await openBilling(page);
     await billing.selectTimeRange("Last 30 days");
     await billing.expectTotalMinutesEmpty();
@@ -25,7 +26,7 @@ test.describe("SETTINGS › Billing — Negative @journey @new-user @billing @ne
   test("TC-BL-N103 @medium @negative — All time with no usage keeps empty state", async ({
     page,
   }) => {
-    test.skip(!(await isBillingEmptyState(page)), "Usage data exists — empty state not shown");
+    test.skip(!(await isBillingEmptyState(page)), STAGING_EMPTY_SKIP.billing);
     const billing = await openBilling(page);
     await billing.selectTimeRange("All time");
     await billing.expectTotalMinutesEmpty();

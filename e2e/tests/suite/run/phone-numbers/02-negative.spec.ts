@@ -64,11 +64,4 @@ test.describe("RUN › Phone numbers — Validation @journey @new-user @phone-nu
     });
   });
 
-  test("TC-VC-106 @high @negative @manual — Two concurrent calls same agent", async () => {
-    test.skip(true, "Manual: place two simultaneous calls to same agent number");
-  });
-
-  test("TC-EC-010 @high @edge @manual — Phone number in multiple active agents", async () => {
-    test.skip(true, "Manual: assign same number to two agents");
-  });
 });

@@ -1,13 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { BillingPage } from "../../../../pages/billing.page";
 import { isBillingEmptyState } from "../../../../helpers/billing.helper";
+import { STAGING_EMPTY_SKIP } from "../../../../helpers/staging-profile";
 import { BILLING_COPY } from "../../../../data/billing-data";
 
 test.describe("SETTINGS › Billing — Main UI @journey @new-user @billing", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isBillingEmptyState(page)),
-      "Usage data exists — empty state not shown",
+      STAGING_EMPTY_SKIP.billing,
     );
   });
 

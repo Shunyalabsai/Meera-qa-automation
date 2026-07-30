@@ -12,12 +12,34 @@ export class AgentsOnboardingPage {
     });
   }
 
-  /** True when the "Build your first voice agent" onboarding hero is shown. */
+  /** True when onboarding/empty workspace — no populated agents list with New agent link. */
   async isEmptyState(): Promise<boolean> {
-    return this.page
+    const hero = await this.page
       .getByText(/Build your first voice agent/i)
-      .isVisible({ timeout: 8_000 })
+      .isVisible({ timeout: 3_000 })
       .catch(() => false);
+    if (hero) return true;
+
+    const newAgentLink = await this.page
+      .getByRole("link", { name: /New agent/i })
+      .isVisible({ timeout: 2_000 })
+      .catch(() => false);
+    if (newAgentLink) return false;
+
+    const onboardingCta = await this.createFirstAgentCta()
+      .first()
+      .isVisible({ timeout: 2_000 })
+      .catch(() => false);
+    const getStarted = await this.page
+      .getByText(/^Get started$/i)
+      .isVisible({ timeout: 2_000 })
+      .catch(() => false);
+    const zeroAgents = await this.page
+      .getByText(/0 total/i)
+      .isVisible({ timeout: 2_000 })
+      .catch(() => false);
+
+    return onboardingCta || getStarted || zeroAgents;
   }
 
   async expectEmptyState() {

@@ -28,10 +28,4 @@ test.describe("ANALYZE › Recordings — Search @journey @new-user @recordings 
     await recordings.expectEmptyOrTable();
   });
 
-  test("TC-RC-023 @medium @positive @manual — Search returns matching recording row", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: complete recorded call, search by phone or call ID and verify row",
-    );
-  });
 });

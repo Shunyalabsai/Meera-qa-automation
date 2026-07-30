@@ -75,9 +75,8 @@ export default class SheetResultsReporter implements Reporter {
     }
 
     const file = path.relative(process.cwd(), test.location.file);
-    const key = `${file.replace(/\\/g, "/")}:${test.location.line}`;
 
-    this.resultsByKey.set(key, {
+    this.resultsByKey.set(test.id, {
       title: test.title,
       file,
       line: test.location.line,
@@ -121,10 +120,15 @@ export default class SheetResultsReporter implements Reporter {
     if (!shouldAutoPublishSheet()) return;
     if (entries.length === 0) return;
     if (result.status === "interrupted") {
+      if (process.env.E2E_SHEET_PUBLISH_ON_INTERRUPT === "false") {
+        console.log(
+          "[sheet-results] Skipping auto-publish — run was interrupted",
+        );
+        return;
+      }
       console.log(
-        "[sheet-results] Skipping auto-publish — run was interrupted",
+        "[sheet-results] Run interrupted — publishing partial results from this run",
       );
-      return;
     }
 
     await this.runAutoUpdate();

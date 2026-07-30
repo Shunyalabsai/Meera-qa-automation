@@ -61,10 +61,4 @@ test.describe("ANALYZE › Recordings — Negative @journey @new-user @recording
     await expect(recordings.searchInput()).toHaveValue(XSS_PAYLOAD);
   });
 
-  test("TC-SC-014 @high @security @manual — Audio data not retained beyond policy", async () => {
-    test.skip(
-      true,
-      "Manual/infra: verify recordings deleted after configured retention period",
-    );
-  });
 });

@@ -78,10 +78,4 @@ test.describe("ANALYZE › Calls — Edge @journey @new-user @calls @edge", () =
     await calls.expectEmptyOrTable();
   });
 
-  test("TC-CL-E107 @medium @edge @manual — Completed call appears in list after Playground call", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: complete call in Playground, verify row on Calls list",
-    );
-  });
 });

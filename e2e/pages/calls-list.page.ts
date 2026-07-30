@@ -36,6 +36,52 @@ export class CallsListPage {
       .catch(() => false);
   }
 
+  async parseShownCount(): Promise<number> {
+    const text = (await this.shownCount().textContent()) ?? "";
+    const match = text.match(/(\d+)\s+shown/i);
+    return match ? Number.parseInt(match[1], 10) : 0;
+  }
+
+  async hasCallRecords(): Promise<boolean> {
+    if (await this.isEmptyState()) return false;
+    const count = await this.parseShownCount();
+    if (count > 0) return true;
+    return this.callsTable()
+      .getByRole("row")
+      .nth(1)
+      .isVisible({ timeout: 3_000 })
+      .catch(() => false);
+  }
+
+  callsTable(): Locator {
+    return this.page.getByRole("table");
+  }
+
+  async expectHasCallRecords() {
+    await this.expectPageHeader();
+    const count = await this.parseShownCount();
+    expect(count).toBeGreaterThan(0);
+    await expect(this.callsTable()).toBeVisible();
+  }
+
+  /** First call ID from table — UUID in row text or link href, read at runtime. */
+  async firstCallIdFromTable(): Promise<string | null> {
+    if (!(await this.callsTable().isVisible({ timeout: 5_000 }).catch(() => false))) {
+      return null;
+    }
+    const link = this.callsTable().getByRole("link").first();
+    if (await link.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      const href = (await link.getAttribute("href")) ?? "";
+      const fromHref = href.match(/calls\/([^/?#]+)/i)?.[1];
+      if (fromHref && fromHref.length > 8) return fromHref;
+    }
+    const text = await this.callsTable().innerText();
+    const uuid = text.match(
+      /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i,
+    );
+    return uuid?.[0] ?? null;
+  }
+
   async expectEmptyState() {
     await this.expectPageHeader();
     await expect(this.page.getByText(CALLS_COPY.emptyTitle)).toBeVisible({
@@ -60,24 +106,19 @@ export class CallsListPage {
 
   filterField(label: string): Locator {
     const inMain = this.page.getByRole("main");
-    const pattern = new RegExp(`^${escapeRegExp(label)}$`, "i");
-    const asLabel = inMain.locator("label").filter({ hasText: pattern }).first();
-    // Duration is plain text in the filter bar, not a <label>.
-    if (/^Duration \(sec\)$/i.test(label)) {
-      return asLabel.or(inMain.getByText(pattern).first());
-    }
-    return asLabel;
+    const pattern = new RegExp(escapeRegExp(label), "i");
+    return inMain.locator("label").filter({ hasText: pattern }).first();
   }
 
   filterCombobox(label: string) {
     return this.filterField(label).locator(
-      "xpath=following-sibling::select[1] | following-sibling::*[1]//select | following-sibling::*[1]",
+      "xpath=./select[1] | following-sibling::select[1] | following-sibling::*[1]//select | following-sibling::*[1]",
     );
   }
 
   filterSelect(label: CallFilterLabel | "Agent"): Locator {
     const field = this.filterField(label);
-    return field.locator("xpath=following-sibling::select[1]");
+    return field.locator("xpath=./select[1] | following-sibling::select[1]");
   }
 
   async selectFilterOption(label: CallFilterLabel | "Agent", value: string) {
@@ -247,5 +288,11 @@ export class CallsListPage {
 
   exportButton(): Locator {
     return this.page.getByRole("button", { name: /Export|Download|CSV/i });
+  }
+
+  async hasExportControl(): Promise<boolean> {
+    return this.exportButton()
+      .isVisible({ timeout: 5_000 })
+      .catch(() => false);
   }
 }

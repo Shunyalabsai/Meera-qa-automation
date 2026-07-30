@@ -81,10 +81,4 @@ test.describe("SETTINGS › Billing — Filters @journey @new-user @billing @pos
     }
   });
 
-  test("TC-BL-019 @medium @positive @manual — TOTAL MINUTES updates after call usage", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: complete calls, verify TOTAL MINUTES > 0",
-    );
-  });
 });

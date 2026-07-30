@@ -6,11 +6,50 @@ export class AgentsListPage {
 
   async open() {
     await gotoApp(this.page, "agents");
-    await expect(this.page.getByRole("heading", { name: "Agents" })).toBeVisible();
+    await this.expectListLoaded();
+  }
+
+  async expectListLoaded() {
+    await expect(this.page.getByRole("heading", { name: "Agents" })).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect
+      .poll(async () => this.agentListItems().count(), { timeout: 20_000 })
+      .toBeGreaterThan(0);
+  }
+
+  agentListItems() {
+    return this.page.locator("main li").filter({
+      has: this.page.locator("span.font-medium"),
+    });
+  }
+
+  async hasAgentRecords(): Promise<boolean> {
+    await this.open();
+    return (await this.agentListItems().count()) > 0;
+  }
+
+  async firstAgentName(): Promise<string | null> {
+    const name = await this.agentListItems()
+      .first()
+      .locator("span.font-medium")
+      .textContent()
+      .catch(() => null);
+    return name?.trim() || null;
+  }
+
+  async hasNewAgentLink(): Promise<boolean> {
+    return this.page
+      .getByRole("link", { name: /New agent/i })
+      .isVisible({ timeout: 5_000 })
+      .catch(() => false);
   }
 
   async clickNewAgent() {
-    await this.page.getByRole("link", { name: /New agent/i }).click();
+    const link = this.page.getByRole("link", { name: /New agent/i });
+    await expect(link).toBeVisible({ timeout: 15_000 });
+    await link.click();
+    await expect(this.page).toHaveURL(/\/agents\/new/, { timeout: 30_000 });
   }
 
   agentRow(name: string) {

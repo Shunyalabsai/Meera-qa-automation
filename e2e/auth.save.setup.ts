@@ -34,7 +34,7 @@ async function recoverFromStuckLoading(page: import("@playwright/test").Page) {
 
   if (
     loading ||
-    (url.includes("meera-stage") && url.includes("/agents") && !(await isSignedInApp(page)))
+    (url.includes("agents.shunya") && url.includes("/agents") && !(await isSignedInApp(page)))
   ) {
     await page.goto(appPath(""), { waitUntil: "domcontentloaded" });
   }

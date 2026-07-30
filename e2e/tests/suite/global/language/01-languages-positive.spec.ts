@@ -69,9 +69,6 @@ test.describe("Global › Language switcher — International @language @positiv
       .toBe("fr");
   });
 
-  test("TC-LG-013 @low @positive @manual — Google Translate applies page translation", async () => {
-    test.skip(true, "Manual: verify UI strings translate after non-English selection");
-  });
 });
 
 test.describe("Global › Language switcher — Regional India @language @positive", () => {

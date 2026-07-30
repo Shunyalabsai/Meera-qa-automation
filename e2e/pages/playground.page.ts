@@ -1,5 +1,5 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { gotoApp } from "../helpers/navigate";
+import { gotoApp, waitForLoadingToClear } from "../helpers/navigate";
 
 /** BUILD › Playground — browser voice and outbound phone call testing. */
 export class PlaygroundPage {
@@ -135,7 +135,20 @@ export class PlaygroundPage {
     return this.agentSelect().inputValue();
   }
 
+  /** Wait until the agent dropdown is populated beyond the "Pick an agent" placeholder. */
+  async waitForAgentOptions(): Promise<void> {
+    await expect(this.agentSelect()).toBeVisible({ timeout: 30_000 });
+    await waitForLoadingToClear(this.page);
+    await expect
+      .poll(async () => this.agentSelect().locator("option").count(), {
+        timeout: 15_000,
+      })
+      .toBeGreaterThan(1)
+      .catch(() => undefined);
+  }
+
   async hasSelectableAgent(): Promise<boolean> {
+    await this.waitForAgentOptions();
     const options = this.agentSelect().locator("option");
     const count = await options.count();
     for (let i = 0; i < count; i++) {
@@ -148,6 +161,7 @@ export class PlaygroundPage {
   }
 
   async selectFirstAgent(): Promise<string | null> {
+    await this.waitForAgentOptions();
     const select = this.agentSelect();
     const options = select.locator("option");
     const count = await options.count();

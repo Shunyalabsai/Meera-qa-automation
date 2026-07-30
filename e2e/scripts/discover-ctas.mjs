@@ -2,7 +2,7 @@ import { chromium } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "https://meera-stage.shunyalabs.ai/vap/";
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "https://agents.shunyalabs.ai/vap/";
 const authFile = path.join(process.cwd(), ".auth/user.json");
 const routes = ["billing", "admin/webhooks", "alerts"];
 

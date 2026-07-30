@@ -1,13 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { InsightsPage } from "../../../../pages/insights.page";
 import { isInsightsEmptyState } from "../../../../helpers/insights.helper";
+import { STAGING_EMPTY_SKIP } from "../../../../helpers/staging-profile";
 import { INSIGHTS_COPY } from "../../../../data/insights-data";
 
 test.describe("ANALYZE › Insights — Main UI @journey @new-user @insights", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isInsightsEmptyState(page)),
-      "Insights has call data — empty state not shown",
+      STAGING_EMPTY_SKIP.insights,
     );
   });
 

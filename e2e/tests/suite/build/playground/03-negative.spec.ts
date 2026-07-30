@@ -85,15 +85,4 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     ).toBeVisible({ timeout: 15_000 });
   });
 
-  test("TC-VC-102 @high @negative @manual — No audio from caller", async () => {
-    test.skip(true, "Manual: start call and remain silent — verify reprompt/end");
-  });
-
-  test("TC-VC-103 @high @negative @manual — Noisy background audio", async () => {
-    test.skip(true, "Manual: call with heavy background noise");
-  });
-
-  test("TC-VC-105 @medium @negative @manual — Unsupported spoken language", async () => {
-    test.skip(true, "Manual: speak language not configured on agent");
-  });
 });

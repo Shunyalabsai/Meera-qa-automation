@@ -108,7 +108,4 @@ test.describe("SETTINGS › Webhooks — Edge @journey @new-user @webhooks @edge
     );
   });
 
-  test("TC-WH-E109 @medium @edge @manual — Save valid webhook then verify Recent deliveries", async () => {
-    test.skip(true, "Manual: save subscription, trigger event, verify delivery log");
-  });
 });

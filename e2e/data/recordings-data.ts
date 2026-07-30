@@ -2,7 +2,7 @@
 
 export const RECORDINGS_COPY = {
   emptyTitle: /No recordings found/i,
-  searchPlaceholder: /Search phone number or call ID/i,
+  searchPlaceholder: /Phone number or call ID|Search phone number or call ID/i,
   agentFilterDefault: /All agents/i,
 } as const;
 

@@ -116,15 +116,4 @@ test.describe("ANALYZE › Calls — Filter dropdowns @journey @new-user @calls 
     await expect(exportBtn).toBeVisible();
   });
 
-  test("TC-AN-003 @high @positive @manual — View full transcript of a call", async () => {
-    test.skip(true, "Manual: open completed call detail and verify transcript");
-  });
-
-  test("TC-AN-007 @medium @positive @manual — Intent recognition results visible", async () => {
-    test.skip(true, "Manual: verify intent labels on completed call detail");
-  });
-
-  test("TC-VC-009 @high @positive @manual — Call recording saved after call", async () => {
-    test.skip(true, "Manual: complete call with recording enabled");
-  });
 });

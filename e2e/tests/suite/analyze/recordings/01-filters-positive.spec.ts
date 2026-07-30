@@ -23,14 +23,4 @@ test.describe("ANALYZE › Recordings — Filters @journey @new-user @recordings
     await recordings.expectAgentFilterDefault();
   });
 
-  test("TC-RC-012 @medium @positive @manual — Agent filter lists workspace agents when present", async () => {
-    test.skip(
-      true,
-      "Manual: create agent with recording, verify agent name appears in filter dropdown",
-    );
-  });
-
-  test("TC-VC-202 @critical @security @manual — Recording URL without auth", async () => {
-    test.skip(true, "Manual: access recording URL without session");
-  });
 });

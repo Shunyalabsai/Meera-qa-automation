@@ -16,7 +16,7 @@ export class PromptTemplatesPage {
       this.page.getByRole("heading", { name: /Prompt Templates/i }),
     ).toBeVisible({ timeout: 30_000 });
     await expect(
-      this.page.getByText(/Reusable system prompts|branching version history/i).first(),
+      this.page.getByText(/Build a prompt once, reuse it across your agents/i).first(),
     ).toBeVisible();
   }
 
@@ -33,13 +33,28 @@ export class PromptTemplatesPage {
       this.page.getByText(/No prompt templates yet/i),
     ).toBeVisible({ timeout: 15_000 });
     await expect(
-      this.page.getByText(/Create one to reuse across agents/i),
+      this.page.getByText(/Create your first template/i),
     ).toBeVisible();
     await expect(this.newTemplateButton()).toBeVisible();
   }
 
   newTemplateButton(): Locator {
     return this.page.getByRole("button", { name: /New template/i });
+  }
+
+  templateListItems(): Locator {
+    return this.page.locator("main li").filter({
+      has: this.page.getByRole("button", { name: /^View$/i }),
+    });
+  }
+
+  async expectPopulatedList() {
+    await this.expectListHeader();
+    await expect(this.newTemplateButton()).toBeVisible();
+    await expect(this.templateListItems().first()).toBeVisible({
+      timeout: 15_000,
+    });
+    expect(await this.templateListItems().count()).toBeGreaterThan(0);
   }
 
   async clickNewTemplate() {
@@ -105,7 +120,7 @@ export class PromptTemplatesPage {
 
   variableDescriptionInputs(): Locator {
     return this.page
-      .getByPlaceholder(/description.*CSV|shown in CSV/i)
+      .getByPlaceholder(/description/i)
       .or(this.page.getByLabel(/description.*CSV|shown in CSV/i));
   }
 
@@ -149,9 +164,7 @@ export class PromptTemplatesPage {
     const before = await inputs.count();
     if (before === 0) return;
 
-    const removeBtn = this.page
-      .locator("main")
-      .getByRole("button", { name: /^✕$|^×$/ });
+    const removeBtn = this.page.getByRole("button", { name: /Remove variable/i });
     await expect(removeBtn.nth(before - 1)).toBeVisible({ timeout: 5_000 });
     await removeBtn.nth(before - 1).click();
     await expect(inputs).toHaveCount(before - 1, { timeout: 10_000 });

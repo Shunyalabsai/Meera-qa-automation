@@ -71,4 +71,4 @@ npm run auth:save && npm run test:new-user
 
 Clerk sends a **6-digit verification code** to the email. Automation stops at OTP unless `E2E_SIGNUP_OTP` is set (copy from yopmail or your test inbox).
 
-After OTP → user lands on `https://meera-stage.shunyalabs.ai/vap/agents` with the new-user onboarding card.
+After OTP → user lands on `https://agents.shunyalabs.ai/vap/agents` with the new-user onboarding card.

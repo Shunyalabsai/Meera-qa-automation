@@ -134,7 +134,4 @@ test.describe("SETTINGS › Webhooks — Event subscriptions @journey @new-user 
     }
   });
 
-  test("TC-IN-005 @medium @positive @manual — API key revocation", async () => {
-    test.skip(true, "Manual: generate and revoke API key if exposed on page");
-  });
 });

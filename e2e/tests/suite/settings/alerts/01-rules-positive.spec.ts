@@ -109,10 +109,4 @@ test.describe("SETTINGS › Alerts — Create rule form @journey @new-user @aler
     await expect(alerts.newRuleButton()).toBeVisible();
   });
 
-  test("TC-AL-021 @medium @positive @manual — Create rule persists in Rules list", async () => {
-    test.skip(
-      true,
-      "Manual: submit rule with valid name, verify it appears in Rules list",
-    );
-  });
 });

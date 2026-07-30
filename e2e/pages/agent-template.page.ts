@@ -1,4 +1,5 @@
 import { Page, expect } from "@playwright/test";
+import { waitForLoadingToClear } from "../helpers/navigate";
 
 /** Template gallery shown at /agents/new before the agent form. */
 export const AGENT_TEMPLATES = [
@@ -49,17 +50,20 @@ export class AgentTemplatePage {
 
   async expectGallery() {
     await expect(
-      this.page.getByRole("heading", { name: /What are you building/i }),
+      this.page.getByRole("heading", { name: /What industry are you building for/i }),
     ).toBeVisible({ timeout: 30_000 });
     await expect(
-      this.page.getByText(/Pick a template to get started/i),
+      this.page.getByText(/Pick an industry to see real, ready-to-use example agents/i),
     ).toBeVisible();
   }
 
   async expectAllTemplateCards() {
-    for (const t of AGENT_TEMPLATES) {
-      await expect(this.page.getByText(t.title, { exact: false })).toBeVisible();
-    }
+    // New UI: industry-based gallery with 5 industry cards
+    await expect(this.page.getByText(/BFSI/i)).toBeVisible();
+    await expect(this.page.getByText(/Ecommerce/i)).toBeVisible();
+    await expect(this.page.getByText(/Healthcare/i)).toBeVisible();
+    await expect(this.page.getByText(/Logistics/i)).toBeVisible();
+    await expect(this.page.getByText(/Telecom/i)).toBeVisible();
     await expect(
       this.page.getByText(/Start from scratch/i),
     ).toBeVisible();
@@ -70,9 +74,10 @@ export class AgentTemplatePage {
   }
 
   async waitForGalleryOrForm() {
+    await waitForLoadingToClear(this.page);
     await expect(
       this.page
-        .getByRole("heading", { name: /What are you building/i })
+        .getByRole("heading", { name: /What industry are you building for/i })
         .or(this.page.getByRole("tab", { name: "Prompt" })),
     ).toBeVisible({ timeout: 30_000 });
   }

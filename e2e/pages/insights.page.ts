@@ -1,5 +1,5 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { gotoApp } from "../helpers/navigate";
+import { gotoApp, waitForLoadingToClear } from "../helpers/navigate";
 import {
   INSIGHTS_COPY,
   INSIGHTS_CHART_TITLES,
@@ -16,6 +16,7 @@ export class InsightsPage {
   async open() {
     await gotoApp(this.page, "insights");
     await this.expectPageHeader();
+    await this.waitForKpisSettled();
   }
 
   async expectPageHeader() {
@@ -24,13 +25,65 @@ export class InsightsPage {
     ).toBeVisible({ timeout: 30_000 });
   }
 
-  async isEmptyState(): Promise<boolean> {
+  /** Raw read of the Total Calls KPI — assumes KPIs already rendered. */
+  private readTotalCallsNow(): Promise<number> {
     return this.page
-      .getByText(/TOTAL CALLS/i)
-      .locator("xpath=following::*[1]")
-      .filter({ hasText: /^0$/ })
-      .isVisible({ timeout: 5_000 })
-      .catch(() => false);
+      .getByRole("main")
+      .innerText()
+      .catch(() => "")
+      .then((text) => {
+        const match = text.match(/Total Calls\s+(\d+(?:\.\d+)?)/i);
+        return match ? Number.parseFloat(match[1]) : 0;
+      });
+  }
+
+  async parseTotalCalls(): Promise<number> {
+    await this.waitForKpisSettled();
+    return this.readTotalCallsNow();
+  }
+
+  /**
+   * Wait until KPI tiles finish loading so reads aren't taken on a half-rendered
+   * page. The main panel initially renders only the heading, then the Total
+   * Calls tile appears and updates once aggregates resolve — so we wait for the
+   * value to appear AND stop changing across consecutive polls.
+   */
+  async waitForKpisSettled(): Promise<void> {
+    await waitForLoadingToClear(this.page);
+    let prev = Number.NaN;
+    await expect
+      .poll(
+        async () => {
+          const text = await this.page
+            .getByRole("main")
+            .innerText()
+            .catch(() => "");
+          const match = text.match(/Total Calls\s+(\d+(?:\.\d+)?)/i);
+          if (!match) return false;
+          const value = Number.parseFloat(match[1]);
+          const stable = value === prev;
+          prev = value;
+          return stable;
+        },
+        { timeout: 25_000, intervals: [500, 700, 900, 1_200] },
+      )
+      .toBe(true);
+  }
+
+  async isEmptyState(): Promise<boolean> {
+    await this.waitForKpisSettled();
+    return (await this.readTotalCallsNow()) === 0;
+  }
+
+  async hasCallData(): Promise<boolean> {
+    await this.waitForKpisSettled();
+    return (await this.readTotalCallsNow()) > 0;
+  }
+
+  async expectPopulatedKpis() {
+    await this.expectKpiCardsVisible();
+    await this.waitForKpisSettled();
+    expect(await this.readTotalCallsNow()).toBeGreaterThan(0);
   }
 
   async expectEmptyState() {

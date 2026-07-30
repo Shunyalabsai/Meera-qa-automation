@@ -67,10 +67,4 @@ test.describe("ANALYZE › Insights — Filters @journey @new-user @insights @po
     }
   });
 
-  test("TC-IS-017 @medium @positive @manual — Sentiment chart shows data after calls", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: complete calls with sentiment, verify Sentiment Trends chart populates",
-    );
-  });
 });

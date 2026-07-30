@@ -63,10 +63,4 @@ test.describe("ANALYZE › Recordings — Edge @journey @new-user @recordings @e
     await recordings.expectEmptyOrTable();
   });
 
-  test("TC-RC-E107 @medium @edge @manual — Recording appears after completed call", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: complete call with recording enabled, verify row on Recordings",
-    );
-  });
 });

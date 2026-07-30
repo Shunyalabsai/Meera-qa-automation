@@ -24,6 +24,21 @@ export class RecordingsPage {
       .catch(() => false);
   }
 
+  async hasRecordings(): Promise<boolean> {
+    if (await this.isEmptyState()) return false;
+    return this.recordingsTable()
+      .getByRole("row")
+      .nth(1)
+      .isVisible({ timeout: 5_000 })
+      .catch(() => false);
+  }
+
+  async expectHasRecordings() {
+    await this.expectPageHeader();
+    await expect(this.recordingsTable()).toBeVisible();
+    await expect(this.recordingsTable().getByRole("row").nth(1)).toBeVisible();
+  }
+
   async expectEmptyState() {
     await this.expectPageHeader();
     await expect(this.page.getByText(RECORDINGS_COPY.emptyTitle)).toBeVisible({

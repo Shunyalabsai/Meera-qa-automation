@@ -68,11 +68,4 @@ test.describe("BUILD › Playground — Edge @journey @new-user @playground @edg
     await expect(playground.startPhoneCallButton()).toBeEnabled();
   });
 
-  test("TC-PG-E106 @medium @edge @manual — Mic permission denied in browser call", async () => {
-    test.skip(true, "Manual: deny microphone permission and verify error handling");
-  });
-
-  test("TC-VC-010 @medium @positive @manual — Low-bandwidth call stability", async () => {
-    test.skip(true, "Manual: throttle network to 3G and place browser call");
-  });
 });

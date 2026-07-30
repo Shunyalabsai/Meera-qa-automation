@@ -19,7 +19,7 @@ test.describe("BUILD › Agents — Onboarding validation @negative @edge @onboa
     await new AgentTemplatePage(page).waitForGalleryOrForm();
     await expect(
       page.getByRole("tab", { name: "Prompt" }).or(
-        page.getByRole("heading", { name: /What are you building/i }),
+        page.getByRole("heading", { name: /What industry are you building for/i }),
       ),
     ).toBeVisible({ timeout: 30_000 });
   });

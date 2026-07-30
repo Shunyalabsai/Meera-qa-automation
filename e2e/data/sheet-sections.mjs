@@ -23,6 +23,7 @@ export const SECTION_TAB_NAMES = {
 export const RESULT_COLUMNS = [
   "Test ID",
   "Title",
+  "Journey",
   "Priority",
   "Type",
   "Tags",

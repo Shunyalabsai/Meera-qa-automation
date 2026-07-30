@@ -22,7 +22,7 @@ const SIDEBAR_ROUTES: Record<string, RegExp> = {
 
 function redirectUrl(): string {
   const base =
-    process.env.PLAYWRIGHT_BASE_URL ?? "https://meera-stage.shunyalabs.ai/vap/";
+    process.env.PLAYWRIGHT_BASE_URL ?? "https://agents.shunyalabs.ai/vap/";
   return encodeURIComponent(base.endsWith("/") ? base : `${base}/`);
 }
 
@@ -44,6 +44,29 @@ async function isSpaShellBroken(page: Page): Promise<boolean> {
   return !(await isSpaShell(page));
 }
 
+/**
+ * Wait for the SPA "Loading…" placeholder to clear before reading/asserting content.
+ * The staging app renders the page shell (heading/sidebar) before its async data
+ * finishes, so reads taken too early return premature 0/null values and waits for
+ * data-dependent content can time out while the spinner is still shown.
+ *
+ * Best-effort: never throws. A genuinely stuck load is surfaced by the caller's
+ * own assertion (which carries its own timeout).
+ */
+export async function waitForLoadingToClear(
+  page: Page,
+  timeout = 45_000,
+): Promise<void> {
+  const loading = page.getByText(/^\s*Loading…?\s*$/i).first();
+  try {
+    if (await loading.isVisible({ timeout: 1_000 }).catch(() => false)) {
+      await loading.waitFor({ state: "hidden", timeout });
+    }
+  } catch {
+    // Spinner still visible after timeout — leave it to the caller's assertion.
+  }
+}
+
 /** Staging nginx returns 404 JSON on deep-link reload — recover via SPA root + sidebar nav. See STAGING_INFRA SPA-RELOAD in e2e/data/known-issues.mjs */
 export async function reloadSpaRoute(page: Page, route: string): Promise<void> {
   await page.reload();
@@ -54,7 +77,7 @@ export async function reloadSpaRoute(page: Page, route: string): Promise<void> {
 
 async function clientNavigate(page: Page, route: string): Promise<void> {
   const base =
-    process.env.PLAYWRIGHT_BASE_URL ?? "https://meera-stage.shunyalabs.ai/vap/";
+    process.env.PLAYWRIGHT_BASE_URL ?? "https://agents.shunyalabs.ai/vap/";
   const basePath = normalizeBaseUrl(base).replace(/^https?:\/\/[^/]+/, "") || "/vap/";
   const target = `${basePath.replace(/\/?$/, "/")}${route.replace(/^\//, "")}`;
 
@@ -80,6 +103,7 @@ export async function gotoApp(page: Page, route = ""): Promise<void> {
   if (!shellOk) {
     await page.goto(appPath(trimmed), { waitUntil: "domcontentloaded" });
     assertSignedIn(page);
+    await waitForLoadingToClear(page);
     return;
   }
 
@@ -89,12 +113,14 @@ export async function gotoApp(page: Page, route = ""): Promise<void> {
     if (await link.isVisible({ timeout: 15_000 }).catch(() => false)) {
       await link.click();
       assertSignedIn(page);
+      await waitForLoadingToClear(page);
       return;
     }
   }
 
   await clientNavigate(page, trimmed);
   assertSignedIn(page);
+  await waitForLoadingToClear(page);
 }
 
 function assertSignedIn(page: Page): void {

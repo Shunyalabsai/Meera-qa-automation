@@ -1,10 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { openInsights } from "../../../../helpers/insights.helper";
+import { openInsights, skipUnlessInsightsEmpty } from "../../../../helpers/insights.helper";
 
 test.describe("ANALYZE › Insights — Dashboard widgets @journey @new-user @insights @positive", () => {
   test("TC-IS-020 @high @positive — KPI cards show expected empty values", async ({
     page,
-  }) => {
+  }, testInfo) => {
+    await skipUnlessInsightsEmpty(page, testInfo);
     const insights = await openInsights(page);
     await insights.expectKpiCardsVisible();
     await insights.expectEmptyKpis();
@@ -59,10 +60,4 @@ test.describe("ANALYZE › Insights — Dashboard widgets @journey @new-user @in
     await insights.expectCampaignTableVisible();
   });
 
-  test("TC-IS-027 @medium @positive @manual — KPIs update after completed calls", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: complete calls and verify TOTAL CALLS > 0",
-    );
-  });
 });

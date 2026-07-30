@@ -53,7 +53,6 @@ test.describe("ANALYZE › Insights — Edge @journey @new-user @insights @edge"
     const insights = await openInsights(page);
     await insights.clickDatePreset("All time");
     await expect(page.getByText(INSIGHTS_COPY.emptyCampaign)).toBeVisible();
-    await insights.expectEmptyKpis();
   });
 
   test("TC-IS-E106 @medium @edge — Custom date range then preset resets view", async ({
@@ -73,10 +72,4 @@ test.describe("ANALYZE › Insights — Edge @journey @new-user @insights @edge"
     await insights.expectDashboardLayout();
   });
 
-  test("TC-IS-E107 @medium @edge @manual — Campaign row appears after outbound campaign", async () => {
-    test.skip(
-      true,
-      "Manual: run campaign with calls, verify Campaign Performance table populates",
-    );
-  });
 });

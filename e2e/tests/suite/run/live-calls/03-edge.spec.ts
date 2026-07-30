@@ -39,14 +39,4 @@ test.describe("RUN › Live Calls — Edge @journey @new-user @live-calls @edge"
     ).toBeVisible({ timeout: 30_000 });
   });
 
-  test("TC-LC-E104 @medium @edge @manual — Call from Playground appears within few seconds", async () => {
-    test.skip(
-      true,
-      "Manual: start browser call in Playground, verify row on Live Calls within seconds",
-    );
-  });
-
-  test("TC-LC-E105 @medium @edge @manual — API-triggered call appears on dashboard", async () => {
-    test.skip(true, "Manual: POST /api/calls and verify Live Calls updates");
-  });
 });

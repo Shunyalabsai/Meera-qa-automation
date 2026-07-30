@@ -1,6 +1,6 @@
 /** SETTINGS › Webhooks — per-event outbound delivery configuration. */
 import { Page, expect, Locator } from "@playwright/test";
-import { gotoApp } from "../helpers/navigate";
+import { gotoApp, waitForLoadingToClear } from "../helpers/navigate";
 import {
   WEBHOOKS_COPY,
   WEBHOOK_EVENTS,
@@ -29,6 +29,33 @@ export class WebhooksPage {
   async open() {
     await gotoApp(this.page, "admin/webhooks");
     await this.expectPageHeader();
+    await this.waitForSubscriptionsSettled();
+  }
+
+  /**
+   * Quick-apply checkboxes render ENABLED on first paint, then the subscription
+   * fetch disables the events that are already subscribed. Reading the
+   * enabled/disabled state before that fetch resolves makes the env-precondition
+   * guards (hasEnabledQuickApplyCheckboxes / hasAnySubscribeButton) flap and the
+   * test proceeds into a now-disabled control. Wait until every event row shows
+   * a "subscribed · …" or "not subscribed" badge so the state is final.
+   */
+  async waitForSubscriptionsSettled(): Promise<void> {
+    await waitForLoadingToClear(this.page);
+    try {
+      await expect
+        .poll(
+          async () =>
+            this.eventSubscriptionsSection()
+              .getByText(/not subscribed|subscribed ·/i)
+              .count(),
+          { timeout: 20_000, intervals: [500, 750, 1_000] },
+        )
+        .toBeGreaterThanOrEqual(WEBHOOK_EVENTS.length);
+    } catch {
+      // Badges still not fully rendered after the timeout — guards will read the
+      // best-available live state rather than blocking the test outright.
+    }
   }
 
   async expectPageHeader() {
@@ -91,13 +118,42 @@ export class WebhooksPage {
     });
   }
 
-  async hasEnabledQuickApplyCheckboxes(): Promise<boolean> {
-    for (const event of WEBHOOK_EVENTS) {
-      const box = this.eventCheckbox(event).first();
-      if (!(await box.isVisible({ timeout: 2_000 }).catch(() => false))) continue;
-      if (await box.isEnabled().catch(() => false)) return true;
+  /**
+   * Read a per-event boolean signature repeatedly until it stops changing.
+   * The quick-apply controls render in their default state on first paint and
+   * then flip once the subscription fetch resolves, so a single read is racy.
+   * Requiring two consecutive identical reads guarantees the final state.
+   */
+  private async readUntilStable(
+    read: () => Promise<boolean[]>,
+    { attempts = 12, gapMs = 600 } = {},
+  ): Promise<boolean[]> {
+    let prevSig = "";
+    let last: boolean[] = [];
+    for (let i = 0; i < attempts; i++) {
+      last = await read();
+      const sig = last.map((s) => (s ? "1" : "0")).join("");
+      if (sig === prevSig) return last;
+      prevSig = sig;
+      await this.page.waitForTimeout(gapMs);
     }
-    return false;
+    return last;
+  }
+
+  async hasEnabledQuickApplyCheckboxes(): Promise<boolean> {
+    await this.waitForSubscriptionsSettled();
+    const states = await this.readUntilStable(async () => {
+      const result: boolean[] = [];
+      for (const event of WEBHOOK_EVENTS) {
+        const box = this.eventCheckbox(event).first();
+        const visible = await box
+          .isVisible({ timeout: 1_000 })
+          .catch(() => false);
+        result.push(visible ? await box.isEnabled().catch(() => false) : false);
+      }
+      return result;
+    });
+    return states.some(Boolean);
   }
 
   /** Select the first quick-apply event that is not already subscribed. */
@@ -180,16 +236,19 @@ export class WebhooksPage {
   }
 
   async hasAnySubscribeButton(): Promise<boolean> {
-    for (const event of WEBHOOK_EVENTS) {
-      if (
-        await this.subscribeButtonForEvent(event)
-          .isVisible({ timeout: 500 })
-          .catch(() => false)
-      ) {
-        return true;
+    await this.waitForSubscriptionsSettled();
+    const states = await this.readUntilStable(async () => {
+      const result: boolean[] = [];
+      for (const event of WEBHOOK_EVENTS) {
+        result.push(
+          await this.subscribeButtonForEvent(event)
+            .isVisible({ timeout: 500 })
+            .catch(() => false),
+        );
       }
-    }
-    return false;
+      return result;
+    });
+    return states.some(Boolean);
   }
 
   eventRow(eventName: string): Locator {
@@ -333,5 +392,52 @@ export class WebhooksPage {
 
   async expectSidebarLinkVisible() {
     await expect(this.page.getByRole("link", { name: /^Webhooks$/i })).toBeVisible();
+  }
+
+  /**
+   * Subscribed events render as "{event} subscribed · enabled" with a
+   * destination paragraph "→ {url}". Counting the destination rows for a given
+   * URL is the most robust signal that subscriptions point at our endpoint.
+   */
+  subscriptionUrlRows(url: string): Locator {
+    return this.eventSubscriptionsSection().getByText(`→ ${url}`);
+  }
+
+  /** Any "· enabled" subscription badge in the Event subscriptions list. */
+  subscribedBadges(): Locator {
+    return this.eventSubscriptionsSection().getByText(/subscribed · enabled/i);
+  }
+
+  async countSubscribed(): Promise<number> {
+    return this.subscribedBadges().count();
+  }
+
+  async countSubscribedToUrl(url: string): Promise<number> {
+    return this.subscriptionUrlRows(url).count();
+  }
+
+  recentDeliveriesSection(): Locator {
+    return this.page
+      .getByRole("heading", { name: /^Recent deliveries$/i })
+      .locator("xpath=..");
+  }
+
+  /**
+   * Quick-apply the given endpoint to every currently-enabled event, then Apply.
+   * Idempotent: when all events are already subscribed the quick-apply
+   * checkboxes are disabled and we simply verify the existing subscriptions.
+   * Returns the number of events subscribed to `url`.
+   */
+  async applyToAllEvents(url: string, secret: string): Promise<number> {
+    await this.fillQuickApply(url, secret);
+    if (await this.hasEnabledQuickApplyCheckboxes()) {
+      await this.selectAllButton().click();
+      await expect(this.applyButton()).toBeEnabled();
+      await this.clickApply();
+    }
+    await expect(this.subscriptionUrlRows(url).first()).toBeVisible({
+      timeout: 20_000,
+    });
+    return this.countSubscribedToUrl(url);
   }
 }

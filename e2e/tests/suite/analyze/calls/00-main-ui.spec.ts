@@ -1,13 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { CallsListPage } from "../../../../pages/calls-list.page";
 import { isCallsEmptyState } from "../../../../helpers/calls.helper";
+import { STAGING_EMPTY_SKIP } from "../../../../helpers/staging-profile";
 import { CALLS_COPY } from "../../../../data/calls-filter-data";
 
 test.describe("ANALYZE › Calls — Main UI @journey @new-user @calls", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isCallsEmptyState(page)),
-      "Call records exist — empty state not shown",
+      STAGING_EMPTY_SKIP.calls,
     );
   });
 

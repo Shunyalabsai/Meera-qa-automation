@@ -77,7 +77,4 @@ test.describe("BUILD › Playground — Phone Call mode @journey @new-user @play
     await expect(playground.contextVariablesInput()).toContainText("customer_name=Rahul");
   });
 
-  test("TC-VC-007 @high @positive @manual — Outbound call initiated via API", async () => {
-    test.skip(true, "Manual/API: POST /calls with phone number");
-  });
 });

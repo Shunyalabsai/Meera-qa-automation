@@ -1,35 +1,45 @@
-# QA Test Coverage Matrix
+# QA Test Coverage
 
-All **132 Google Sheet cases** are represented in the Playwright suite.
+The suite is **fully automated** — there are no manual/placeholder test cases in the
+project anymore. Every spec under `e2e/tests/suite/**` is an executable Playwright
+test against the live app.
 
-## Three layers
+The authoritative inventory is generated from the specs themselves:
 
-| Layer | Tag | Count (approx) | Command |
-|-------|-----|----------------|---------|
-| **UI automated** | `@positive` `@negative` `@edge` | ~600+ executable tests | `npm run test:positive` etc. |
-| **Manual / telephony / API** | `@manual` `@catalog` | 100 sheet cases | `npm run test:manual` |
-| **Registry audit** | `@qa-audit` | 1 | `npm run test:qa-audit` |
+```bash
+npm run sheet:catalog        # scan specs → e2e/data/test-catalog.json
+npm run sheet:real-catalog   # → e2e/REAL-TEST-CATALOG.csv (real cases, by section)
+```
 
-> Playwright `--grep @positive` matches any test title containing `@positive`, including journey specs.
+## Layers
+
+| Layer | Tag | Command |
+|-------|-----|---------|
+| Happy path | `@positive` | `npm run test:positive` |
+| Validation / failures | `@negative` | `npm run test:negative` |
+| Boundary cases | `@edge` | `npm run test:edge` |
+| CTA functional | `@cta` | `npm run test:cta` |
+
+> `--grep @positive` matches any test title containing `@positive`, including journey specs.
 
 ## By dashboard section
 
-| Section | Positive | Negative / Edge | Manual (sheet TC ID) |
-|---------|----------|-----------------|----------------------|
-| **Authentication** | sign-in, sign-up, SSO | extended-negative, security | TC-AU-* session/API |
-| **BUILD › Agents** | 5 card journeys + onboarding | templates/edge-cases (116), validation | POC gaps, mid-call delete |
-| **BUILD › Prompts** | 00–05 specs | 04-validation, 06-edge | Legacy KB upload (TC-KB-*) |
-| **BUILD › Playground** | `00–04` journey specs | `@negative` `@edge` | Live voice calls (TC-VC-*) |
-| **RUN › Phone numbers** | positive | negative | API outbound, concurrent |
-| **RUN › Campaigns** | positive | — | — |
-| **RUN › Live Calls** | positive | — | Inbound telephony |
-| **ANALYZE › Calls** | `00–04` journey specs | `@negative` `@edge` | Transcript security, telephony |
-| **ANALYZE › Recordings** | `00–04` journey specs | `@negative` `@edge` | Auth on recording URL, retention |
-| **ANALYZE › Insights** | `00–04` journey specs | `@negative` `@edge` | KPI/chart data after calls |
-| **SETTINGS › Alerts** | `00–06` journey specs | `@negative` `@edge` `@cta` | Alert firing, channel delivery |
-| **SETTINGS › Billing** | `00–05` journey specs | `@negative` `@edge` `@cta` | Usage chart after calls |
-| **SETTINGS › Webhooks** | `00–05` journey specs | `@negative` `@edge` `@cta` | SSRF, API keys |
-| **Global UI** | ui-coverage, responsive | ui-coverage | Performance (TC-PF-*), SC-* |
+| Section | Coverage |
+|---------|----------|
+| **Authentication** | sign-in, sign-up, SSO, extended-negative, security |
+| **BUILD › Agents** | 5 template journeys + onboarding, lifecycle, `templates/edge-cases` matrix, validation |
+| **BUILD › Prompts** | list / empty-state / create / edit / lifecycle / edge |
+| **BUILD › Playground** | browser mode, phone (Plivo) mode, negative, edge |
+| **RUN › Phone numbers** | list, add-number modal, negative, edge |
+| **RUN › Campaigns** | empty state, agent-required, phone-numbers link |
+| **RUN › Live Calls** | empty state, page load, positive, edge |
+| **ANALYZE › Calls** | list, filters, search, negative, edge |
+| **ANALYZE › Recordings** | list, filters, search, negative, edge |
+| **ANALYZE › Insights** | KPIs, widgets, filters, negative, edge |
+| **SETTINGS › Alerts** | rules, channels, negative, edge, cta |
+| **SETTINGS › Billing** | usage, filters, negative, edge, cta |
+| **SETTINGS › Webhooks** | quick-apply, subscriptions, custom events, negative, edge, cta, e2e delivery |
+| **Global UI** | navigation, responsive, language switcher, ui-coverage, cta-audit |
 
 ## Agent form edge matrix (all 5 gallery entries)
 
@@ -45,23 +55,20 @@ All **132 Google Sheet cases** are represented in the Playwright suite.
 
 ```bash
 npm run auth:save
-npm test                          # all tests (many manual will skip)
+npm test                          # all automated tests
 npm run test:positive             # happy-path only
 npm run test:negative             # validation & failures
 npm run test:edge                 # boundary cases
-npm run test:manual               # 100 sheet cases (documented skips)
 npm run test:agent-templates-edge # agent form edges only
-npm run coverage:report           # registry vs sheet
 ```
 
-## What requires manual execution
+## Out of scope for browser E2E (future manual effort — TBD)
 
-These **cannot** be fully automated in browser E2E:
+These were intentionally **removed** from the automated project to avoid confusion
+and will be planned separately later:
 
 - Live voice calls (Hindi, Hinglish, silence, noise, DTMF)
-- Telephony (inbound, concurrent, caller ID spoofing)
-- API security (JWT tampering, rate limits, IDOR)
-- Performance (latency, 50 concurrent calls, 100MB PDF)
+- Telephony (inbound, concurrent, caller-ID spoofing)
+- API security (JWT tampering, rate limits, IDOR, SSRF)
+- Performance (latency, concurrent calls)
 - Infrastructure (encryption at rest, multi-tenant isolation)
-
-Each has a Playwright test with `@manual` and the exact sheet steps in the skip reason.

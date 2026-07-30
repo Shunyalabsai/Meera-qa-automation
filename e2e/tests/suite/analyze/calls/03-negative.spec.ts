@@ -87,19 +87,4 @@ test.describe("ANALYZE › Calls — Negative @journey @new-user @calls @negativ
     ).toBeVisible({ timeout: 15_000 });
   });
 
-  test("TC-AN-201 @critical @security @manual — Cross-org call logs via API", async () => {
-    test.skip(true, "Manual/API: access another org call ID");
-  });
-
-  test("TC-AN-202 @critical @security @manual — PII redaction in transcripts", async () => {
-    test.skip(true, "Manual: verify PII masked in stored transcript");
-  });
-
-  test("TC-AN-203 @high @security @manual — Transcript not cached in browser", async () => {
-    test.skip(true, "Manual: inspect browser storage after viewing transcript");
-  });
-
-  test("TC-VC-201 @critical @security @manual — PII encryption at rest", async () => {
-    test.skip(true, "Manual/infra: inspect DB encryption for transcripts");
-  });
 });

@@ -59,19 +59,4 @@ test.describe("BUILD › Prompts — Edge cases @edge @negative @prompts", () =>
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test("TC-KB-101 @high @negative @manual — Upload unsupported file type", async () => {
-    test.skip(true, "Manual: legacy KB upload — not in Prompt Templates UI");
-  });
-
-  test("TC-KB-102 @high @negative @manual — Upload file exceeding size limit", async () => {
-    test.skip(true, "Manual: legacy KB upload — not in Prompt Templates UI");
-  });
-
-  test("TC-KB-103 @medium @negative @manual — Upload empty PDF", async () => {
-    test.skip(true, "Manual: legacy KB upload — not in Prompt Templates UI");
-  });
-
-  test("TC-KB-104 @critical @negative @manual — Prompt injection in KB document", async () => {
-    test.skip(true, "Manual: KB document injection — requires KB feature");
-  });
 });

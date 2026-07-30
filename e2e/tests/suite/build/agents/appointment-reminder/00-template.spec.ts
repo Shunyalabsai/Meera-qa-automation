@@ -14,7 +14,7 @@ test.describe("BUILD › Agents › Appointment reminder — Template @journey @
     await gotoNewAgent(page);
 
     const hasGallery = await page
-      .getByRole("heading", { name: /What are you building/i })
+      .getByRole("heading", { name: /What industry are you building for/i })
       .isVisible({ timeout: 8_000 })
       .catch(() => false);
 

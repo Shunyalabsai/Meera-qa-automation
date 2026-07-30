@@ -100,11 +100,4 @@ test.describe("Global › Language switcher — Edge @language @edge", () => {
     await switcher.expectLocalStorageLang("en");
   });
 
-  test("TC-LG-E110 @medium @edge @manual — Google Translate combo loads for non-English", async () => {
-    test.skip(true, "Manual: verify select.goog-te-combo appears after language pick");
-  });
-
-  test("TC-EC-008 @medium @edge @manual — RTL language Urdu layout", async () => {
-    test.skip(true, "Manual: select Urdu and verify RTL text direction on UI");
-  });
 });

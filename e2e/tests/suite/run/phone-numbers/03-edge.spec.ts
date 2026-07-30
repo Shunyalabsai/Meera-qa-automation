@@ -59,15 +59,4 @@ test.describe("RUN › Phone numbers — Edge @journey @new-user @phone-numbers 
     }
   });
 
-  test("TC-PN-E105 @medium @edge @manual — Add number with real Plivo credentials", async () => {
-    test.skip(true, "Manual: requires valid Plivo/Twilio credentials — do not run in CI");
-  });
-
-  test("TC-VC-203 @high @security @manual — Caller ID spoofing", async () => {
-    test.skip(true, "Manual/telephony: spoof inbound caller ID");
-  });
-
-  test("TC-VC-205 @critical @security @manual — Mass outbound API abuse", async () => {
-    test.skip(true, "Manual/API: rate limit test with 1000 outbound requests");
-  });
 });

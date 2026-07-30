@@ -92,10 +92,4 @@ test.describe("SETTINGS › Alerts — Channels form @journey @new-user @alerts 
     await expect(alerts.addChannelButton()).toBeVisible();
   });
 
-  test("TC-AL-038 @medium @positive @manual — Save Slack channel persists in list", async () => {
-    test.skip(
-      true,
-      "Manual: save valid Slack webhook channel, verify it appears in Channels list",
-    );
-  });
 });

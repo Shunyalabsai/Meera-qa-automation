@@ -155,23 +155,4 @@ test.describe("SETTINGS › Webhooks — Negative @journey @new-user @webhooks @
     ).toBeVisible({ timeout: 15_000 });
   });
 
-  test("TC-IN-202 @critical @security @manual — SSRF webhook to internal IP", async () => {
-    test.skip(true, "Manual: set webhook to 169.254.x.x and verify blocked");
-  });
-
-  test("TC-VC-204 @critical @security @manual — SSRF via webhook callback URL", async () => {
-    test.skip(true, "Manual: SSRF test on call webhook callback");
-  });
-
-  test("TC-IN-201 @high @security @manual — Webhook signature validation", async () => {
-    test.skip(true, "Manual: verify HMAC signature on webhook payload");
-  });
-
-  test("TC-IN-203 @high @security @manual — API key in URL parameter", async () => {
-    test.skip(true, "Manual: verify API key not accepted in query string");
-  });
-
-  test("TC-IN-204 @high @security @manual — Overprivileged API key scope", async () => {
-    test.skip(true, "Manual: verify scoped API key permissions");
-  });
 });

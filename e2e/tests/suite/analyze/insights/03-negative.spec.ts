@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { openInsights } from "../../../../helpers/insights.helper";
+import { openInsights, skipUnlessInsightsEmpty } from "../../../../helpers/insights.helper";
 import { skipKnownIssue } from "../../../../helpers/skip";
 import { INSIGHTS_COPY, INSIGHTS_SAMPLES } from "../../../../data/insights-data";
 
@@ -41,7 +41,8 @@ test.describe("ANALYZE › Insights — Negative @journey @new-user @insights @n
 
   test("TC-IS-N104 @medium @negative — Future date range keeps empty KPIs", async ({
     page,
-  }) => {
+  }, testInfo) => {
+    await skipUnlessInsightsEmpty(page, testInfo);
     const insights = await openInsights(page);
     const from = insights.dateFromInput();
     test.skip(

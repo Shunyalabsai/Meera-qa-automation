@@ -119,11 +119,4 @@ test.describe("SETTINGS › Webhooks — Quick apply @journey @new-user @webhook
     await expect(box).not.toBeChecked();
   });
 
-  test("TC-IN-002 @high @positive @manual — CRM webhook on call end", async () => {
-    test.skip(true, "Manual: configure CRM webhook and complete call");
-  });
-
-  test("TC-IN-003 @medium @positive @manual — Zapier/n8n integration", async () => {
-    test.skip(true, "Manual: configure Zapier/n8n webhook");
-  });
 });

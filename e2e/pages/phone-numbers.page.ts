@@ -1,5 +1,5 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { gotoApp } from "../helpers/navigate";
+import { gotoApp, waitForLoadingToClear } from "../helpers/navigate";
 
 /** RUN › Phone numbers — register Plivo/Twilio numbers. */
 export class PhoneNumbersPage {
@@ -8,6 +8,7 @@ export class PhoneNumbersPage {
   async open() {
     await gotoApp(this.page, "phone-numbers");
     await this.expectPageHeader();
+    await this.waitForListSettled();
   }
 
   async expectPageHeader() {
@@ -19,7 +20,24 @@ export class PhoneNumbersPage {
     ).toBeVisible();
   }
 
+  /**
+   * The numbers list and "Telephony accounts (N)" control render only after the
+   * data fetch resolves. Reading the empty state before then yields a false
+   * "not empty" (the empty message hasn't painted yet). The Telephony accounts
+   * control is present in both empty and populated states, so use it as the
+   * settle signal.
+   */
+  async waitForListSettled(): Promise<void> {
+    await waitForLoadingToClear(this.page);
+    await this.page
+      .getByRole("button", { name: /Telephony accounts/i })
+      .first()
+      .waitFor({ state: "visible", timeout: 30_000 })
+      .catch(() => undefined);
+  }
+
   async isEmptyState(): Promise<boolean> {
+    await this.waitForListSettled();
     return this.page
       .getByText(/No phone numbers registered yet/i)
       .isVisible({ timeout: 5_000 })

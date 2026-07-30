@@ -15,10 +15,20 @@ import {
   sectionKeyFromSpecPath,
   tabNameForSection,
 } from "../data/sheet-sections.mjs";
+import {
+  MAX_RUN_HISTORY,
+  allTabNamesFromHistory,
+  buildSummarySheetRows,
+  buildTabSheetRows,
+  loadSheetRunHistory,
+  saveSheetRunHistory,
+} from "./sheet-history.mjs";
+import { detectRunJourney, detectTestJourney } from "./sheet-format.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const catalogFile = path.join(root, "e2e/data/test-catalog.json");
 const resultsFile = path.join(root, "test-results/sheet-results.json");
+const playwrightJsonFile = path.join(root, "test-results/results.json");
 const historyFile = path.join(root, "e2e/data/test-results-history.json");
 const outDir = path.join(root, "e2e/data/results-sheets");
 
@@ -75,13 +85,115 @@ function tabForResult(result, catalogEntry) {
   return tabNameForSection(section);
 }
 
+/** Last retry wins — one row per test (keyed by title for dynamic specs). */
 function dedupeRunTests(tests) {
   const byKey = new Map();
   for (const t of tests) {
     const file = t.file.replace(/\\/g, "/");
-    byKey.set(`${file}:${t.line}`, t);
+    byKey.set(`${file}:${t.line}:${t.title}`, t);
   }
   return [...byKey.values()];
+}
+
+function specFilePath(specFile) {
+  const normalized = specFile.replace(/\\/g, "/");
+  return normalized.startsWith("e2e/") ? normalized : `e2e/${normalized}`;
+}
+
+function flattenPlaywrightJson(report) {
+  const tests = [];
+
+  function walkSuite(suite) {
+    for (const spec of suite.specs ?? []) {
+      for (const test of spec.tests ?? []) {
+        const results = test.results ?? [];
+        const result = results[results.length - 1];
+        if (!result) continue;
+
+        let reason = "";
+        if (result.status === "failed" || result.status === "timedOut") {
+          reason =
+            result.errors?.map((e) => e.message).join(" ") ?? "Test failed";
+        } else if (result.status === "skipped") {
+          reason =
+            result.error?.message ??
+            test.annotations?.find((a) => a.type === "skip")?.description ??
+            "Skipped";
+        } else if (result.status === "interrupted") {
+          reason = result.error?.message ?? "Interrupted";
+        }
+
+        tests.push({
+          title: spec.title,
+          file: specFilePath(spec.file),
+          line: spec.line,
+          status: result.status,
+          reason: stripAnsi(reason).replace(/\s+/g, " ").trim().slice(0, 4000),
+          durationMs: result.duration,
+          retry: result.retry,
+        });
+      }
+    }
+    for (const child of suite.suites ?? []) walkSuite(child);
+  }
+
+  for (const suite of report.suites ?? []) walkSuite(suite);
+  return dedupeRunTests(tests);
+}
+
+/** Prefer Playwright results.json — complete; sheet-results.json can drop dynamic tests. */
+function loadRunPayload() {
+  const sheetRun = fs.existsSync(resultsFile)
+    ? loadJson(resultsFile, null)
+    : null;
+  const pwReport = fs.existsSync(playwrightJsonFile)
+    ? loadJson(playwrightJsonFile, null)
+    : null;
+
+  if (!sheetRun?.tests?.length && !pwReport) return null;
+
+  const pwTests = pwReport ? flattenPlaywrightJson(pwReport) : [];
+  const sheetTests = sheetRun?.tests?.length
+    ? dedupeRunTests(sheetRun.tests)
+    : [];
+
+  const usePlaywright =
+    pwTests.length > sheetTests.length ||
+    (pwTests.length > 0 && sheetTests.length === 0);
+
+  const tests = usePlaywright ? pwTests : sheetTests;
+  if (!tests.length) return null;
+
+  const pwStats = pwReport?.stats;
+  const passed = tests.filter((t) => t.status === "passed").length;
+  const failed = tests.filter((t) =>
+    ["failed", "timedOut", "interrupted"].includes(t.status),
+  ).length;
+  const skipped = tests.filter((t) => t.status === "skipped").length;
+  const flaky = tests.filter((t) => t.retry > 0 && t.status === "passed").length;
+
+  const runAt =
+    sheetRun?.runAt ?? pwStats?.startTime ?? new Date().toISOString();
+  const runId = sheetRun?.runId ?? runAt.replace(/[:.]/g, "-");
+
+  return {
+    runAt,
+    finishedAt: sheetRun?.finishedAt ?? new Date().toISOString(),
+    environment: sheetRun?.environment ?? process.env.PLAYWRIGHT_BASE_URL ?? "",
+    runId,
+    status:
+      sheetRun?.status ??
+      (failed > 0 ? "failed" : skipped === tests.length ? "skipped" : "passed"),
+    stats: {
+      expected: passed,
+      unexpected: failed,
+      skipped,
+      flaky,
+      durationMs: pwStats?.duration ?? sheetRun?.stats?.durationMs ?? 0,
+    },
+    tests,
+    source: usePlaywright ? "results.json" : "sheet-results.json",
+  };
 }
 
 /**
@@ -91,12 +203,12 @@ function dedupeRunTests(tests) {
  */
 export function exportSheetResults(options = {}) {
   const log = options.log ?? false;
-  const resultsPath = options.resultsFile ?? resultsFile;
 
-  if (!fs.existsSync(resultsPath)) {
+  const run = loadRunPayload();
+  if (!run?.tests?.length) {
     if (log) {
       console.error(
-        "No real run data found at test-results/sheet-results.json",
+        "No real run data found at test-results/sheet-results.json or test-results/results.json",
       );
       console.error("Run tests on staging first:");
       console.error("  E2E_USE_SAVED_AUTH=true npm test");
@@ -104,23 +216,13 @@ export function exportSheetResults(options = {}) {
     return null;
   }
 
-  const run = loadJson(resultsPath, null);
-  if (!run?.tests?.length) {
-    if (log) {
-      console.error("sheet-results.json exists but contains zero test results.");
-      console.error(
-        "Run Playwright tests first — the sheet is not updated from catalog alone.",
-      );
-    }
-    return null;
+  if (log && run.source) {
+    console.log(`  Source: ${run.source} (${run.tests.length} tests)`);
   }
 
   const catalog = loadJson(catalogFile, { tests: [], tabs: [] });
   const index = catalogIndex(catalog);
   const executed = dedupeRunTests(run.tests);
-
-  const latestFile = path.join(root, "e2e/data/test-results-latest.json");
-  const latestStore = loadJson(latestFile, { tests: {} });
 
   const runRows = [];
 
@@ -138,6 +240,7 @@ export function exportSheetResults(options = {}) {
         catalogEntry?.title ??
         (result.title.replace(/^TC-[A-Z0-9-]+.*?—\s*/i, "").trim() ||
           result.title),
+      rawTitle: result.title,
       priority: catalogEntry?.priority ?? "",
       type: catalogEntry?.type ?? "",
       tags: catalogEntry?.tags?.join(", ") ?? "",
@@ -151,52 +254,106 @@ export function exportSheetResults(options = {}) {
       environment: run.environment,
       runId: run.runId,
       tab,
+      journey: detectTestJourney({
+        tags: catalogEntry?.tags?.join(", ") ?? "",
+        describe: catalogEntry?.describe ?? "",
+        specFile,
+        rawTitle: result.title,
+      }),
     };
 
-    const key = `${specFile}:${result.line}`;
-    latestStore.tests[key] = row;
     runRows.push(row);
   }
 
-  fs.writeFileSync(latestFile, JSON.stringify(latestStore, null, 2));
-
-  const allLatest = Object.values(latestStore.tests);
-  const mergedByTab = {};
-  for (const row of allLatest) {
-    if (!mergedByTab[row.tab]) mergedByTab[row.tab] = [];
-    mergedByTab[row.tab].push(row);
+  const rowsByTab = {};
+  for (const row of runRows) {
+    if (!rowsByTab[row.tab]) rowsByTab[row.tab] = [];
+    rowsByTab[row.tab].push(row);
   }
 
-  // Append run to history (executed tests only)
-  const history = loadJson(historyFile, { runs: [] });
-  history.runs.unshift({
-    runId: run.runId,
-    runAt: run.runAt,
-    finishedAt: run.finishedAt,
-    environment: run.environment,
-    status: run.status,
-    stats: run.stats,
-    executed: executed.length,
-    tabSummary: Object.fromEntries(
-      Object.entries(
-        runRows.reduce((acc, row) => {
-          if (!acc[row.tab]) acc[row.tab] = [];
-          acc[row.tab].push(row);
-          return acc;
-        }, {}),
-      ).map(([tab, rows]) => [
-        tab,
-        {
-          executed: rows.length,
-          pass: rows.filter((r) => r.status === "Pass").length,
-          fail: rows.filter((r) => r.status === "Fail").length,
-          skipped: rows.filter((r) => r.status === "Skipped").length,
-        },
-      ]),
-    ),
-  });
-  history.runs = history.runs.slice(0, 50);
-  fs.writeFileSync(historyFile, JSON.stringify(history, null, 2));
+  const sheetHistory = loadSheetRunHistory();
+
+  // One-time seed from legacy merged file (single run) when history is empty
+  if (!sheetHistory.runs.length) {
+    const legacyMerged = path.join(root, "e2e/data/test-results-merged.json");
+    if (fs.existsSync(legacyMerged)) {
+      const legacy = loadJson(legacyMerged, null);
+      if (legacy?.run && legacy?.tabs && Object.keys(legacy.tabs).length) {
+        sheetHistory.runs.unshift({
+          runId: legacy.run.runId,
+          runAt: legacy.run.runAt,
+          finishedAt: legacy.run.finishedAt,
+          environment: legacy.run.environment,
+          status: legacy.run.status,
+          stats: legacy.run.stats,
+          executed: legacy.runSummary?.executed ?? legacy.summary?.executed,
+          rowsByTab: legacy.tabs,
+        });
+        saveSheetRunHistory(sheetHistory);
+        if (log) {
+          console.log(
+            `  Seeded sheet history from previous merged export (${legacy.run.runId})`,
+          );
+        }
+      }
+    }
+  }
+
+  const alreadyRecorded = sheetHistory.runs.some((r) => r.runId === run.runId);
+
+  const runJourney = detectRunJourney(runRows);
+
+  if (!alreadyRecorded) {
+    sheetHistory.runs.unshift({
+      runId: run.runId,
+      runAt: run.runAt,
+      finishedAt: run.finishedAt,
+      environment: run.environment,
+      status: run.status,
+      stats: run.stats,
+      executed: executed.length,
+      journey: runJourney,
+      rowsByTab,
+    });
+    sheetHistory.runs = sheetHistory.runs.slice(0, MAX_RUN_HISTORY);
+    saveSheetRunHistory(sheetHistory);
+    if (log) {
+      console.log(
+        `  Appended run to sheet history (${sheetHistory.runs.length} run(s) stored)`,
+      );
+    }
+  } else if (log) {
+    console.log(`  Run ${run.runId} already in sheet history — rebuilding sheet`);
+  }
+
+  // Lightweight metadata log (no per-test rows)
+  const metaHistory = loadJson(historyFile, { runs: [] });
+  if (!metaHistory.runs.some((r) => r.runId === run.runId)) {
+    metaHistory.runs.unshift({
+      runId: run.runId,
+      runAt: run.runAt,
+      finishedAt: run.finishedAt,
+      environment: run.environment,
+      status: run.status,
+      stats: run.stats,
+      executed: executed.length,
+      tabSummary: Object.fromEntries(
+        Object.entries(rowsByTab).map(([tab, rows]) => [
+          tab,
+          {
+            executed: rows.length,
+            pass: rows.filter((r) => r.status === "Pass").length,
+            fail: rows.filter((r) => r.status === "Fail").length,
+            skipped: rows.filter((r) => r.status === "Skipped").length,
+          },
+        ]),
+      ),
+    });
+    metaHistory.runs = metaHistory.runs.slice(0, 50);
+    fs.writeFileSync(historyFile, JSON.stringify(metaHistory, null, 2));
+  }
+
+  const tabNames = allTabNamesFromHistory(sheetHistory.runs);
 
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -206,111 +363,60 @@ export function exportSheetResults(options = {}) {
     }
   }
 
-  for (const [tab, rows] of Object.entries(mergedByTab)) {
-    const lines = [rowToCsv(RESULT_COLUMNS)];
-    for (const r of rows) {
-      lines.push(
-        rowToCsv([
-          r.testId,
-          r.title,
-          r.priority,
-          r.type,
-          r.tags,
-          r.specFile,
-          r.describe,
-          r.status,
-          r.lastRunAt,
-          r.durationSec,
-          r.reason,
-          r.environment,
-          r.runId,
-        ]),
-      );
-    }
+  const sheetTabs = {};
+  const sheetTabMeta = {};
+  for (const tab of tabNames) {
+    const built = buildTabSheetRows(sheetHistory.runs, tab);
+    sheetTabs[tab] = built.rows;
+    sheetTabMeta[tab] = built.rowMeta;
     const safeName = tab.replace(/[\\/:*?"<>|]/g, "-");
+    const lines = built.rows.map((cells) => rowToCsv(cells));
     fs.writeFileSync(path.join(outDir, `${safeName}.csv`), lines.join("\n") + "\n");
   }
+
+  const summaryBuilt = buildSummarySheetRows(sheetHistory.runs);
+  const summarySheetRows = summaryBuilt.rows;
+  const summarySheetMeta = summaryBuilt.rowMeta;
+  fs.writeFileSync(
+    path.join(outDir, `${SUMMARY_TAB.replace(/[\\/:*?"<>|]/g, "-")}.csv`),
+    summarySheetRows.map((cells) => rowToCsv(cells)).join("\n") + "\n",
+  );
 
   const pass = runRows.filter((r) => r.status === "Pass").length;
   const fail = runRows.filter((r) => r.status === "Fail").length;
   const skipped = runRows.filter((r) => r.status === "Skipped").length;
 
-  const summaryLines = [
-    rowToCsv([
-      "Run ID",
-      "Run At",
-      "Environment",
-      "Overall Status",
-      "Tests Executed",
-      "Passed",
-      "Failed",
-      "Skipped",
-      "Duration (min)",
-    ]),
-    rowToCsv([
-      run.runId,
-      run.runAt,
-      run.environment,
-      run.status,
-      runRows.length,
-      pass,
-      fail,
-      skipped,
-      (run.stats.durationMs / 60000).toFixed(2),
-    ]),
-    "",
-    rowToCsv(["Section Tab", "Executed", "Pass", "Fail", "Skipped"]),
-  ];
-
-  for (const tab of Object.keys(mergedByTab).sort()) {
-    const rows = mergedByTab[tab];
-    summaryLines.push(
-      rowToCsv([
-        tab,
-        rows.length,
-        rows.filter((r) => r.status === "Pass").length,
-        rows.filter((r) => r.status === "Fail").length,
-        rows.filter((r) => r.status === "Skipped").length,
-      ]),
-    );
-  }
-
-  fs.writeFileSync(
-    path.join(outDir, `${SUMMARY_TAB.replace(/[\\/:*?"<>|]/g, "-")}.csv`),
-    summaryLines.join("\n") + "\n",
-  );
-
   const mergedOut = path.join(root, "e2e/data/test-results-merged.json");
   const mergedPayload = {
     generatedAt: new Date().toISOString(),
-    run,
+    run: { ...run, journey: runJourney },
+    historyRunCount: sheetHistory.runs.length,
     runSummary: {
       executed: runRows.length,
       pass,
       fail,
       skipped,
+      journey: runJourney,
     },
-    tabs: mergedByTab,
-    summary: {
-      executed: allLatest.length,
-      pass: allLatest.filter((r) => r.status === "Pass").length,
-      fail: allLatest.filter((r) => r.status === "Fail").length,
-      skipped: allLatest.filter((r) => r.status === "Skipped").length,
-    },
+    sheetTabs,
+    sheetTabMeta,
+    summarySheetRows,
+    summarySheetMeta,
+    tabNames,
   };
   fs.writeFileSync(mergedOut, JSON.stringify(mergedPayload, null, 2));
 
   if (log) {
     console.log(
-      `Exported ${Object.keys(mergedByTab).length} section tab(s) + Summary → ${outDir}`,
+      `Exported ${tabNames.length} section tab(s) + Summary → ${outDir}`,
     );
-    console.log(`  Run: ${run.runId} (${run.status})`);
+    console.log(`  Run: ${run.runId} (${run.status}) — ${runJourney}`);
     console.log(`  Environment: ${run.environment}`);
     console.log(
       `  This run: ${runRows.length} — Pass ${pass} / Fail ${fail} / Skipped ${skipped}`,
     );
     console.log(
-      `  Latest store: ${allLatest.length} test(s) across ${Object.keys(mergedByTab).length} tab(s)`,
+      `  Sheet history: ${sheetHistory.runs.length} run(s) — Summary tab tracks runs; section tabs list all test rows`,
     );
   }
 

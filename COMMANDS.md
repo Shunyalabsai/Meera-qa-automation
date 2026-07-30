@@ -16,6 +16,7 @@ npm run auth:save
 npm test                    # full automated suite
 npm run test:smoke          # @smoke only
 npm run test:new-user       # first-time user journey (@new-user, ~375 tests)
+npm run test:existing-user  # returning user with data (@existing-user, ~391 tests)
 
 # Authentication (sign-in screen)
 npm run test:auth           # all auth (includes logout)
@@ -31,8 +32,6 @@ npm run test:settings       # SETTINGS: Alerts, Billing, Webhooks
 # Single areas
 npm run test:agents         # BUILD › Agents only
 npm run test:global         # Language, nav, responsive
-
-npm run test:catalog        # all pending sheet cases
 ```
 
 ---
@@ -76,12 +75,11 @@ Global UI
 ## Utilities
 
 ```bash
-npm run sheet:sync          # pull QA cases from legacy Google Sheet
-npm run sheet:catalog       # scan specs → e2e/data/test-catalog.json (800+ tests)
+npm run sheet:catalog       # scan specs → e2e/data/test-catalog.json
+npm run sheet:real-catalog  # → e2e/REAL-TEST-CATALOG.csv (real cases by section)
 npm run sheet:export        # merge last run → CSV per section tab
 npm run sheet:publish       # push results to Google Sheet (service account)
 npm run sheet:update        # export + publish (also runs automatically after npm test)
-npm run coverage:report
 npm run report
 ```
 

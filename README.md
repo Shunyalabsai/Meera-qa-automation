@@ -17,10 +17,10 @@ npm install && npm run install:browsers
 cp .env.example .env
 npm run auth:save
 npm test
-npm run coverage:report
-npm run sheet:catalog    # scan all 800+ tests into catalog
-npm run sheet:export     # CSV per section tab (after a test run)
-npm run sheet:publish    # push to Google Sheet (needs service account)
+npm run sheet:catalog       # scan all specs into catalog
+npm run sheet:real-catalog  # → e2e/REAL-TEST-CATALOG.csv (real cases by section)
+npm run sheet:export        # CSV per section tab (after a test run)
+npm run sheet:publish       # push to Google Sheet (needs service account)
 ```
 
 ---
@@ -47,22 +47,21 @@ e2e/tests/suite/
 │   ├── billing/
 │   └── webhooks/
 ├── workspace/               Org switcher, personal workspace, user profile
-├── global/                  Sidebar nav, responsive, language selector
-└── catalog.spec.ts          Remaining sheet cases by dashboard section
+└── global/                  Sidebar nav, responsive, language selector
 ```
 
-### Dashboard ↔ Sheet mapping
+### Dashboard ↔ TC ID prefixes
 
-| Dashboard | Sheet cases routed here |
-|-----------|-------------------------|
+| Dashboard | Primary TC ID prefixes |
+|-----------|------------------------|
 | BUILD › Agents | TC-AG-* |
-| BUILD › Prompts | TC-KB-* |
-| BUILD › Playground | TC-VC-* (voice/telephony UI) |
-| RUN › * | TC-VC-* (phone, live), TC-AN-006 |
-| ANALYZE › Calls | TC-AN-* |
-| SETTINGS › Webhooks | TC-IN-* |
+| BUILD › Prompts | TC-PT-*, TC-KB-* |
+| BUILD › Playground | TC-PG-*, TC-VC-* (UI / dial validation) |
+| RUN › * | TC-PN-*, TC-CM-*, TC-LC-*, TC-AN-006 |
+| ANALYZE › Calls | TC-AN-*, TC-CL-* |
+| SETTINGS › Webhooks | TC-WH-*, TC-IN-* |
 | Authentication | TC-AU-* |
-| Global UI | TC-UI-*, TC-PF-*, TC-EC-*, TC-SC-* |
+| Global UI | TC-UI-*, TC-LG-* |
 
 ---
 
@@ -74,7 +73,5 @@ e2e/tests/suite/
 | Positive only | `npm run test:positive` |
 | Negative only | `npm run test:negative` |
 | Edge only | `npm run test:edge` |
-| Manual sheet catalog (132 cases) | `npm run test:manual` |
 | Per dashboard group | `npm run test:build`, `test:run`, etc. |
-| Coverage matrix | [e2e/COVERAGE.md](./e2e/COVERAGE.md) |
-| Registry vs sheet | `npm run coverage:report` |
+| Coverage overview | [e2e/COVERAGE.md](./e2e/COVERAGE.md) |

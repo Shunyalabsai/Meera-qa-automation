@@ -55,19 +55,4 @@ test.describe("BUILD › Playground — Browser mode @journey @new-user @playgro
     await playground.expectBrowserModePanel();
   });
 
-  test("TC-VC-002 @high @positive @manual — Hindi speech during browser call", async () => {
-    test.skip(true, "Manual: speak Hindi during browser call and verify transcription");
-  });
-
-  test("TC-VC-003 @high @positive @manual — Hinglish code-switch during browser call", async () => {
-    test.skip(true, "Manual: speak mixed Hindi-English during browser call");
-  });
-
-  test("TC-VC-004 @high @positive @manual — TTS response in configured language", async () => {
-    test.skip(true, "Manual: verify spoken response language during live call");
-  });
-
-  test("TC-VC-005 @high @positive @manual — Graceful hangup saves transcript in log", async () => {
-    test.skip(true, "Manual: end browser call and verify log updates");
-  });
 });

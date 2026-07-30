@@ -98,9 +98,6 @@ test.describe("Global UI — Edge @edge @global", () => {
     }
   });
 
-  test("TC-EC-006 @medium @edge @manual — Duplicate agent names allowed or blocked", async () => {
-    test.skip(true, "Manual: create two agents with identical names and verify policy");
-  });
 });
 
 test.describe("Global UI — Security @security @global", () => {
@@ -122,11 +119,4 @@ test.describe("Global UI — Security @security @global", () => {
     expect(page.url().startsWith("https://")).toBe(true);
   });
 
-  test("TC-SC-001 @critical @security @manual — IDOR cross-org access", async () => {
-    test.skip(true, "Manual/API: manipulate org ID in URL");
-  });
-
-  test("TC-PF-001 @high @performance @manual — Dashboard load under 3s", async () => {
-    test.skip(true, "Manual/perf: measure dashboard load time");
-  });
 });

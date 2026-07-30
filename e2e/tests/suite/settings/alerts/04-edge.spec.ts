@@ -77,10 +77,4 @@ test.describe("SETTINGS › Alerts — Edge @journey @new-user @alerts @edge", (
     await alerts.expectAddChannelFormVisible();
   });
 
-  test("TC-AL-E108 @medium @edge @manual — Alert fires and appears in Recent events", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: trigger metric threshold, verify event in Recent events",
-    );
-  });
 });

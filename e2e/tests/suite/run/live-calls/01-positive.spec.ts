@@ -37,14 +37,4 @@ test.describe("RUN › Live Calls — Positive @journey @new-user @live-calls @p
     }
   });
 
-  test("TC-VC-001 @critical @positive @manual — Inbound call appears within seconds", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: start call from Playground or /api/calls — verify row appears on Live Calls",
-    );
-  });
-
-  test("TC-LC-013 @medium @positive @manual — Click active row opens live conversation view", async () => {
-    test.skip(true, "Manual: with active call, click row and verify live transcript/audio");
-  });
 });

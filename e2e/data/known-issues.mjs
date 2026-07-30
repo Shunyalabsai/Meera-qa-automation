@@ -29,12 +29,19 @@ export const KNOWN_ISSUES = {
   "CM-LINK-001": {
     category: "product-gap",
     summary:
-      'Campaign create form "Add one in Phone Numbers" link href omits /vap/ — click lands on nginx 404 (https://meera-stage.shunyalabs.ai/phone-numbers)',
+      'Campaign create form "Add one in Phone Numbers" link href omits /vap/ — click lands on nginx 404 (https://agents.shunyalabs.ai/phone-numbers)',
     status: "open",
     fix: "Link href should be /vap/phone-numbers (or relative under SPA base)",
     tests: ["TC-CM-020", "TC-CM-021", "CTA-CM-002"],
     note:
       "Earlier test runs showed false Pass when clickAddPhoneNumbersLink() fell back to sidebar nav — removed; tests must fail until product fix",
+  },
+  "CL-EXPORT-001": {
+    category: "product-gap",
+    summary:
+      "Calls list exposes no Export / Download / CSV control even when call records are present",
+    status: "open",
+    fix: "Add export action to the Calls page toolbar",
   },
 };
 

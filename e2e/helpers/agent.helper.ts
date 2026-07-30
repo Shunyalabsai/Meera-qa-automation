@@ -23,7 +23,7 @@ export async function openAgentFormForEntry(
 
   const gallery = new AgentTemplatePage(page);
   const onGallery = await page
-    .getByRole("heading", { name: /What are you building/i })
+    .getByRole("heading", { name: /What industry are you building for/i })
     .isVisible({ timeout: 2_000 })
     .catch(() => false);
 
@@ -119,7 +119,7 @@ export async function createAgentViaUi(
 
 /** @deprecated use openAgentFormFromScratch */
 export async function dismissAgentTemplatePicker(page: Page): Promise<boolean> {
-  const picker = page.getByRole("heading", { name: /What are you building/i });
+  const picker = page.getByRole("heading", { name: /What industry are you building for/i });
   if (!(await picker.isVisible({ timeout: 5_000 }).catch(() => false))) {
     return false;
   }

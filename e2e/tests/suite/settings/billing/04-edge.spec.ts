@@ -57,10 +57,4 @@ test.describe("SETTINGS › Billing — Edge @journey @new-user @billing @edge",
     }
   });
 
-  test("TC-BL-E106 @medium @edge @manual — Usage chart populates after calls", async () => {
-    test.skip(
-      true,
-      "Manual/telephony: complete calls, verify Usage over time chart has data",
-    );
-  });
 });
