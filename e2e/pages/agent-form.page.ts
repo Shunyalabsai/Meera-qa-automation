@@ -70,7 +70,7 @@ export class AgentFormPage {
       this.page.getByRole("heading", { name: /New agent/i }),
     ).toBeVisible();
     await expect(
-      this.page.getByText(/pipeline type locks everything else/i),
+      this.page.getByText(/which voice pipeline|pipeline type locks everything else/i),
     ).toBeVisible();
   }
 

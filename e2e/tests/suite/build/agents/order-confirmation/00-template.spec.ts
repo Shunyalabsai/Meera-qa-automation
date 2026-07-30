@@ -22,9 +22,6 @@ test.describe("BUILD › Agents › Order confirmation — Template @journey @or
 
     const gallery = new AgentTemplatePage(page);
     await gallery.expectGallery();
-    await expect(
-      page.getByText(ORDER_CONFIRMATION_TEMPLATE.cardTitle, { exact: false }),
-    ).toBeVisible();
     await gallery.selectTemplate(ORDER_CONFIRMATION_TEMPLATE.cardTitle);
 
     const form = new AgentFormPage(page);

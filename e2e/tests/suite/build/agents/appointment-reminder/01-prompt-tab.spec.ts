@@ -31,14 +31,14 @@ test.describe("BUILD › Agents › Appointment reminder — Prompt tab @journey
     }
   });
 
-  test("TC-AG-AR-012 @high @positive — Pre-fills en, professional tone, neutral accent/gender", async ({
+  test("TC-AG-AR-012 @high @positive — Pre-fills template defaults", async ({
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.languageSelect()).toHaveValue("en");
-    await expect(form.voiceToneSelect()).toHaveValue("professional");
-    await expect(form.accentSelect()).toHaveValue("neutral");
-    await expect(form.genderSelect()).toHaveValue("neutral");
+    await expect(form.languageSelect()).toHaveValue(APPOINTMENT_REMINDER_TEMPLATE.expectedLanguage);
+    await expect(form.voiceToneSelect()).toHaveValue(APPOINTMENT_REMINDER_TEMPLATE.expectedVoiceTone);
+    await expect(form.accentSelect()).toHaveValue(APPOINTMENT_REMINDER_TEMPLATE.expectedAccent);
+    await expect(form.genderSelect()).toHaveValue(APPOINTMENT_REMINDER_TEMPLATE.expectedGender);
   });
 
   test("TC-AG-AR-013 @high @positive — Name and description fields accept input", async ({

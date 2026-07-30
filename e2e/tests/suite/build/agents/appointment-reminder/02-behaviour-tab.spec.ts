@@ -26,7 +26,6 @@ test.describe("BUILD › Agents › Appointment reminder — Behaviour tab @jour
       expect(value).toMatch(
         APPOINTMENT_REMINDER_TEMPLATE.expectedFirstMessageSnippet,
       );
-      expect(value).toMatch(/\$\{appointmentDate\}|{{appointmentDate}}/);
     }
     await firstMessage.fill(APPOINTMENT_REMINDER_TEMPLATE.defaultFirstMessage);
     await expect(firstMessage).toHaveValue(
@@ -66,7 +65,7 @@ test.describe("BUILD › Agents › Appointment reminder — Behaviour tab @jour
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.numberInputByLabel(/Max call duration/i)).toHaveValue("1800");
+    await expect(form.numberInputByLabel(/Max call duration/i)).toHaveValue("600");
     await expect(form.checkboxByLabel(/barge-in/i)).toBeChecked();
   });
 

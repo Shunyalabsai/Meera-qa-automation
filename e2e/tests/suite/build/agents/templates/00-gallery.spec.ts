@@ -5,8 +5,10 @@ import {
 } from "../../../../../pages/agent-template.page";
 import { gotoNewAgent } from "../../../../../helpers/agent.helper";
 
+const INDUSTRIES = ["BFSI", "Ecommerce", "Healthcare", "Logistics", "Telecom"];
+
 test.describe("BUILD › Agents › Template gallery @templates", () => {
-  test("TC-AG-TPL-001 @high @ui — Gallery shows all 4 template cards and Start from scratch", async ({
+  test("TC-AG-TPL-001 @high @ui — Gallery shows all 5 industry cards and Start from scratch", async ({
     page,
   }) => {
     await gotoNewAgent(page);
@@ -22,10 +24,10 @@ test.describe("BUILD › Agents › Template gallery @templates", () => {
     await gallery.expectGallery();
     await gallery.expectAllTemplateCards();
 
-    for (const t of AGENT_TEMPLATES) {
-      await expect(page.getByText(t.title, { exact: false })).toBeVisible();
-      await expect(page.getByText(t.description, { exact: false })).toBeVisible();
+    for (const industry of INDUSTRIES) {
+      await expect(gallery.industryCard(industry)).toBeVisible();
     }
+    await expect(page.getByText(/Start from scratch/i)).toBeVisible();
   });
 
   for (const t of AGENT_TEMPLATES) {

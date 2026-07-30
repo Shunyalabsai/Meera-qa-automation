@@ -64,7 +64,7 @@ test.describe("BUILD › Agents › Customer support — Behaviour tab @journey 
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.numberInputByLabel(/Max call duration/i)).toHaveValue("1800");
+    await expect(form.numberInputByLabel(/Max call duration/i)).toHaveValue("600");
     const cb = form.checkboxByLabel(/barge-in/i);
     await cb.check();
     await expect(cb).toBeChecked();

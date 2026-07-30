@@ -14,6 +14,6 @@ test.describe("Authentication › Google SSO @smoke", () => {
     await gotoApp(page, "agents");
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Agents" })).toBeVisible();
-    await expect(page.getByText(/Voice Agent Platform/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Voice Agent Platform/i })).toBeVisible();
   });
 });

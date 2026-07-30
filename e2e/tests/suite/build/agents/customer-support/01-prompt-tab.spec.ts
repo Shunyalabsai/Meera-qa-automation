@@ -31,14 +31,14 @@ test.describe("BUILD › Agents › Customer support — Prompt tab @journey @cu
     }
   });
 
-  test("TC-AG-CS-012 @high @positive — Pre-fills en, warm tone, neutral accent/gender", async ({
+  test("TC-AG-CS-012 @high @positive — Pre-fills template defaults", async ({
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.languageSelect()).toHaveValue("en");
-    await expect(form.voiceToneSelect()).toHaveValue("warm");
-    await expect(form.accentSelect()).toHaveValue("neutral");
-    await expect(form.genderSelect()).toHaveValue("neutral");
+    await expect(form.languageSelect()).toHaveValue(CUSTOMER_SUPPORT_TEMPLATE.expectedLanguage);
+    await expect(form.voiceToneSelect()).toHaveValue(CUSTOMER_SUPPORT_TEMPLATE.expectedVoiceTone);
+    await expect(form.accentSelect()).toHaveValue(CUSTOMER_SUPPORT_TEMPLATE.expectedAccent);
+    await expect(form.genderSelect()).toHaveValue(CUSTOMER_SUPPORT_TEMPLATE.expectedGender);
   });
 
   test("TC-AG-CS-013 @high @positive — Name and description fields accept input", async ({

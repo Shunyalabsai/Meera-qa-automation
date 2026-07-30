@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { openDebtRecoveryAgentForm } from "../../../../../helpers/agent.helper";
 import { AgentFormPage } from "../../../../../pages/agent-form.page";
+import { DEBT_RECOVERY_TEMPLATE } from "../../../../../data/debt-recovery-template";
 
 /**
  * Debt recovery–specific Prompt tab tests.
@@ -35,13 +36,13 @@ test.describe("BUILD › Agents › Debt recovery — Prompt tab @journey @debt-
     }
   });
 
-  test("TC-AG-004 @high @positive — Debt recovery pre-fills hinglish and assertive", async ({
+  test("TC-AG-004 @high @positive — Debt recovery pre-fills template defaults", async ({
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.languageSelect()).toHaveValue("hinglish");
-    await expect(form.voiceToneSelect()).toHaveValue("assertive");
-    await expect(form.accentSelect()).toHaveValue("neutral");
+    await expect(form.languageSelect()).toHaveValue(DEBT_RECOVERY_TEMPLATE.expectedLanguage);
+    await expect(form.voiceToneSelect()).toHaveValue(DEBT_RECOVERY_TEMPLATE.expectedVoiceTone);
+    await expect(form.accentSelect()).toHaveValue(DEBT_RECOVERY_TEMPLATE.expectedAccent);
   });
 
   test("TC-AG-DR-019 @high @positive — Name and description fields accept input", async ({

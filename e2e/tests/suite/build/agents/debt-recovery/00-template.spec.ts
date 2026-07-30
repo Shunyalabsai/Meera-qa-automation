@@ -19,9 +19,6 @@ test.describe("BUILD › Agents › Debt recovery — Template @journey @debt-re
 
     const gallery = new AgentTemplatePage(page);
     await gallery.expectGallery();
-    await expect(
-      page.getByText(DEBT_RECOVERY_TEMPLATE.cardTitle, { exact: false }),
-    ).toBeVisible();
     await gallery.selectTemplate(DEBT_RECOVERY_TEMPLATE.cardTitle);
 
     const form = new AgentFormPage(page);

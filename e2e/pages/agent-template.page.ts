@@ -7,25 +7,39 @@ export const AGENT_TEMPLATES = [
     id: "debt-recovery",
     title: "Debt recovery",
     description: "Call customers about overdue payments",
+    industry: "BFSI",
+    agentCard: "Credit Card Payment Reminder Agent",
   },
   {
     id: "order-confirmation",
     title: "Order confirmation",
     description: "Confirm order details and delivery",
+    industry: "Logistics",
+    agentCard: "Order Confirmation & Reschedule Agent",
   },
   {
     id: "appointment-reminder",
     title: "Appointment reminder",
     description: "Remind customers about upcoming appointments",
+    industry: "Healthcare",
+    agentCard: "Appointment Reminder & Reschedule Agent (Hinglish)",
   },
   {
     id: "customer-support",
     title: "Customer support",
     description: "Handle inbound support calls",
+    industry: "Telecom",
+    agentCard: "Retention Call Agent",
   },
 ] as const;
 
 export type AgentTemplateTitle = (typeof AGENT_TEMPLATES)[number]["title"];
+
+/** Maps old template titles to the new 2-step gallery (industry → agent card). */
+const TEMPLATE_INDUSTRY_MAP: Record<string, { industry: string; agentCard: string }> =
+  Object.fromEntries(
+    AGENT_TEMPLATES.map((t) => [t.title, { industry: t.industry, agentCard: t.agentCard }]),
+  );
 
 /** Every way to reach the agent form from /agents/new. */
 export const TEMPLATE_FORM_ENTRIES = [
@@ -73,6 +87,18 @@ export class AgentTemplatePage {
     return this.page.getByRole("button", { name: new RegExp(title, "i") });
   }
 
+  industryCard(industry: string) {
+    return this.page.getByRole("button", { name: new RegExp(industry, "i") }).first();
+  }
+
+  async selectIndustry(industry: string) {
+    await this.industryCard(industry).click();
+    await this.page.getByRole("button", { name: /← Back to industries/i }).waitFor({
+      state: "visible",
+      timeout: 10_000,
+    });
+  }
+
   async waitForGalleryOrForm() {
     await waitForLoadingToClear(this.page);
     await expect(
@@ -93,7 +119,23 @@ export class AgentTemplatePage {
       return;
     }
     await this.expectGallery();
-    await this.templateCard(title).click();
+
+    // New 2-step gallery: industry → agent card
+    const mapping = TEMPLATE_INDUSTRY_MAP[title];
+    if (mapping) {
+      await this.selectIndustry(mapping.industry);
+      // Match on the first part of agentCard (strip parenthetical suffixes which
+      // can interfere with Playwright's accessible-name regex matching).
+      const agentPattern = mapping.agentCard.replace(/\s*\(.*\)\s*$/, "").trim();
+      await this.page
+        .getByRole("button", { name: new RegExp(agentPattern, "i") })
+        .first()
+        .click();
+    } else {
+      // Fallback: try to click the template title directly (old 1-step gallery)
+      await this.templateCard(title).click();
+    }
+
     await expect(
       this.page.getByRole("tab", { name: "Prompt" }),
     ).toBeVisible({ timeout: 30_000 });

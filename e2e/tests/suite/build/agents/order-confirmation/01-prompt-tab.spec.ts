@@ -31,14 +31,14 @@ test.describe("BUILD › Agents › Order confirmation — Prompt tab @journey @
     }
   });
 
-  test("TC-AG-OC-012 @high @positive — Pre-fills hinglish, warm tone, neutral accent/gender", async ({
+  test("TC-AG-OC-012 @high @positive — Pre-fills template defaults", async ({
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.languageSelect()).toHaveValue("hinglish");
-    await expect(form.voiceToneSelect()).toHaveValue("warm");
-    await expect(form.accentSelect()).toHaveValue("neutral");
-    await expect(form.genderSelect()).toHaveValue("neutral");
+    await expect(form.languageSelect()).toHaveValue(ORDER_CONFIRMATION_TEMPLATE.expectedLanguage);
+    await expect(form.voiceToneSelect()).toHaveValue(ORDER_CONFIRMATION_TEMPLATE.expectedVoiceTone);
+    await expect(form.accentSelect()).toHaveValue(ORDER_CONFIRMATION_TEMPLATE.expectedAccent);
+    await expect(form.genderSelect()).toHaveValue(ORDER_CONFIRMATION_TEMPLATE.expectedGender);
   });
 
   test("TC-AG-OC-013 @high @positive — Name and description fields accept input", async ({
