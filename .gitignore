@@ -10,6 +10,7 @@ node_modules/
 
 # Generated test run exports — never commit; publish only from live staging runs
 e2e/data/results-sheets/
+e2e/data/screenshots/
 e2e/data/test-results-merged.json
 e2e/data/test-results-history.json
 e2e/data/test-results-latest.json

@@ -41,6 +41,34 @@ const resultsFile = path.join(root, "test-results/sheet-results.json");
 const playwrightJsonFile = path.join(root, "test-results/results.json");
 const historyFile = path.join(root, "e2e/data/test-results-history.json");
 const outDir = path.join(root, "e2e/data/results-sheets");
+const screenshotRoot = path.join(root, "e2e/data/screenshots");
+
+/**
+ * Copy failure screenshots out of test-results/ into a durable folder
+ * (e2e/data/screenshots/<runId>/). Playwright wipes test-results/ at the
+ * start of every run, so without this the screenshots die with the next run.
+ * Mutates each row's `screenshot` to the durable path.
+ */
+function persistRunScreenshots(runId, rows) {
+  const dir = path.join(screenshotRoot, String(runId).replace(/[:.]/g, "-"));
+  let copied = 0;
+  for (const [i, row] of rows.entries()) {
+    const src = row.screenshot;
+    if (!src || !fs.existsSync(src)) continue;
+    // Prefix with the row index — Playwright names every failure
+    // "test-failed-1.png", so a bare basename would collide.
+    const dest = path.join(dir, `${i}-${path.basename(src)}`);
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+      fs.copyFileSync(src, dest);
+      row.screenshot = dest;
+      copied++;
+    } catch {
+      // keep the original path; the failure stays readable
+    }
+  }
+  return copied;
+}
 
 function escapeCsv(value) {
   const s = String(value ?? "");
@@ -309,6 +337,11 @@ export function exportSheetResults(options = {}) {
     };
 
     runRows.push(row);
+  }
+
+  const savedShots = persistRunScreenshots(run.runId, runRows);
+  if (log && savedShots) {
+    console.log(`  Persisted ${savedShots} failure screenshot(s) → e2e/data/screenshots/`);
   }
 
   const rowsByTab = {};
