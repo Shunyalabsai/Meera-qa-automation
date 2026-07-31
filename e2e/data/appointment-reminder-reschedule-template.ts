@@ -11,10 +11,11 @@ export const APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE = {
   expectedSystemPromptSnippet: /appointment|reschedule|remind|Healthcare/i,
   expectedFirstMessageSnippet: /baat kar rahi|appointment|remind/i,
   defaultFirstMessage:
-    "Hi {{customerName}}, I'm calling to remind you about your appointment on {{appointmentDate}}. Can you confirm you'll be attending?",
+    "Hi! Kya main ${patient_name} ji se baat kar rahi hoon?",
   defaultSilenceTimeoutSecs: 10,
-  defaultIdleMaxRetries: 4,
+  defaultIdleMaxRetries: 2,
   defaultMaxCallDurationSecs: 600,
+  defaultCallDirection: "outbound",
   defaultExtractionFields: [
     "appointmentConfirmed",
     "rescheduleRequested",

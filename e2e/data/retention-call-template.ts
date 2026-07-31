@@ -11,10 +11,11 @@ export const RETENTION_CALL_TEMPLATE = {
   expectedSystemPromptSnippet: /retention|cancellation|customer/i,
   expectedFirstMessageSnippet: /retention|cancel/i,
   defaultFirstMessage:
-    "Hi, thank you for reaching {{brand}} support. I'm here to help you today. What can I assist you with?",
+    "Hi, this is Sarah calling from ConnectTel regarding your recent request to cancel your mobile service. Am I speaking with ${customer_name}?",
   defaultSilenceTimeoutSecs: 10,
   defaultIdleMaxRetries: 2,
-  defaultMaxCallDurationSecs: 1800,
+  defaultMaxCallDurationSecs: 600,
+  defaultCallDirection: "outbound",
   defaultExtractionFields: [
     "issueType",
     "issueResolved",

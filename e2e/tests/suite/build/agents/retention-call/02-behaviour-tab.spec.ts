@@ -60,7 +60,7 @@ test.describe("BUILD › Agents › Retention Call — Behaviour tab @journey @r
       .fill("It looks like you stepped away. Feel free to call back anytime.");
   });
 
-  test("TC-AG-CS-025 @medium @positive — Max call duration 1800 and barge-in toggles", async ({
+  test("TC-AG-CS-025 @medium @positive — Max call duration 600 and barge-in toggles", async ({
     page,
   }) => {
     const form = new AgentFormPage(page);

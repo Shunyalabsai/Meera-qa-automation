@@ -12,5 +12,9 @@ export const ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE = {
   expectedFirstMessageSnippet: /baat kar rahi|order|confirm|reschedule/i,
   defaultExtractionFields: ["buyingIntent", "orderConfirmed", "updatedAddress"],
   defaultFirstMessage:
-    "Hi {{customerName}}, I'm calling to confirm your recent order with {{brand}}. Do you have a moment?",
+    "Hi! Kya main ${customer_name} ji se baat kar rahi hoon?",
+  defaultSilenceTimeoutSecs: 10,
+  defaultIdleMaxRetries: 2,
+  defaultMaxCallDurationSecs: 600,
+  defaultCallDirection: "outbound",
 } as const;

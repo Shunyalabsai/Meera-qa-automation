@@ -7,6 +7,13 @@ export const CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE = {
   expectedLanguage: "en",
   expectedVoiceTone: "professional",
   expectedAccent: "american",
+  expectedGender: "female",
   expectedSystemPromptSnippet: /credit card payment|payment link|BFSI/i,
   expectedFirstMessageSnippet: /bank|credit|payment/i,
+  defaultFirstMessage:
+    "Hi, this is Kate calling from Horizon Bank. Am I speaking with ${customer_name}?",
+  defaultSilenceTimeoutSecs: 10,
+  defaultIdleMaxRetries: 2,
+  defaultMaxCallDurationSecs: 600,
+  defaultCallDirection: "outbound",
 } as const;
