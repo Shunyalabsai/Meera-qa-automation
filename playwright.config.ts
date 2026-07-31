@@ -6,7 +6,7 @@ import path from "node:path";
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 const baseURL =
-  process.env.PLAYWRIGHT_BASE_URL ?? "https://meera-stage.shunyalabs.ai/vap/";
+  process.env.PLAYWRIGHT_BASE_URL ?? "https://agents.shunyalabs.ai/vap/";
 
 const authFile = path.join(__dirname, ".auth/user.json");
 const hasAuthFile = fs.existsSync(authFile);

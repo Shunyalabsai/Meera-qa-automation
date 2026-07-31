@@ -1,9 +1,9 @@
 import { Page, expect } from "@playwright/test";
-import { openStartFromScratchAgentForm, waitForAgentCreated } from "./agent.helper";
+import { openRetentionCallAgentForm, waitForAgentCreated } from "./agent.helper";
 import { gotoApp } from "./navigate";
 import { AgentFormPage } from "../pages/agent-form.page";
 import type { AgentConfig } from "../pages/agent-form.page";
-import { START_FROM_SCRATCH } from "../data/start-from-scratch-template";
+import { RETENTION_CALL_TEMPLATE } from "../data/retention-call-template";
 
 export function extractAgentIdFromUrl(page: Page): string {
   const match = page.url().match(/\/agents\/([0-9a-f-]+)/);
@@ -11,22 +11,31 @@ export function extractAgentIdFromUrl(page: Page): string {
   return match[1];
 }
 
-export async function createStartFromScratchAgent(
+export async function createRetentionCallAgent(
   page: Page,
   config: AgentConfig,
 ): Promise<string> {
-  const form = await openStartFromScratchAgentForm(page);
-  await form.fillAgentConfig({
-    systemPrompt: START_FROM_SCRATCH.sampleSystemPrompt,
-    ...config,
-  });
+  const form = await openRetentionCallAgentForm(page);
+  await form.fillAgentConfig(config);
 
-  await form.openTab("Behaviour");
-  await form.fillBehaviourFields({
-    ...config,
-    firstMessage:
-      config.firstMessage ?? START_FROM_SCRATCH.sampleFirstMessage,
-  });
+  const needsBehaviour =
+    config.firstMessage ||
+    config.goodbyeMessage ||
+    config.silenceTimeoutSecs !== undefined;
+
+  if (needsBehaviour) {
+    await form.openTab("Behaviour");
+    await form.fillBehaviourFields(config);
+  } else {
+    await form.openTab("Behaviour");
+    const firstMessage = await page.getByLabel(/First message/i).inputValue();
+    if (!firstMessage.trim()) {
+      await form.fillBehaviourFields({
+        ...config,
+        firstMessage: RETENTION_CALL_TEMPLATE.defaultFirstMessage,
+      });
+    }
+  }
 
   if (config.recordCalls !== undefined) {
     await form.openTab("Recording");

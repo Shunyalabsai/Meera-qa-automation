@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { AgentsListPage } from "../../../../pages/agents-list.page";
 import { AgentDetailPage } from "../../../../pages/agent-detail.page";
 import { isAgentsEmptyState } from "../../../../helpers/new-user-dashboard";
-import { createDebtRecoveryAgent } from "../../../../helpers/debt-recovery.helper";
+import { createCreditCardPaymentReminderAgent } from "../../../../helpers/credit-card-payment-reminder.helper";
 import { skipEnvPrecondition } from "../../../../helpers/skip";
 import { uniqueName } from "../../../../utils/test-data";
 
@@ -39,7 +39,7 @@ test.describe("BUILD › Agents — List & detail CTAs @agents @cta @serial", ()
     page,
   }) => {
     agentName = uniqueName("CTA_Agent");
-    agentId = await createDebtRecoveryAgent(page, {
+    agentId = await createCreditCardPaymentReminderAgent(page, {
       name: agentName,
       description: "CTA coverage agent",
       language: "en",

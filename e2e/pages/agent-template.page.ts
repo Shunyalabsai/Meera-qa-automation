@@ -4,29 +4,29 @@ import { waitForLoadingToClear } from "../helpers/navigate";
 /** Template gallery shown at /agents/new before the agent form. */
 export const AGENT_TEMPLATES = [
   {
-    id: "debt-recovery",
-    title: "Debt recovery",
+    id: "credit-card-payment-reminder",
+    title: "Credit Card Payment Reminder",
     description: "Call customers about overdue payments",
     industry: "BFSI",
     agentCard: "Credit Card Payment Reminder Agent",
   },
   {
-    id: "order-confirmation",
-    title: "Order confirmation",
+    id: "order-confirmation-reschedule",
+    title: "Order Confirmation & Reschedule",
     description: "Confirm order details and delivery",
     industry: "Logistics",
     agentCard: "Order Confirmation & Reschedule Agent",
   },
   {
-    id: "appointment-reminder",
-    title: "Appointment reminder",
+    id: "appointment-reminder-reschedule",
+    title: "Appointment Reminder & Reschedule",
     description: "Remind customers about upcoming appointments",
     industry: "Healthcare",
     agentCard: "Appointment Reminder & Reschedule Agent (Hinglish)",
   },
   {
-    id: "customer-support",
-    title: "Customer support",
+    id: "retention-call",
+    title: "Retention Call",
     description: "Handle inbound support calls",
     industry: "Telecom",
     agentCard: "Retention Call Agent",
@@ -35,7 +35,7 @@ export const AGENT_TEMPLATES = [
 
 export type AgentTemplateTitle = (typeof AGENT_TEMPLATES)[number]["title"];
 
-/** Maps old template titles to the new 2-step gallery (industry → agent card). */
+/** Maps template titles to the 2-step gallery (industry → agent card). */
 const TEMPLATE_INDUSTRY_MAP: Record<string, { industry: string; agentCard: string }> =
   Object.fromEntries(
     AGENT_TEMPLATES.map((t) => [t.title, { industry: t.industry, agentCard: t.agentCard }]),

@@ -110,12 +110,6 @@ export class CallsListPage {
     return inMain.locator("label").filter({ hasText: pattern }).first();
   }
 
-  filterCombobox(label: string) {
-    return this.filterField(label).locator(
-      "xpath=./select[1] | following-sibling::select[1] | following-sibling::*[1]//select | following-sibling::*[1]",
-    );
-  }
-
   filterSelect(label: CallFilterLabel | "Agent"): Locator {
     const field = this.filterField(label);
     return field.locator("xpath=./select[1] | following-sibling::select[1]");

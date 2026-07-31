@@ -51,46 +51,46 @@ export async function openAgentFormViaTemplate(
   return form;
 }
 
-/** Opens /agents/new and selects the Debt recovery template card. */
-export async function openDebtRecoveryAgentForm(
+/** Opens /agents/new and selects the Credit Card Payment Reminder template card. */
+export async function openCreditCardPaymentReminderAgentForm(
   page: Page,
 ): Promise<AgentFormPage> {
   const { form } = await openAgentFormForEntry(page, {
     kind: "template",
-    title: "Debt recovery",
+    title: "Credit Card Payment Reminder",
   });
   return form;
 }
 
-/** Opens /agents/new and selects the Order confirmation template card. */
-export async function openOrderConfirmationAgentForm(
+/** Opens /agents/new and selects the Order Confirmation & Reschedule template card. */
+export async function openOrderConfirmationRescheduleAgentForm(
   page: Page,
 ): Promise<AgentFormPage> {
   const { form } = await openAgentFormForEntry(page, {
     kind: "template",
-    title: "Order confirmation",
+    title: "Order Confirmation & Reschedule",
   });
   return form;
 }
 
-/** Opens /agents/new and selects the Appointment reminder template card. */
-export async function openAppointmentReminderAgentForm(
+/** Opens /agents/new and selects the Appointment Reminder & Reschedule template card. */
+export async function openAppointmentReminderRescheduleAgentForm(
   page: Page,
 ): Promise<AgentFormPage> {
   const { form } = await openAgentFormForEntry(page, {
     kind: "template",
-    title: "Appointment reminder",
+    title: "Appointment Reminder & Reschedule",
   });
   return form;
 }
 
-/** Opens /agents/new and selects the Customer support template card. */
-export async function openCustomerSupportAgentForm(
+/** Opens /agents/new and selects the Retention Call template card. */
+export async function openRetentionCallAgentForm(
   page: Page,
 ): Promise<AgentFormPage> {
   const { form } = await openAgentFormForEntry(page, {
     kind: "template",
-    title: "Customer support",
+    title: "Retention Call",
   });
   return form;
 }

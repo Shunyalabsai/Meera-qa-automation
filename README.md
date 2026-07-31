@@ -1,6 +1,6 @@
 # Meera Voice Agent Platform — E2E Tests
 
-Playwright tests for [Meera VAP](https://meera-stage.shunyalabs.ai/) organized to match the **dashboard sidebar** (BUILD / RUN / ANALYZE / SETTINGS), plus Authentication and Global UI.
+Playwright tests for [Meera VAP](https://agents.shunyalabs.ai/) organized to match the **dashboard sidebar** (BUILD / RUN / ANALYZE / SETTINGS), plus Authentication and Global UI.
 
 Sheet cases: [QA Google Sheet](https://docs.google.com/spreadsheets/d/1V56bydTla54TIyYX4pdlDnUtRaN76oiVK24o6ZOQOaM/edit) (132 total).
 

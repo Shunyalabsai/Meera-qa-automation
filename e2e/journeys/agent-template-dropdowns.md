@@ -13,10 +13,10 @@ Shared Prompt-tab dropdown tests for **all 4 template cards** plus **Start from 
 
 ## Template cards
 
-1. Debt recovery
-2. Order confirmation
-3. Appointment reminder
-4. Customer support
+1. Credit Card Payment Reminder
+2. Order Confirmation & Reschedule
+3. Appointment Reminder & Reschedule
+4. Retention Call
 5. Start from scratch
 
 ## Test files
@@ -36,14 +36,14 @@ Each entry gets:
 
 **Total per entry:** 23 tests × 5 entries = **115 dropdown tests**
 
-Debt recovery–specific prompt tests (pre-fill, system prompt) remain in `debt-recovery/01-prompt-tab.spec.ts`.
+Credit Card Payment Reminder–specific prompt tests (pre-fill, system prompt) remain in `credit-card-payment-reminder/01-prompt-tab.spec.ts`.
 
 ## Edge / negative cases
 
 | File | Coverage |
 |------|----------|
 | `templates/edge-cases.spec.ts` | **All 5 entries × 22 edge cases** = 110 tests |
-| `debt-recovery/06-validation.spec.ts` | Lifecycle edges (delete/clone cancel) |
+| `credit-card-payment-reminder/06-validation.spec.ts` | Lifecycle edges (delete/clone cancel) |
 
 ### Edge case matrix (per card)
 

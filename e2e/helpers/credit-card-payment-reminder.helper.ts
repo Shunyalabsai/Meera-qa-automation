@@ -1,9 +1,8 @@
 import { Page, expect } from "@playwright/test";
-import { openStartFromScratchAgentForm, waitForAgentCreated } from "./agent.helper";
+import { openCreditCardPaymentReminderAgentForm, waitForAgentCreated } from "./agent.helper";
 import { gotoApp } from "./navigate";
 import { AgentFormPage } from "../pages/agent-form.page";
 import type { AgentConfig } from "../pages/agent-form.page";
-import { START_FROM_SCRATCH } from "../data/start-from-scratch-template";
 
 export function extractAgentIdFromUrl(page: Page): string {
   const match = page.url().match(/\/agents\/([0-9a-f-]+)/);
@@ -11,22 +10,33 @@ export function extractAgentIdFromUrl(page: Page): string {
   return match[1];
 }
 
-export async function createStartFromScratchAgent(
+/** Create a debt recovery agent and return its ID from the detail URL. */
+export async function createCreditCardPaymentReminderAgent(
   page: Page,
   config: AgentConfig,
 ): Promise<string> {
-  const form = await openStartFromScratchAgentForm(page);
-  await form.fillAgentConfig({
-    systemPrompt: START_FROM_SCRATCH.sampleSystemPrompt,
-    ...config,
-  });
+  const form = await openCreditCardPaymentReminderAgentForm(page);
+  await form.fillAgentConfig(config);
 
-  await form.openTab("Behaviour");
-  await form.fillBehaviourFields({
-    ...config,
-    firstMessage:
-      config.firstMessage ?? START_FROM_SCRATCH.sampleFirstMessage,
-  });
+  const needsBehaviour =
+    config.firstMessage ||
+    config.goodbyeMessage ||
+    config.silenceTimeoutSecs !== undefined;
+
+  if (needsBehaviour) {
+    await form.openTab("Behaviour");
+    await form.fillBehaviourFields(config);
+  } else {
+    const firstMessage = await page.getByLabel(/First message/i).inputValue().catch(() => "");
+    if (!firstMessage.trim()) {
+      await form.openTab("Behaviour");
+      await form.fillBehaviourFields({
+        ...config,
+        firstMessage:
+          "Hi, am I speaking with {{customerName}}? This is Meera regarding your account.",
+      });
+    }
+  }
 
   if (config.recordCalls !== undefined) {
     await form.openTab("Recording");

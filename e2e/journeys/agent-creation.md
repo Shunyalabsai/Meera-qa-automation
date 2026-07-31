@@ -7,16 +7,16 @@ Quick run:
 ```bash
 npm run auth:save
 npm run test:agents-onboarding   # empty-state main screen first
-npm run test:debt-recovery
+npm run test:credit-card-payment-reminder
 ```
 
-Other template cards (Order confirmation, Appointment reminder, Customer support) will get their own journey folders when needed.
+Other template cards (Order Confirmation & Reschedule, Appointment Reminder & Reschedule, Retention Call) will get their own journey folders when needed.
 
-**Order confirmation** — see [order-confirmation-agent.md](./order-confirmation-agent.md).
+**Order Confirmation & Reschedule** — see [order-confirmation-reschedule-agent.md](./order-confirmation-reschedule-agent.md).
 
-**Appointment reminder** — see [appointment-reminder-agent.md](./appointment-reminder-agent.md).
+**Appointment Reminder & Reschedule** — see [appointment-reminder-reschedule-agent.md](./appointment-reminder-reschedule-agent.md).
 
-**Customer support** — see [customer-support-agent.md](./customer-support-agent.md).
+**Retention Call** — see [retention-call-agent.md](./retention-call-agent.md).
 
 **Start from scratch** — see [start-from-scratch-agent.md](./start-from-scratch-agent.md).
 

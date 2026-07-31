@@ -19,7 +19,7 @@ export type AgentFormTab =
   | "Outcomes"
   | "Advanced";
 
-export type DebtRecoveryAgentConfig = {
+export type AgentConfig = {
   name: string;
   description?: string;
   language?: LanguageOption;
@@ -70,7 +70,7 @@ export class AgentFormPage {
       this.page.getByRole("heading", { name: /New agent/i }),
     ).toBeVisible();
     await expect(
-      this.page.getByText(/which voice pipeline|pipeline type locks everything else/i),
+      this.page.getByText(/which voice pipeline/i),
     ).toBeVisible();
   }
 
@@ -149,8 +149,8 @@ export class AgentFormPage {
 
   firstMessageInput() {
     return this.page
-      .getByLabel(/First message/i)
-      .or(this.page.locator('textarea').nth(0));
+      .getByRole("textbox", { name: /^First message/i })
+      .or(this.page.getByLabel(/First message/i));
   }
 
   goodbyeMessageInput() {
@@ -343,7 +343,7 @@ export class AgentFormPage {
 
   // ── Fill full config (debt recovery journey) ─────────────────────
 
-  async fillDebtRecoveryConfig(config: DebtRecoveryAgentConfig) {
+  async fillAgentConfig(config: AgentConfig) {
     await this.nameInput().fill(config.name);
     if (config.description) {
       await this.descriptionInput().fill(config.description);
@@ -360,9 +360,9 @@ export class AgentFormPage {
     }
   }
 
-  async fillBehaviourFields(config: DebtRecoveryAgentConfig) {
+  async fillBehaviourFields(config: AgentConfig) {
     if (config.firstMessage) {
-      await this.page.getByLabel(/First message/i).fill(config.firstMessage);
+      await this.firstMessageInput().fill(config.firstMessage);
     }
     if (config.goodbyeMessage) {
       const goodbye = this.goodbyeMessageInput();
@@ -409,7 +409,7 @@ export class AgentFormPage {
     }
   }
 
-  async fillOutcomesFields(config: DebtRecoveryAgentConfig) {
+  async fillOutcomesFields(config: AgentConfig) {
     if (config.extractionSchema) {
       const editor = this.page
         .locator("textarea.font-mono, textarea[class*='font-mono']")
@@ -426,7 +426,7 @@ export class AgentFormPage {
     }
   }
 
-  async fillAdvancedFields(config: DebtRecoveryAgentConfig) {
+  async fillAdvancedFields(config: AgentConfig) {
     if (config.temperature !== undefined) {
       await this.numberInputByLabel(/Temperature/i).fill(
         String(config.temperature),
@@ -450,7 +450,7 @@ export class AgentFormPage {
     }
   }
 
-  async fillRecordingFields(config: DebtRecoveryAgentConfig) {
+  async fillRecordingFields(config: AgentConfig) {
     if (config.recordCalls !== undefined) {
       const cb = this.checkboxByLabel(/Record all calls/i);
       config.recordCalls ? await cb.check() : await cb.uncheck();
@@ -547,10 +547,6 @@ export class AgentFormPage {
       errorPattern:
         /name|required|Fix the highlighted|trim|whitespace|too short|invalid/i,
     });
-  }
-
-  firstMessageInput() {
-    return this.page.getByRole("textbox", { name: /^First message/i });
   }
 
   /** Assert form stayed on create page with a validation banner or field error. */

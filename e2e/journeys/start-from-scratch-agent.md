@@ -19,7 +19,7 @@ Below the 4 template cards, **Start from scratch** opens a blank form with neutr
 | System prompt | *(empty — required)* |
 | First message | *(empty)* |
 | Pipeline | Shunya Native (selected) |
-| Silence timeout | 10s · Max retries **2** · Max duration **1800s** |
+| Silence timeout | 10s · Max retries **2** · Max duration **600s** |
 | Speech speed | **1.00x** |
 | Record all calls | unchecked |
 | Temperature / tokens | 0.7 / 300 |
@@ -59,8 +59,8 @@ npm run test:start-from-scratch-lifecycle
 
 | Entry | Folder | Tag |
 |-------|--------|-----|
-| Debt recovery | `debt-recovery/` | `@debt-recovery` |
-| Order confirmation | `order-confirmation/` | `@order-confirmation` |
-| Appointment reminder | `appointment-reminder/` | `@appointment-reminder` |
-| Customer support | `customer-support/` | `@customer-support` |
+| Credit Card Payment Reminder | `credit-card-payment-reminder/` | `@credit-card-payment-reminder` |
+| Order Confirmation & Reschedule | `order-confirmation-reschedule/` | `@order-confirmation-reschedule` |
+| Appointment Reminder & Reschedule | `appointment-reminder-reschedule/` | `@appointment-reminder-reschedule` |
+| Retention Call | `retention-call/` | `@retention-call` |
 | **Start from scratch** | `start-from-scratch/` | `@start-from-scratch` |

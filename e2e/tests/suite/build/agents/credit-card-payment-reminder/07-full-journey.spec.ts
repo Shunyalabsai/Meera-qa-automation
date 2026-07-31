@@ -1,44 +1,41 @@
 import { test, expect } from "@playwright/test";
-import {
-  openStartFromScratchAgentForm,
-  waitForAgentCreated,
-} from "../../../../../helpers/agent.helper";
+import { openCreditCardPaymentReminderAgentForm, waitForAgentCreated } from "../../../../../helpers/agent.helper";
 import { AgentFormPage } from "../../../../../pages/agent-form.page";
-import { START_FROM_SCRATCH } from "../../../../../data/start-from-scratch-template";
 import { uniqueName } from "../../../../../utils/test-data";
 
-test.describe("BUILD › Agents › Start from scratch — Full journey @journey @start-from-scratch", () => {
-  test("TC-AG-SFS-060 @high @positive — Blank form fully configured → agent created", async ({
+test.describe("BUILD › Agents › Credit Card Payment Reminder — Full journey @journey @credit-card-payment-reminder", () => {
+  test("TC-AG-DR-060 @high @positive — All tabs configured → agent created", async ({
     page,
   }) => {
-    const agentName = uniqueName("ScratchAgent");
-    const form = await openStartFromScratchAgentForm(page);
+    const agentName = uniqueName("CreditCardPaymentReminder");
+    const form = await openCreditCardPaymentReminderAgentForm(page);
     await form.expectNewAgentHeader();
 
     await form.fillAgentConfig({
       name: agentName,
-      description: START_FROM_SCRATCH.sampleDescription,
+      description: "E2E debt recovery agent for overdue payment calls",
       language: "hinglish",
-      voiceTone: "professional",
+      voiceTone: "assertive",
       accent: "indian",
       gender: "female",
-      systemPrompt: START_FROM_SCRATCH.sampleSystemPrompt,
+      systemPrompt:
+        "You are a professional recovery agent. Collect commitment dates politely but firmly.",
     });
 
     await form.openTab("Behaviour");
     await form.fillBehaviourFields({
       name: agentName,
-      firstMessage: START_FROM_SCRATCH.sampleFirstMessage,
+      firstMessage:
+        "Hi, am I speaking with {{customerName}}? This is Meera from {{brand}} regarding your account.",
       goodbyeMessage: "Thank you for your time. Have a great day!",
       silenceTimeoutSecs: 10,
       maxCallDurationSecs: 1800,
       bargeIn: true,
       voicemailEnabled: true,
-      voicemailMessage: "Please call us back when convenient.",
+      voicemailMessage: "Please call us back to discuss your account.",
       idleRepromptMessage: "Are you still there?",
       idleMaxRetries: 2,
-      idleTerminateMessage:
-        "It looks like you stepped away. Feel free to call back anytime.",
+      idleTerminateMessage: "Feel free to call us back anytime.",
     });
 
     await form.openTab("Recording");
@@ -47,9 +44,12 @@ test.describe("BUILD › Agents › Start from scratch — Full journey @journey
     await form.openTab("Outcomes");
     await form.fillOutcomesFields({
       name: agentName,
-      extractionSchema: START_FROM_SCRATCH.sampleExtractionSchema,
+      extractionSchema: `{
+  "commitmentDate": "date customer promised to pay",
+  "amountAgreed": "amount agreed"
+}`,
       escalationEnabled: true,
-      transferTarget: "#custom-escalations",
+      transferTarget: "+14155559999",
     });
 
     await form.openTab("Advanced");
@@ -57,9 +57,13 @@ test.describe("BUILD › Agents › Start from scratch — Full journey @journey
       name: agentName,
       temperature: 0.7,
       maxTokens: 300,
+      preCallApiEnabled: true,
+      preCallApiUrl: "https://api.example.com/pre-call",
+      preCallApiMethod: "POST",
     });
 
     await form.createAgentButton().click();
+
     await waitForAgentCreated(page);
     await expect(page.getByText(agentName).first()).toBeVisible({ timeout: 15_000 });
   });

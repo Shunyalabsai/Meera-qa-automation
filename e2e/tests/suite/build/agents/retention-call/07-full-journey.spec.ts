@@ -1,40 +1,38 @@
 import { test, expect } from "@playwright/test";
-import {
-  openStartFromScratchAgentForm,
-  waitForAgentCreated,
-} from "../../../../../helpers/agent.helper";
+import { openRetentionCallAgentForm, waitForAgentCreated } from "../../../../../helpers/agent.helper";
 import { AgentFormPage } from "../../../../../pages/agent-form.page";
-import { START_FROM_SCRATCH } from "../../../../../data/start-from-scratch-template";
+import { RETENTION_CALL_TEMPLATE } from "../../../../../data/retention-call-template";
 import { uniqueName } from "../../../../../utils/test-data";
 
-test.describe("BUILD › Agents › Start from scratch — Full journey @journey @start-from-scratch", () => {
-  test("TC-AG-SFS-060 @high @positive — Blank form fully configured → agent created", async ({
+test.describe("BUILD › Agents › Retention Call — Full journey @journey @retention-call", () => {
+  test("TC-AG-CS-060 @high @positive — All tabs configured → agent created", async ({
     page,
   }) => {
-    const agentName = uniqueName("ScratchAgent");
-    const form = await openStartFromScratchAgentForm(page);
+    const agentName = uniqueName("SupportAgent");
+    const form = await openRetentionCallAgentForm(page);
     await form.expectNewAgentHeader();
 
     await form.fillAgentConfig({
       name: agentName,
-      description: START_FROM_SCRATCH.sampleDescription,
-      language: "hinglish",
-      voiceTone: "professional",
-      accent: "indian",
-      gender: "female",
-      systemPrompt: START_FROM_SCRATCH.sampleSystemPrompt,
+      description: "E2E inbound customer support agent",
+      language: "en",
+      voiceTone: "warm",
+      accent: "neutral",
+      gender: "neutral",
+      systemPrompt:
+        "You are a helpful customer support agent. Be empathetic and escalate complex issues.",
     });
 
     await form.openTab("Behaviour");
     await form.fillBehaviourFields({
       name: agentName,
-      firstMessage: START_FROM_SCRATCH.sampleFirstMessage,
-      goodbyeMessage: "Thank you for your time. Have a great day!",
+      firstMessage: RETENTION_CALL_TEMPLATE.defaultFirstMessage,
+      goodbyeMessage: "Thank you for contacting support. Have a great day!",
       silenceTimeoutSecs: 10,
       maxCallDurationSecs: 1800,
       bargeIn: true,
       voicemailEnabled: true,
-      voicemailMessage: "Please call us back when convenient.",
+      voicemailMessage: "Please call us back and we'll assist you.",
       idleRepromptMessage: "Are you still there?",
       idleMaxRetries: 2,
       idleTerminateMessage:
@@ -47,9 +45,13 @@ test.describe("BUILD › Agents › Start from scratch — Full journey @journey
     await form.openTab("Outcomes");
     await form.fillOutcomesFields({
       name: agentName,
-      extractionSchema: START_FROM_SCRATCH.sampleExtractionSchema,
+      extractionSchema: `{
+  "issueType": "category of the customer's issue",
+  "issueResolved": "boolean: was the issue fully resolved?",
+  "escalationNeeded": "boolean: did the call require human handoff?"
+}`,
       escalationEnabled: true,
-      transferTarget: "#custom-escalations",
+      transferTarget: "#support-escalations",
     });
 
     await form.openTab("Advanced");
