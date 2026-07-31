@@ -83,12 +83,100 @@ export class AgentTemplatePage {
     ).toBeVisible();
   }
 
+  async expectGalleryCountLine(total: number) {
+    await expect(
+      this.page.getByText(
+        new RegExp(`^${total} ready-to-use agents across 5 industries$`, "i"),
+      ),
+    ).toBeVisible();
+  }
+
+  async expectIndustryCount(industry: string, count: number) {
+    await expect(
+      this.page
+        .getByRole("button", { name: new RegExp(`^${industry} ${count}`, "i") })
+        .getByText(new RegExp(`^${count} example agents$`, "i")),
+    ).toBeVisible();
+  }
+
+  async expectStartFromScratchDescription() {
+    await expect(
+      this.page
+        .getByRole("button", { name: /^Start from scratch/i })
+        .getByText(/Blank form — define everything yourself/i),
+    ).toBeVisible();
+  }
+
+  scheduleConsultationButton() {
+    return this.page.getByRole("button", { name: /Schedule a consultation/i });
+  }
+
+  async expectScheduleConsultationCta() {
+    await expect(this.scheduleConsultationButton()).toBeVisible();
+    await expect(
+      this.page.getByText(/Need help building your AI Voice Agent\?/i),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText(/We can help you design prompts, conversation flows/i),
+    ).toBeVisible();
+  }
+
   templateCard(title: string) {
     return this.page.getByRole("button", { name: new RegExp(title, "i") });
   }
 
   industryCard(industry: string) {
     return this.page.getByRole("button", { name: new RegExp(industry, "i") }).first();
+  }
+
+  /** Button for an example agent card inside an industry view.
+   *  The card's accessible name concatenates title + language tag + description,
+   *  so match by prefix (title + language disambiguates near-identical cards
+   *  such as "Fixed Deposit Payment Agent (Hindi)" vs "Fixed Deposit Payment Agent"). */
+  agentCardButton(title: string, language?: string) {
+    const escaped = title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const suffix = language
+      ? `\\s*${language.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`
+      : "";
+    return this.page.getByRole("button", {
+      name: new RegExp(`^${escaped}${suffix}`, "i"),
+    });
+  }
+
+  backToIndustriesButton() {
+    return this.page.getByRole("button", { name: /← Back to industries/i });
+  }
+
+  async expectIndustryView(industry: string) {
+    await expect(
+      this.page.getByRole("heading", { name: new RegExp(`^${industry} agents$`, "i") }),
+    ).toBeVisible({ timeout: 10_000 });
+    await expect(
+      this.page.getByText(/Pick a real example to get started/i),
+    ).toBeVisible();
+    await expect(this.backToIndustriesButton()).toBeVisible();
+  }
+
+  async expectAgentCardVisible(title: string, language?: string) {
+    const card = this.agentCardButton(title, language);
+    await expect(card).toBeVisible({ timeout: 10_000 });
+    if (language) {
+      await expect(card).toContainText(language);
+    }
+  }
+
+  /** In an industry view the agent-card grid holds exactly `count` cards
+   *  plus the "← Back to industries" button. */
+  async expectAgentCardCount(count: number) {
+    const cardCount = await this.page
+      .locator("main button")
+      .evaluateAll((els) => els.filter((el) => el.textContent?.trim()).length);
+    expect(cardCount - 1).toBe(count);
+  }
+
+  async goBackToIndustries() {
+    await this.backToIndustriesButton().click();
+    await this.expectGallery();
   }
 
   async selectIndustry(industry: string) {
