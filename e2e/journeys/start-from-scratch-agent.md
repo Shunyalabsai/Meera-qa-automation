@@ -19,7 +19,7 @@ Below the 4 template cards, **Start from scratch** opens a blank form with neutr
 | System prompt | *(empty — required)* |
 | First message | *(empty)* |
 | Pipeline | Shunya Native (selected) |
-| Silence timeout | 10s · Max retries **2** · Max duration **600s** |
+| Silence timeout | 10s · Max retries **2** · Max duration **1800s** |
 | Speech speed | **1.00x** |
 | Record all calls | unchecked |
 | Temperature / tokens | 0.7 / 300 |
@@ -44,7 +44,7 @@ Below the 4 template cards, **Start from scratch** opens a blank form with neutr
 
 Also in `../templates/`:
 - `00-gallery.spec.ts` — TC-AG-TPL-003 Start from scratch opens form
-- `prompt-dropdowns.spec.ts` — all dropdown options (23 × 5 entries)
+- `prompt-dropdowns.spec.ts` — all dropdown options (25 × 5 entries)
 - `edge-cases.spec.ts` — 22 negative/edge cases per entry
 
 ## Run

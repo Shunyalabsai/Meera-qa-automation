@@ -15,11 +15,12 @@ End-to-end flow for a first-time Meera VAP user (Clerk hosted auth).
    └── Resend code (countdown timer)
 
 3. Redirect → Dashboard (BUILD › Agents)
-   ├── "Build your first voice agent"
+   ├── "Get started" card
    ├── Step 1: Create an agent
-   ├── Step 2: Add a phone number
-   ├── Step 3: Test in Playground
-   └── CTA: "Create your first agent →"
+   ├── Step 2: Test in Playground
+   ├── Step 3: Add a phone number
+   ├── Step 4: Run a campaign
+   └── CTA: "New agent"
 ```
 
 ## Automated tests

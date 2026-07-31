@@ -28,7 +28,7 @@ test.describe("BUILD › Agents — List & detail CTAs @agents @cta @serial", ()
     if (!(await agents.hasNewAgentLink())) {
       skipEnvPrecondition(
         testInfo,
-        "New agent link not shown — use Create your first agent onboarding CTA instead",
+        "New agent link not shown — use the Get started onboarding CTA instead",
       );
       return;
     }

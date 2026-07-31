@@ -64,10 +64,6 @@ export class AgentsListPage {
       .first();
   }
 
-  agentCard(name: string) {
-    return this.agentRow(name);
-  }
-
   async expectAgentVisible(name: string) {
     await expect(this.page.getByText(name, { exact: false })).toBeVisible({
       timeout: 30_000,
@@ -98,11 +94,6 @@ export class AgentsListPage {
     await expect(this.page).toHaveURL(/\/agents\/[0-9a-f-]+$/, {
       timeout: 15_000,
     });
-  }
-
-  async expectAgentStatus(name: string, status: "draft" | "active" | "archived") {
-    const row = this.agentRow(name);
-    await expect(row.getByText(status, { exact: true })).toBeVisible();
   }
 
   async cloneAgent(name: string) {

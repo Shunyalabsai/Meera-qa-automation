@@ -31,9 +31,12 @@ export const ACCENT_OPTIONS = [
 
 export const AGENT_GENDER_OPTIONS = ["neutral", "female", "male"] as const;
 
+export const CALL_DIRECTION_OPTIONS = ["outbound", "inbound"] as const;
+
 export const PRE_CALL_API_METHODS = ["POST", "GET"] as const;
 
 export type LanguageOption = (typeof LANGUAGE_OPTIONS)[number];
 export type VoiceToneOption = (typeof VOICE_TONE_OPTIONS)[number];
 export type AccentOption = (typeof ACCENT_OPTIONS)[number];
 export type AgentGenderOption = (typeof AGENT_GENDER_OPTIONS)[number];
+export type CallDirectionOption = (typeof CALL_DIRECTION_OPTIONS)[number];

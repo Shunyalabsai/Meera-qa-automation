@@ -46,21 +46,20 @@ test.describe("BUILD › Agents › Start from scratch — Gallery entry @journe
     await expect(form.genderSelect()).toHaveValue(
       START_FROM_SCRATCH.expectedGender,
     );
+    await expect(form.callDirectionSelect()).toHaveValue(
+      START_FROM_SCRATCH.defaultCallDirection,
+    );
 
     const prompt = await form.systemPromptInput().inputValue();
     expect(prompt.trim()).toBe("");
   });
 
-  test("TC-AG-SFS-002 @medium @positive — Change template link returns to gallery", async ({
+  test("TC-AG-SFS-002 @medium @positive — Change template returns to gallery", async ({
     page,
   }) => {
     await openStartFromScratchAgentForm(page);
-    const changeLink = page.getByRole("link", { name: /Change template/i });
-    test.skip(
-      !(await changeLink.isVisible({ timeout: 3_000 }).catch(() => false)),
-      "Change template link not present",
-    );
-    await changeLink.click();
+    const form = new AgentFormPage(page);
+    await form.changeTemplateButton().click();
     await new AgentTemplatePage(page).expectGallery();
   });
 });

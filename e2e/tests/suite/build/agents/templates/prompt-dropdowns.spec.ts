@@ -5,6 +5,7 @@ import { TEMPLATE_FORM_ENTRIES } from "../../../../../pages/agent-template.page"
 import {
   ACCENT_OPTIONS,
   AGENT_GENDER_OPTIONS,
+  CALL_DIRECTION_OPTIONS,
   LANGUAGE_OPTIONS,
   VOICE_TONE_OPTIONS,
 } from "../../../../../data/agent-form-options";
@@ -16,6 +17,7 @@ import {
  * Voice tone:  neutral, warm, professional, casual, assertive
  * Accent:      neutral, indian, british, american, australian
  * Agent gender: neutral, female, male
+ * Call direction: outbound, inbound
  */
 for (const entry of TEMPLATE_FORM_ENTRIES) {
   test.describe(`BUILD › Agents › ${entry.label} — Prompt dropdowns @templates @positive`, () => {
@@ -28,7 +30,7 @@ for (const entry of TEMPLATE_FORM_ENTRIES) {
       await openAgentFormForEntry(page, entryArg);
     });
 
-    test(`TC-AG-TPL-${entry.id}-UI @high @ui — All four dropdowns list correct options`, async ({
+    test(`TC-AG-TPL-${entry.id}-UI @high @ui — All five dropdowns list correct options`, async ({
       page,
     }) => {
       const form = new AgentFormPage(page);
@@ -76,6 +78,17 @@ for (const entry of TEMPLATE_FORM_ENTRIES) {
         }) => {
           const form = new AgentFormPage(page);
           await form.selectGender(gender);
+        });
+      }
+    });
+
+    test.describe("Call direction", () => {
+      for (const dir of CALL_DIRECTION_OPTIONS) {
+        test(`TC-AG-TPL-${entry.id}-DIR-${dir} @medium — selects ${dir}`, async ({
+          page,
+        }) => {
+          const form = new AgentFormPage(page);
+          await form.selectCallDirection(dir);
         });
       }
     });

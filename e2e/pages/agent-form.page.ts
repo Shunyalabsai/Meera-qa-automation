@@ -8,6 +8,7 @@ import type {
 import {
   ACCENT_OPTIONS,
   AGENT_GENDER_OPTIONS,
+  CALL_DIRECTION_OPTIONS,
   LANGUAGE_OPTIONS,
   VOICE_TONE_OPTIONS,
 } from "../data/agent-form-options";
@@ -19,6 +20,8 @@ export type AgentFormTab =
   | "Outcomes"
   | "Advanced";
 
+export type CallDirection = "outbound" | "inbound";
+
 export type AgentConfig = {
   name: string;
   description?: string;
@@ -26,12 +29,14 @@ export type AgentConfig = {
   voiceTone?: VoiceToneOption;
   accent?: AccentOption;
   gender?: AgentGenderOption;
+  callDirection?: CallDirection;
   systemPrompt?: string;
   firstMessage?: string;
   goodbyeMessage?: string;
   silenceTimeoutSecs?: number;
   maxCallDurationSecs?: number;
   bargeIn?: boolean;
+  fastFarewell?: boolean;
   voicemailEnabled?: boolean;
   voicemailMessage?: string;
   idleRepromptMessage?: string;
@@ -72,6 +77,11 @@ export class AgentFormPage {
     await expect(
       this.page.getByText(/which voice pipeline/i),
     ).toBeVisible();
+  }
+
+  /** "Change template" back-navigation on the form (a button, not a link). */
+  changeTemplateButton() {
+    return this.page.getByRole("button", { name: /Change template/i });
   }
 
   tab(name: AgentFormTab) {
@@ -139,6 +149,13 @@ export class AgentFormPage {
     return this.selectByLabel(/^Agent gender$/i);
   }
 
+  /** Outbound/inbound direction — native select with stable id in the new UI. */
+  callDirectionSelect() {
+    return this.page
+      .locator("#call-direction-select")
+      .or(this.selectByLabel(/^Call direction$/i));
+  }
+
   systemPromptInput() {
     return this.page
       .getByRole("textbox", { name: /^Instructions/i })
@@ -155,10 +172,6 @@ export class AgentFormPage {
 
   goodbyeMessageInput() {
     return this.page.getByLabel(/Goodbye message/i).first();
-  }
-
-  speechSpeedSlider() {
-    return this.page.locator('input[type="range"]').first();
   }
 
   numberInputByLabel(label: RegExp) {
@@ -178,27 +191,12 @@ export class AgentFormPage {
     return this.page.getByRole("checkbox", { name: new RegExp(pattern, "i") });
   }
 
-  extractionSchemaTextarea() {
-    return this.page
-      .locator("textarea")
-      .filter({ has: this.page.locator("xpath=ancestor::div[contains(., 'Custom extraction')]") })
-      .first()
-      .or(
-        this.page.locator('[class*="font-mono"]').filter({ hasText: /buyingIntent|^\s*\{/ }).first(),
-      );
-  }
-
   createAgentButton() {
     return this.page.getByRole("button", { name: /^Create agent$/i });
   }
 
   saveChangesButton() {
     return this.page.getByRole("button", { name: /^Save changes$/i });
-  }
-
-  submitButton() {
-    return this.page
-      .getByRole("button", { name: /^Create agent$|^Save changes$/i });
   }
 
   async expectEditHeader(agentName: string) {
@@ -251,6 +249,7 @@ export class AgentFormPage {
     await expect(this.voiceToneSelect()).toBeVisible();
     await expect(this.accentSelect()).toBeVisible();
     await expect(this.genderSelect()).toBeVisible();
+    await expect(this.callDirectionSelect()).toBeVisible();
   }
 
   async expectBehaviourTabContent() {
@@ -311,6 +310,11 @@ export class AgentFormPage {
     await expect(this.genderSelect()).toHaveValue(value);
   }
 
+  async selectCallDirection(value: CallDirection) {
+    await this.callDirectionSelect().selectOption(value);
+    await expect(this.callDirectionSelect()).toHaveValue(value);
+  }
+
   async expectSelectOptions(select: Locator, options: readonly string[]) {
     const values = await select.locator("option").evaluateAll((opts) =>
       opts.map((o) => o.getAttribute("value")).filter(Boolean),
@@ -321,24 +325,27 @@ export class AgentFormPage {
     }
   }
 
-  /** Verify Language, Voice tone, Accent, Agent gender dropdowns exist with all options. */
+  /** Verify Language, Voice tone, Accent, Agent gender, Call direction dropdowns exist with all options. */
   async expectAllPromptDropdownOptions() {
     await expect(this.languageSelect()).toBeVisible();
     await expect(this.voiceToneSelect()).toBeVisible();
     await expect(this.accentSelect()).toBeVisible();
     await expect(this.genderSelect()).toBeVisible();
+    await expect(this.callDirectionSelect()).toBeVisible();
     await this.expectSelectOptions(this.languageSelect(), LANGUAGE_OPTIONS);
     await this.expectSelectOptions(this.voiceToneSelect(), VOICE_TONE_OPTIONS);
     await this.expectSelectOptions(this.accentSelect(), ACCENT_OPTIONS);
     await this.expectSelectOptions(this.genderSelect(), AGENT_GENDER_OPTIONS);
+    await this.expectSelectOptions(this.callDirectionSelect(), CALL_DIRECTION_OPTIONS);
   }
 
-  /** Cycle every option in all four Prompt-tab dropdowns. */
+  /** Cycle every option in all five Prompt-tab dropdowns. */
   async exerciseAllPromptDropdowns() {
     for (const lang of LANGUAGE_OPTIONS) await this.selectLanguage(lang);
     for (const tone of VOICE_TONE_OPTIONS) await this.selectVoiceTone(tone);
     for (const accent of ACCENT_OPTIONS) await this.selectAccent(accent);
     for (const gender of AGENT_GENDER_OPTIONS) await this.selectGender(gender);
+    for (const dir of CALL_DIRECTION_OPTIONS) await this.selectCallDirection(dir);
   }
 
   // ── Fill full config (debt recovery journey) ─────────────────────
@@ -352,6 +359,7 @@ export class AgentFormPage {
     if (config.voiceTone) await this.selectVoiceTone(config.voiceTone);
     if (config.accent) await this.selectAccent(config.accent);
     if (config.gender) await this.selectGender(config.gender);
+    if (config.callDirection) await this.selectCallDirection(config.callDirection);
     if (config.systemPrompt) {
       const prompt = this.systemPromptInput();
       if (await prompt.isEditable({ timeout: 2_000 }).catch(() => false)) {
@@ -383,6 +391,10 @@ export class AgentFormPage {
     if (config.bargeIn !== undefined) {
       const cb = this.checkboxByLabel(/barge-in/i);
       config.bargeIn ? await cb.check() : await cb.uncheck();
+    }
+    if (config.fastFarewell !== undefined) {
+      const cb = this.checkboxByLabel(/Fast farewell/i);
+      config.fastFarewell ? await cb.check() : await cb.uncheck();
     }
     if (config.voicemailEnabled) {
       await this.checkboxByLabel(/Detect voicemail/i).check();
@@ -466,19 +478,9 @@ export class AgentFormPage {
     await this.createAgentButton().click();
   }
 
-  async submitEmpty() {
-    await this.ensureFormReady();
-    await this.nameInput().clear();
-    await this.createAgentButton().click();
-  }
-
   async fillLongName(length: number) {
     await this.ensureFormReady();
     await this.nameInput().fill("A".repeat(length));
-  }
-
-  async expectCreated(name: string) {
-    await expect(this.page.getByText(name)).toBeVisible({ timeout: 30_000 });
   }
 
   async expectNameRequiredError() {
@@ -486,10 +488,6 @@ export class AgentFormPage {
       field: this.nameInput(),
       errorPattern: /name.*required|required.*name|Fix the highlighted|Name is required/i,
     });
-  }
-
-  async expectValidationError(pattern: RegExp) {
-    await expect(this.page.getByText(pattern)).toBeVisible({ timeout: 10_000 });
   }
 
   async submitCreate() {
@@ -554,12 +552,6 @@ export class AgentFormPage {
     pattern = /Fix the highlighted|Couldn't save|required|invalid|First message/i,
   ) {
     await this.expectCreateSaveBlocked({ errorPattern: pattern });
-  }
-
-  async ensureFirstMessage(text = "Hello, this is a test call.") {
-    await this.openTab("Behaviour");
-    await this.page.getByLabel(/First message/i).fill(text);
-    await this.openTab("Prompt");
   }
 
   extractionSchemaEditor() {

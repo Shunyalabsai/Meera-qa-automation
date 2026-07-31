@@ -10,6 +10,7 @@ export const START_FROM_SCRATCH = {
   defaultSilenceTimeoutSecs: 10,
   defaultIdleMaxRetries: 2,
   defaultMaxCallDurationSecs: 1800,
+  defaultCallDirection: "outbound",
   defaultTemperature: 0.7,
   defaultMaxTokens: 300,
   defaultSpeechSpeed: /1(\.0+)?/,

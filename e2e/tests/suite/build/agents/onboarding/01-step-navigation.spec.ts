@@ -2,30 +2,32 @@ import { test, expect } from "@playwright/test";
 import { AgentsOnboardingPage } from "../../../../../pages/agents-onboarding.page";
 import { PhoneNumbersPage } from "../../../../../pages/phone-numbers.page";
 import { PlaygroundPage } from "../../../../../pages/playground.page";
+import { CampaignsPage } from "../../../../../pages/campaigns.page";
 import { isAgentsEmptyState } from "../../../../../helpers/new-user-dashboard";
 
 test.describe("BUILD › Agents — Onboarding step navigation @journey @new-user @onboarding", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isAgentsEmptyState(page)),
-      "Agents onboarding empty state not shown — user may already have agents",
+      "Agents Get-started checklist not shown — onboarding card missing",
     );
   });
 
-  test("TC-AG-ON-010 @high @positive — Create your first agent CTA opens /agents/new", async ({
+  test("TC-AG-ON-010 @high @positive — New agent CTA opens /agents/new", async ({
     page,
   }) => {
     const onboarding = new AgentsOnboardingPage(page);
-    await onboarding.clickCreateFirstAgentCta();
+    await onboarding.clickNewAgentCta();
     await expect(page).toHaveURL(/\/agents\/new/, { timeout: 30_000 });
   });
 
-  test("TC-AG-ON-011 @high @positive — Step 1 Create an agent navigates to /agents/new", async ({
+  test("TC-AG-ON-011 @high @positive — Step 1 Create an agent navigates to agent creation", async ({
     page,
   }) => {
     const onboarding = new AgentsOnboardingPage(page);
     await onboarding.clickCreateAgentStep();
-    await expect(page).toHaveURL(/\/agents\/new/, { timeout: 30_000 });
+    // The step links to /agents/new while incomplete, or /agents (self) once done.
+    await expect(page).toHaveURL(/\/agents(\/new)?/, { timeout: 30_000 });
   });
 
   test("TC-AG-ON-012 @high @positive — Step 2 Add a phone number opens Phone numbers page", async ({
@@ -48,6 +50,19 @@ test.describe("BUILD › Agents — Onboarding step navigation @journey @new-use
 
     const playground = new PlaygroundPage(page);
     await playground.expectNewUserPlayground();
+  });
+
+  test("TC-AG-ON-014 @high @positive — Step 4 Run a campaign opens Campaigns page", async ({
+    page,
+  }) => {
+    const onboarding = new AgentsOnboardingPage(page);
+    await onboarding.clickRunCampaignStep();
+    await expect(page).toHaveURL(/\/campaigns/, { timeout: 30_000 });
+
+    // Assert the page header, not the empty state — the workspace may already
+    // have campaigns from earlier runs.
+    const campaigns = new CampaignsPage(page);
+    await campaigns.expectListHeader();
   });
 });
 

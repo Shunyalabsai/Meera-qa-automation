@@ -117,16 +117,6 @@ export async function createAgentViaUi(
   await waitForAgentCreated(page);
 }
 
-/** @deprecated use openAgentFormFromScratch */
-export async function dismissAgentTemplatePicker(page: Page): Promise<boolean> {
-  const picker = page.getByRole("heading", { name: /What industry are you building for/i });
-  if (!(await picker.isVisible({ timeout: 5_000 }).catch(() => false))) {
-    return false;
-  }
-  await new AgentTemplatePage(page).startFromScratch();
-  return true;
-}
-
 export async function gotoNewAgentForm(page: Page): Promise<void> {
   await openAgentFormFromScratch(page);
 }

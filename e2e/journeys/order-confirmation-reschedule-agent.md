@@ -1,26 +1,42 @@
-# Order Confirmation Agent — Full Journey
+# Order Confirmation & Reschedule Agent — Full Journey
 
-Test suite for the **Order Confirmation & Reschedule** template card, mirroring the Credit Card Payment Reminder structure.
+Test suite for the **Order Confirmation & Reschedule** template card (Logistics industry, outbound).
 
-## Template pre-fill (from UI)
+## Template pre-fill (from live UI)
 
 | Field | Default |
 |-------|---------|
-| Name | Order Confirmation Agent |
-| Language | hinglish |
+| Card title | Order Confirmation & Reschedule |
+| Name | <order confirmation>-derived (asserted via regex) |
+| Language | **hinglish** |
 | Voice tone | **professional** |
 | Accent | **indian** |
 | Agent gender | **female** |
-| First message | Hi! Kya main ${customer_name} ji se baat kar rahi hoon? (Hinglish) |
-| Extraction JSON | buyingIntent, orderConfirmed, updatedAddress |
-| Temperature | 0.7 |
-| Max tokens | 300 |
+| Call direction | **outbound** |
+| First message | `Hi! Kya main ${customer_name} ji se baat kar rahi hoon?` (Hinglish) |
+| Silence timeout | 10s · Max retries **2** · Max duration **600s** |
+| Voicemail detection | can be enabled |
+| Temperature / tokens | 0.7 / 300 |
+
+## System prompt (pre-filled)
+
+Logistics order-confirmation system prompt covering confirming delivery details and rescheduling (`/order|confirms|reschedule|Logistics/i`).
+
+## Extraction fields (order-specific)
+
+```json
+{
+  "buyingIntent": "confirmed intent to buy",
+  "orderConfirmed": "boolean: order details confirmed on the call",
+  "updatedAddress": "revised delivery address if provided"
+}
+```
 
 ## Test files
 
 | File | Coverage |
 |------|----------|
-| `00-template.spec.ts` | Card selection, pre-fill verification |
+| `00-template.spec.ts` | Card + pre-fill (incl. call-direction default), Change template → Logistics industry view |
 | `01-prompt-tab.spec.ts` | Pipeline, system prompt, basic info |
 | `02-behaviour-tab.spec.ts` | First message, silence, barge-in, voicemail |
 | `03-recording-tab.spec.ts` | Record all calls toggle |

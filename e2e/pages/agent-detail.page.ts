@@ -36,15 +36,6 @@ export class AgentDetailPage {
     ).toBeVisible({ timeout: 15_000 });
   }
 
-  async expectSetting(label: RegExp | string, value: RegExp | string) {
-    const pattern =
-      typeof label === "string" ? new RegExp(label, "i") : label;
-    await expect(this.page.getByText(pattern).first()).toBeVisible();
-    if (typeof value === "string") {
-      await expect(this.page.getByText(value, { exact: false })).toBeVisible();
-    }
-  }
-
   async expectSystemPromptContains(text: RegExp | string) {
     const pattern = typeof text === "string" ? new RegExp(text, "i") : text;
     const main = this.page.getByRole("main");

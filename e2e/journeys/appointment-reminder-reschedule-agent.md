@@ -1,22 +1,26 @@
-# Appointment Reminder Agent — Full Journey
+# Appointment Reminder & Reschedule Agent — Full Journey
 
-Test suite for the **Appointment Reminder & Reschedule** template card.
+Test suite for the **Appointment Reminder & Reschedule** template card (Healthcare industry, outbound).
 
-## Template pre-fill (from UI screenshots)
+## Template pre-fill (from live UI)
 
 | Field | Default |
 |-------|---------|
-| Name | Appointment Reminder Agent |
+| Card title | Appointment Reminder & Reschedule |
+| Name | <appointment>-derived (asserted via regex) |
 | Language | **hinglish** |
 | Voice tone | **professional** |
 | Accent | **indian** |
 | Agent gender | **female** |
-| First message | Hi! Kya main ${patient_name} ji se baat kar rahi hoon? |
-| Silence timeout | 10 seconds |
-| Max retries | 4 |
-| Max call duration | 600 seconds |
-| Barge-in | enabled |
+| Call direction | **outbound** |
+| First message | `Hi! Kya main ${patient_name} ji se baat kar rahi hoon?` |
+| Silence timeout | 10s · Max retries **2** · Max duration **600s** |
+| Voicemail detection | can be enabled |
 | Temperature / tokens | 0.7 / 300 |
+
+## System prompt (pre-filled)
+
+Healthcare appointment system prompt covering reminding patients and rescheduling (`/appointment|reschedule|remind|Healthcare/i`).
 
 ## Extraction fields (appointment-specific)
 
@@ -32,8 +36,8 @@ Test suite for the **Appointment Reminder & Reschedule** template card.
 
 | File | Coverage |
 |------|----------|
-| `00-template.spec.ts` | Card selection, pre-fill |
-| `01-prompt-tab.spec.ts` | en, professional, system prompt |
+| `00-template.spec.ts` | Card + pre-fill (incl. call-direction default), Change template → Healthcare industry view |
+| `01-prompt-tab.spec.ts` | Hinglish, professional, system prompt |
 | `02-behaviour-tab.spec.ts` | First message, silence, barge-in |
 | `03-recording-tab.spec.ts` | Record all calls |
 | `04-outcomes-tab.spec.ts` | Appointment extraction, escalation |

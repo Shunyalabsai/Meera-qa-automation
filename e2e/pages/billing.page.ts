@@ -142,18 +142,7 @@ export class BillingPage {
     await expect(this.page.getByText(/Total minutes/i).first()).toBeVisible();
   }
 
-  async expectBillingDashboardLayout() {
-    await this.expectDashboardLoaded();
-    await this.expectTotalMinutesEmpty();
-    await expect(this.page.getByText(BILLING_COPY.noUsageInPeriod)).toBeVisible();
-  }
-
   async expectSidebarLinkVisible() {
     await expect(this.page.getByRole("link", { name: /^Billing$/i })).toBeVisible();
-  }
-
-  /** @deprecated Use expectDashboardLoaded */
-  async expectBillingContentVisible() {
-    await this.expectDashboardLoaded();
   }
 }

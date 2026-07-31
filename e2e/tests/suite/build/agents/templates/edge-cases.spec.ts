@@ -47,7 +47,7 @@ for (const entry of TEMPLATE_FORM_ENTRIES) {
         .catch(() => false);
       test.skip(
         created,
-        "Staging accepts whitespace-only agent names — trim validation not enforced server-side (TC-AG-102 gap)",
+        "[product-gap:AG-102] Staging accepts whitespace-only agent names — trim validation not enforced server-side",
       );
       await form.expectWhitespaceNameBlocked();
     });

@@ -35,23 +35,21 @@ test.describe("BUILD › Agents › Credit Card Payment Reminder — Template @j
     await expect(form.voiceToneSelect()).toHaveValue(
       CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedVoiceTone,
     );
+    await expect(form.callDirectionSelect()).toHaveValue(
+      CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.defaultCallDirection,
+    );
 
     const prompt = await form.systemPromptInput().inputValue();
     expect(prompt).toMatch(CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedSystemPromptSnippet);
   });
 
-  test("TC-AG-DR-002 @medium @positive — Change template link returns to gallery", async ({
+  test("TC-AG-DR-002 @medium @positive — Change template returns to BFSI industry view", async ({
     page,
   }) => {
     await openCreditCardPaymentReminderAgentForm(page);
 
-    const changeLink = page.getByRole("link", { name: /Change template/i });
-    test.skip(
-      !(await changeLink.isVisible({ timeout: 3_000 }).catch(() => false)),
-      "Change template link not present",
-    );
-
-    await changeLink.click();
-    await new AgentTemplatePage(page).expectGallery();
+    const form = new AgentFormPage(page);
+    await form.changeTemplateButton().click();
+    await new AgentTemplatePage(page).expectIndustryView("BFSI");
   });
 });

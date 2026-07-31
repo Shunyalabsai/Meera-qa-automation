@@ -12,11 +12,29 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const suiteDir = path.join(root, "e2e/tests/suite");
 
 const idPattern = /\[(product-gap|staging-infra|untestable-ui|env-precondition|manual):([A-Z0-9-]+)\]/g;
+// skipProductGap(testInfo, "ID") / skipKnownIssue(testInfo, "ID") / failProductGap("ID")
+// build the reason dynamically, so also match the helper calls directly.
+const helperPattern =
+  /(?:skipProductGap|skipKnownIssue|failProductGap)\(\s*(?:testInfo,\s*)?["']([A-Z0-9-]+)["']/g;
 
 /** @type {Map<string, string[]>} */
 const referenced = new Map();
 /** @type {string[]} */
 const unknownIds = [];
+
+function register(id, category, file) {
+  const key = `${category}:${id}`;
+  if (!referenced.has(key)) referenced.set(key, []);
+  referenced.get(key).push(file);
+  if (
+    category !== "env-precondition" &&
+    category !== "manual" &&
+    !KNOWN_ISSUES[id] &&
+    !STAGING_INFRA[id]
+  ) {
+    unknownIds.push(`${key} in ${file}`);
+  }
+}
 
 function walk(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -24,19 +42,13 @@ function walk(dir) {
     if (entry.isDirectory()) walk(full);
     else if (entry.name.endsWith(".spec.ts")) {
       const text = fs.readFileSync(full, "utf8");
+      const file = path.relative(root, full);
       for (const match of text.matchAll(idPattern)) {
-        const [, category, id] = match;
-        const key = `${category}:${id}`;
-        if (!referenced.has(key)) referenced.set(key, []);
-        referenced.get(key).push(path.relative(root, full));
-        if (
-          category !== "env-precondition" &&
-          category !== "manual" &&
-          !KNOWN_ISSUES[id] &&
-          !STAGING_INFRA[id]
-        ) {
-          unknownIds.push(`${key} in ${path.relative(root, full)}`);
-        }
+        register(match[2], match[1], file);
+      }
+      // Helper calls reference registered product-gaps / known issues only.
+      for (const match of text.matchAll(helperPattern)) {
+        register(match[1], "product-gap", file);
       }
     }
   }

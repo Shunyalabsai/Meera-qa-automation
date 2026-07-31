@@ -43,6 +43,13 @@ export const KNOWN_ISSUES = {
     status: "open",
     fix: "Add export action to the Calls page toolbar",
   },
+  "AG-102": {
+    category: "product-gap",
+    summary:
+      "Staging accepts whitespace-only agent names — trim validation not enforced server-side (edge-cases NAME-SPACE skips until fixed)",
+    status: "open",
+    fix: "Trim agent name before submit and block whitespace-only values",
+  },
 };
 
 /** Documented staging infrastructure — tests may adapt; not product bugs. */

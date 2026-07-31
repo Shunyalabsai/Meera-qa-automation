@@ -10,6 +10,7 @@ Shared Prompt-tab dropdown tests for **all 4 template cards** plus **Start from 
 | **Voice tone** | `neutral`, `warm`, `professional`, `casual`, `assertive` |
 | **Accent** | `neutral`, `indian`, `british`, `american`, `australian` |
 | **Agent gender** | `neutral`, `female`, `male` |
+| **Call direction** | `outbound`, `inbound` |
 
 ## Template cards
 
@@ -27,14 +28,15 @@ Shared Prompt-tab dropdown tests for **all 4 template cards** plus **Start from 
 | `templates/prompt-dropdowns.spec.ts` | All dropdown options × all 5 entries |
 
 Each entry gets:
-- 1 UI test (all 4 dropdowns list correct options)
+- 1 UI test (all 5 dropdowns list correct options)
 - 8 Language selection tests
 - 5 Voice tone tests
 - 5 Accent tests
 - 3 Agent gender tests
+- 2 Call direction tests
 - 1 full exercise test
 
-**Total per entry:** 23 tests × 5 entries = **115 dropdown tests**
+**Total per entry:** 25 tests × 5 entries = **125 dropdown tests**
 
 Credit Card Payment Reminder–specific prompt tests (pre-fill, system prompt) remain in `credit-card-payment-reminder/01-prompt-tab.spec.ts`.
 

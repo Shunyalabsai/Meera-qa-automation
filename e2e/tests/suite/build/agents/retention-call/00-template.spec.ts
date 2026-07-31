@@ -44,6 +44,9 @@ test.describe("BUILD › Agents › Retention Call — Template @journey @retent
     await expect(form.genderSelect()).toHaveValue(
       RETENTION_CALL_TEMPLATE.expectedGender,
     );
+    await expect(form.callDirectionSelect()).toHaveValue(
+      RETENTION_CALL_TEMPLATE.defaultCallDirection,
+    );
 
     const prompt = await form.systemPromptInput().inputValue();
     expect(prompt).toMatch(
@@ -51,16 +54,12 @@ test.describe("BUILD › Agents › Retention Call — Template @journey @retent
     );
   });
 
-  test("TC-AG-CS-002 @medium @positive — Change template link returns to gallery", async ({
+  test("TC-AG-CS-002 @medium @positive — Change template returns to Telecom industry view", async ({
     page,
   }) => {
     await openRetentionCallAgentForm(page);
-    const changeLink = page.getByRole("link", { name: /Change template/i });
-    test.skip(
-      !(await changeLink.isVisible({ timeout: 3_000 }).catch(() => false)),
-      "Change template link not present",
-    );
-    await changeLink.click();
-    await new AgentTemplatePage(page).expectGallery();
+    const form = new AgentFormPage(page);
+    await form.changeTemplateButton().click();
+    await new AgentTemplatePage(page).expectIndustryView("Telecom");
   });
 });

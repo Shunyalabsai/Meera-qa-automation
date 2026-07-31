@@ -1,80 +1,55 @@
-# Debt Recovery Agent — Full Journey
+# Credit Card Payment Reminder Agent — Full Journey
 
-Complete test coverage for the **Credit Card Payment Reminder** template: all sheet TC-AG cases, every dropdown option, and the full agent lifecycle.
+Test suite for the **Credit Card Payment Reminder** template card (BFSI industry, outbound).
 
-## Lifecycle (create → delete)
+## Template pre-fill (from live UI)
 
-Serial spec: `09-lifecycle.spec.ts`
+| Field | Default |
+|-------|---------|
+| Card title | Credit Card Payment Reminder |
+| Name | <credit card>-derived (asserted via regex) |
+| Language | **en** |
+| Voice tone | **professional** |
+| Accent | **american** |
+| Agent gender | **female** |
+| Call direction | **outbound** |
+| First message | `Hi, this is Kate calling from Horizon Bank. Am I speaking with ${customer_name}?` |
+| Silence timeout | 10s · Max retries **2** · Max duration **600s** |
+| Voicemail detection | can be enabled |
+| Temperature / tokens | 0.7 / 300 |
 
-```
-Create (TC-AG-001)
-  → List verification
-  → Detail page (TC-AG-DR-081)
-  → Edit system prompt (TC-AG-002)
-  → Edit first message (TC-AG-010)
-  → Edit temperature/tokens (TC-AG-005)
-  → Enable escalation (TC-AG-009)
-  → Change language (TC-AG-004)
-  → Clone (TC-AG-006)
-  → Delete clone (TC-AG-007)
-  → Delete original (TC-AG-007b)
-```
+## System prompt (pre-filled)
 
-## Positive cases (TC-AG-001 … 010)
+Banking/BFSI system prompt covering overdue credit card payment follow-up and payment-link resend (`/credit card payment|payment link|BFSI/i`).
 
-| TC ID | Spec | What it tests |
-|-------|------|---------------|
-| TC-AG-001 | 09-lifecycle | Create debt recovery agent |
-| TC-AG-002 | 09-lifecycle, 01-prompt-tab | Custom system prompt |
-| TC-AG-003 | 11-poc-manual-gaps | STT model — **skipped** (POC UI hidden) |
-| TC-AG-004 | 09-lifecycle, 01-prompt-tab | Language / TTS language |
-| TC-AG-005 | 09-lifecycle, 05-advanced-tab | Temperature & max tokens |
-| TC-AG-006 | 09-lifecycle | Clone agent |
-| TC-AG-007 | 09-lifecycle | Delete agent |
-| TC-AG-008 | 11-poc-manual-gaps | Active/inactive toggle — **skipped** if no UI |
-| TC-AG-009 | 09-lifecycle, 04-outcomes-tab | Escalation / handoff |
-| TC-AG-010 | 09-lifecycle, 02-behaviour-tab | First message / greeting |
-
-## Negative cases (TC-AG-101 … 106)
-
-| TC ID | Spec | What it tests |
-|-------|------|---------------|
-| TC-AG-101 | 06-validation | Empty name |
-| TC-AG-102 | 06-validation | Name > 255 chars |
-| TC-AG-103 | 11-poc-manual-gaps | No STT — **skipped** |
-| TC-AG-104 | 06-validation | Temperature > 2.0 |
-| TC-AG-105 | 11-poc-manual-gaps | Delete mid-call — **skipped** (manual) |
-| TC-AG-106 | 06-validation | XSS in name |
-| TC-AG-DR-N110 | 06-validation | Empty first message |
-| TC-AG-DR-N111 | 06-validation | Invalid extraction JSON |
-| TC-AG-DR-N112 | 06-validation | Invalid pre-call URL |
-| TC-AG-DR-N113 | 06-validation | Max tokens below minimum |
-| TC-AG-DR-N114 | 06-validation | Delete cancelled |
-
-## Security (TC-AG-201 … 203)
-
-Tracked in `11-poc-manual-gaps.spec.ts` as explicit skips — require multi-org or API access.
-
-## Tab & dropdown coverage
+## Test files
 
 | File | Coverage |
 |------|----------|
-| `../templates/prompt-dropdowns.spec.ts` | **All 4 cards + scratch** — Language (8), Voice tone (5), Accent (5), Gender (3) |
-| `../templates/00-gallery.spec.ts` | Template gallery cards |
-| 00-template | Credit Card Payment Reminder card pre-fill |
-| 02-behaviour-tab | Speech speed, voicemail, silence, barge-in |
-| 03-recording-tab | Record calls toggle |
-| 04-outcomes-tab | Outcomes, extraction JSON, escalation |
-| 05-advanced-tab | Temperature, tokens, pre-call API (POST/GET) |
-| 07-full-journey | Single-shot create with all tabs filled |
-| 08-tabs-navigation | Tab order + Guide panel |
+| `00-template.spec.ts` | Card + pre-fill (incl. call-direction default), Change template → BFSI industry view |
+| `01-prompt-tab.spec.ts` | en, professional, BFSI system prompt |
+| `02-behaviour-tab.spec.ts` | Speech speed, voicemail, silence, barge-in |
+| `03-recording-tab.spec.ts` | Record calls toggle |
+| `04-outcomes-tab.spec.ts` | Outcomes, escalation / handoff |
+| `05-advanced-tab.spec.ts` | Temperature, tokens, pre-call API (POST/GET) |
+| `06-validation.spec.ts` | Empty name, >255 chars, XSS, invalid extraction JSON, invalid pre-call URL, min tokens, delete cancelled |
+| `07-full-journey.spec.ts` | Single-shot create with all tabs filled |
+| `08-tabs-navigation.spec.ts` | Tab order + Guide panel |
+| `09-lifecycle.spec.ts` | Create → edit → clone → delete |
+
+## Shared coverage
+
+Also in `../templates/`:
+- `prompt-dropdowns.spec.ts` — all dropdown options (Language, Voice tone, Accent, Gender, Call direction)
+- `00-gallery.spec.ts` — 5 industry cards, per-industry agent counts, back navigation
+- `edge-cases.spec.ts` — 22 negative/edge cases per card
 
 ## Run
 
 ```bash
 npm run auth:save
 
-# Full debt recovery suite (~70 tests)
+# Full credit card suite
 npm run test:credit-card-payment-reminder
 
 # Lifecycle only (create → edit → clone → delete)

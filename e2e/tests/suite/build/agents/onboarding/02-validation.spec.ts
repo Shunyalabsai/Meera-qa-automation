@@ -57,7 +57,12 @@ test.describe("BUILD › Agents — Onboarding validation @negative @edge @onboa
       "Agents onboarding empty state not shown",
     );
     const onboarding = new AgentsOnboardingPage(page);
-    for (const step of [/Create an agent/i, /Add a phone number/i, /Test in Playground/i]) {
+    for (const step of [
+      /Create an agent/i,
+      /Add a phone number/i,
+      /Test in Playground/i,
+      /Run a campaign/i,
+    ]) {
       await expect(onboarding.stepCard(step)).toBeVisible();
     }
   });

@@ -1,24 +1,26 @@
-# Customer Support Agent — Full Journey
+# Retention Call Agent — Full Journey
 
-Test suite for the **Retention Call** template card (inbound support).
+Test suite for the **Retention Call** template card (Telecom industry, outbound).
 
-## Template pre-fill (from UI screenshots)
+## Template pre-fill (from live UI)
 
 | Field | Default |
 |-------|---------|
-| Name | Support Agent |
+| Card title | Retention Call |
+| Name | <retention>-derived (asserted via regex) |
 | Language | **en** |
 | Voice tone | **warm** |
 | Accent | **american** |
 | Agent gender | **female** |
-| First message | Retention-focused greeting (retention/cancellation) |
-| Silence timeout | 10s · Max retries **2** · Max duration **1800s** |
+| Call direction | **outbound** |
+| First message | `Hi, this is Sarah calling from ConnectTel regarding your recent request to cancel your mobile service. Am I speaking with ${customer_name}?` |
+| Silence timeout | 10s · Max retries **2** · Max duration **600s** |
 | Voicemail detection | can be enabled |
 | Temperature / tokens | 0.7 / 300 |
 
 ## System prompt (pre-filled)
 
-> Retention-focused system prompt (retention/cancellation/customer) covering agent behavior for handling cancellations and retention conversations.
+Retention-focused system prompt covering agent behavior for handling cancellations and retention conversations (`/retention|cancellation|customer/i`).
 
 ## Extraction fields (support-specific)
 
@@ -35,11 +37,11 @@ Test suite for the **Retention Call** template card (inbound support).
 
 | File | Coverage |
 |------|----------|
-| `00-template.spec.ts` | Card + pre-fill |
-| `01-prompt-tab.spec.ts` | en, warm, support system prompt |
-| `02-behaviour-tab.spec.ts` | Support greeting, silence, voicemail, barge-in |
+| `00-template.spec.ts` | Card + pre-fill (incl. call-direction default), Change template → Telecom industry view |
+| `01-prompt-tab.spec.ts` | en, warm, retention system prompt |
+| `02-behaviour-tab.spec.ts` | Retention greeting, silence, voicemail, barge-in, max duration 600s |
 | `03-recording-tab.spec.ts` | Record all calls |
-| `04-outcomes-tab.spec.ts` | resolved/escalated outcomes, issue extraction |
+| `04-outcomes-tab.spec.ts` | resolved/escalated outcomes, issue extraction fields |
 | `05-advanced-tab.spec.ts` | Temperature 0.7-0.9 for open support |
 | `06-validation.spec.ts` | Delete/clone cancel |
 | `07-full-journey.spec.ts` | Single-shot create |
@@ -49,7 +51,7 @@ Test suite for the **Retention Call** template card (inbound support).
 ## Shared coverage
 
 Also in `../templates/`:
-- `prompt-dropdowns.spec.ts` — all dropdown options
+- `prompt-dropdowns.spec.ts` — all dropdown options (Language, Voice tone, Accent, Gender, Call direction)
 - `edge-cases.spec.ts` — 22 negative/edge cases per card
 
 ## Run
@@ -62,9 +64,9 @@ npm run test:retention-call-lifecycle
 
 ## All 4 template cards complete
 
-| Card | Folder | Tag |
-|------|--------|-----|
-| Credit Card Payment Reminder | `credit-card-payment-reminder/` | `@credit-card-payment-reminder` |
-| Order Confirmation & Reschedule | `order-confirmation-reschedule/` | `@order-confirmation-reschedule` |
-| Appointment Reminder & Reschedule | `appointment-reminder-reschedule/` | `@appointment-reminder-reschedule` |
-| Retention Call | `retention-call/` | `@retention-call` |
+| Card | Industry | Folder | Tag |
+|------|----------|--------|-----|
+| Credit Card Payment Reminder | BFSI | `credit-card-payment-reminder/` | `@credit-card-payment-reminder` |
+| Order Confirmation & Reschedule | Logistics | `order-confirmation-reschedule/` | `@order-confirmation-reschedule` |
+| Appointment Reminder & Reschedule | Healthcare | `appointment-reminder-reschedule/` | `@appointment-reminder-reschedule` |
+| Retention Call | Telecom | `retention-call/` | `@retention-call` |

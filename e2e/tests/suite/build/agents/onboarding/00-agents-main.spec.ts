@@ -10,7 +10,7 @@ test.describe("BUILD › Agents — Main screen (new user) @journey @new-user @o
     );
   });
 
-  test("TC-AG-ON-001 @high @ui — Empty state shows Build your first voice agent hero", async ({
+  test("TC-AG-ON-001 @high @ui — Empty state shows Get started checklist", async ({
     page,
   }) => {
     const onboarding = new AgentsOnboardingPage(page);
@@ -28,7 +28,7 @@ test.describe("BUILD › Agents — Main screen (new user) @journey @new-user @o
   }) => {
     await expect(page.getByText(/Create an agent/i).first()).toBeVisible();
     await expect(
-      page.getByText(/Write what your agent should do|set its language and tone/i),
+      page.getByText(/Define what your agent does, how it speaks, and what it says/i),
     ).toBeVisible();
   });
 
@@ -37,7 +37,7 @@ test.describe("BUILD › Agents — Main screen (new user) @journey @new-user @o
   }) => {
     await expect(page.getByText(/Add a phone number/i).first()).toBeVisible();
     await expect(
-      page.getByText(/Assign an inbound or outbound number/i),
+      page.getByText(/Assign an inbound or outbound number so calls can be made/i),
     ).toBeVisible();
   });
 
@@ -50,17 +50,26 @@ test.describe("BUILD › Agents — Main screen (new user) @journey @new-user @o
     ).toBeVisible();
   });
 
-  test("TC-AG-ON-006 @high @positive — Create your first agent CTA is visible", async ({
+  test("TC-AG-ON-005b @high @ui — Step 4 Run a campaign guidance text", async ({
+    page,
+  }) => {
+    await expect(page.getByText(/Run a campaign/i).first()).toBeVisible();
+    await expect(
+      page.getByText(/Reach your customers at scale with automated outbound calls/i),
+    ).toBeVisible();
+  });
+
+  test("TC-AG-ON-006 @high @positive — New agent CTA is visible", async ({
     page,
   }) => {
     const onboarding = new AgentsOnboardingPage(page);
-    await expect(onboarding.createFirstAgentCta().first()).toBeVisible();
+    await expect(onboarding.newAgentCta().first()).toBeVisible();
   });
 
-  test("TC-AG-ON-007 @medium @ui — Three numbered onboarding steps are present", async ({
+  test("TC-AG-ON-007 @medium @ui — Four onboarding step links are present", async ({
     page,
   }) => {
-    const steps = page.locator("text=/Create an agent|Add a phone number|Test in Playground/");
-    await expect(steps).toHaveCount(3);
+    const onboarding = new AgentsOnboardingPage(page);
+    await onboarding.expectAllSteps();
   });
 });

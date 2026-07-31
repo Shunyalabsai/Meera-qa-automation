@@ -1,36 +1,41 @@
-# Agents Main Screen — New User Onboarding
+# Agents Main Screen — Get-Started Onboarding
 
-Tests for the **Agents empty state** shown after first sign-up, before any agents exist. This screen precedes the template gallery at `/agents/new`.
+Tests for the **"Get started" onboarding checklist** shown on the Agents dashboard at `/agents` (new user; card also persists while the checklist is incomplete). The card precedes the template gallery at `/agents/new`.
 
 ## Flow
 
 ```
-/agents (empty state)
-├── Hero: "Build your first voice agent"
-├── Step 1: Create an agent        → /agents/new
-├── Step 2: Add a phone number   → /phone-numbers (RUN)
-├── Step 3: Test in Playground   → /playground (BUILD)
-└── CTA: "Create your first agent →" → /agents/new
+/agents
+└── "Get started" card
+    ├── Heading: "Get started"
+    ├── Subtitle: "Complete these steps to run your first call."
+    ├── Step 1: Create an agent       → /agents (done) | /agents/new (todo)
+    ├── Step 2: Test in Playground    → /playground (BUILD)
+    ├── Step 3: Add a phone number    → /phone-numbers (RUN)
+    ├── Step 4: Run a campaign        → /campaigns (RUN)
+    └── CTA: "New agent"              → /agents/new
 ```
 
 ## Screens covered
 
 | Screen | Section | Route |
 |--------|---------|-------|
-| Agents main (empty) | BUILD | `/agents` |
+| Agents main (Get-started card) | BUILD | `/agents` |
 | Phone numbers (empty) | RUN | `/phone-numbers` |
 | Playground (no agent selected) | BUILD | `/playground` |
+| Campaigns (empty) | RUN | `/campaigns` |
 
 ## Test files
 
 | File | Coverage |
 |------|----------|
-| `onboarding/00-agents-main.spec.ts` | Empty state UI, 3 steps, CTA |
-| `onboarding/01-step-navigation.spec.ts` | Step clicks → Phone numbers & Playground |
+| `onboarding/00-agents-main.spec.ts` | Get-started card UI, 4 steps, New agent CTA |
+| `onboarding/01-step-navigation.spec.ts` | Step clicks → Playground, Phone numbers, Campaigns |
+| `onboarding/02-validation.spec.ts` | Edge cases + accessible step links |
 
 ## Note on test data
 
-These tests **skip automatically** when the saved auth user already has agents (list view instead of onboarding hero). Use a fresh account or delete all agents to run the full suite.
+These tests **skip automatically** when the "Get started" card is not shown on `/agents` (e.g. dismissed or checklist complete). The card renders independently of agent count, so a saved-auth user with existing agents still exercises the checklist.
 
 ## Run
 
