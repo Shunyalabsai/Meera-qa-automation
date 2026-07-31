@@ -172,36 +172,6 @@ export class PhoneNumbersPage {
     await expect(radio).toBeChecked();
   }
 
-  async expectExistingAccountDisabled() {
-    await expect(this.useExistingAccountRadio()).toBeDisabled();
-  }
-
-  async fillNewPlivoAccount(input: {
-    authId: string;
-    authToken: string;
-    number: string;
-    accountLabel?: string;
-    numberLabel?: string;
-  }) {
-    await this.setupNewAccountRadio().check();
-    await this.plivoProviderRadio().check();
-    await this.authIdInput().fill(input.authId);
-    await this.authTokenInput().fill(input.authToken);
-    await this.numberInput().fill(input.number);
-    if (input.accountLabel) {
-      const label = this.accountLabelInput();
-      if (await label.isVisible({ timeout: 2_000 }).catch(() => false)) {
-        await label.fill(input.accountLabel);
-      }
-    }
-    if (input.numberLabel) {
-      const label = this.numberLabelInput();
-      if (await label.isVisible({ timeout: 2_000 }).catch(() => false)) {
-        await label.fill(input.numberLabel);
-      }
-    }
-  }
-
   async submitAddNumber() {
     await this.modalAddNumberButton().click();
   }

@@ -64,14 +64,6 @@ export class LanguageSwitcherPage {
       .catch(() => false));
   }
 
-  /** Google Translate reloads can hit nginx SPA 404 — recover via shell + sidebar nav. */
-  async recoverShell(route = "agents") {
-    if (await this.isShellBroken()) {
-      await gotoApp(this.page, route);
-    }
-    await expect(this.triggerButton()).toBeVisible({ timeout: 30_000 });
-  }
-
   async openPanel() {
     const trigger = this.triggerButton();
     await expect(trigger).toBeVisible({ timeout: 30_000 });
@@ -104,10 +96,6 @@ export class LanguageSwitcherPage {
 
   async search(query: string) {
     await this.searchInput().fill(query);
-  }
-
-  async clearSearch() {
-    await this.searchInput().fill("");
   }
 
   async selectLanguage(entry: LanguageEntry, route = "agents") {
