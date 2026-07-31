@@ -65,7 +65,8 @@
     "sheet:update": "node e2e/scripts/sheet-auto-update.mjs",
     "issues:audit": "node e2e/scripts/audit-known-issues.mjs",
     "report": "playwright show-report",
-    "install:browsers": "playwright install chromium"
+    "install:browsers": "playwright install chromium",
+    "sheet:manual-cases": "node e2e/scripts/fetch-manual-cases.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",

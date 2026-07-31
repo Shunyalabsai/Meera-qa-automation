@@ -94,6 +94,9 @@ export function buildFormatRequests(sheetId, rowMeta, columnCount) {
 
   if (!rowMeta?.length) return requests;
 
+  // A leftover filter from a previous publish blocks merging title/section rows.
+  requests.push({ clearBasicFilter: { sheetId } });
+
   requests.push({
     updateSheetProperties: {
       properties: { sheetId, gridProperties: { frozenRowCount: 1 } },
@@ -110,6 +113,104 @@ export function buildFormatRequests(sheetId, rowMeta, columnCount) {
       startColumnIndex: 0,
       endColumnIndex: columnCount,
     };
+
+    if (meta.type === "title") {
+      if (meta.merge) {
+        requests.push({
+          mergeCells: {
+            range: {
+              sheetId,
+              startRowIndex: rowIndex,
+              endRowIndex: rowIndex + 1,
+              startColumnIndex: 0,
+              endColumnIndex: columnCount,
+            },
+            mergeType: "MERGE_ALL",
+          },
+        });
+      }
+      requests.push({
+        repeatCell: {
+          range,
+          cell: {
+            userEnteredFormat: {
+              backgroundColor: COLORS.headerBg,
+              textFormat: {
+                bold: true,
+                foregroundColor: COLORS.headerFg,
+                fontSize: 14,
+              },
+              horizontalAlignment: "LEFT",
+              verticalAlignment: "MIDDLE",
+            },
+          },
+          fields:
+            "userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment)",
+        },
+      });
+      continue;
+    }
+
+    if (meta.type === "section") {
+      if (meta.merge) {
+        requests.push({
+          mergeCells: {
+            range: {
+              sheetId,
+              startRowIndex: rowIndex,
+              endRowIndex: rowIndex + 1,
+              startColumnIndex: 0,
+              endColumnIndex: columnCount,
+            },
+            mergeType: "MERGE_ALL",
+          },
+        });
+      }
+      requests.push({
+        repeatCell: {
+          range,
+          cell: {
+            userEnteredFormat: {
+              backgroundColor: { red: 0.36, green: 0.55, blue: 0.72 },
+              textFormat: {
+                bold: true,
+                foregroundColor: COLORS.white,
+                fontSize: 11,
+              },
+              horizontalAlignment: "LEFT",
+              verticalAlignment: "MIDDLE",
+            },
+          },
+          fields:
+            "userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment)",
+        },
+      });
+      continue;
+    }
+
+    if (meta.type === "kv") {
+      requests.push({
+        repeatCell: {
+          range: {
+            sheetId,
+            startRowIndex: rowIndex,
+            endRowIndex: rowIndex + 1,
+            startColumnIndex: 0,
+            endColumnIndex: Math.min(2, columnCount),
+          },
+          cell: {
+            userEnteredFormat: {
+              textFormat: { bold: true, fontSize: 10 },
+              verticalAlignment: "MIDDLE",
+            },
+          },
+          fields: "userEnteredFormat(textFormat,verticalAlignment)",
+        },
+      });
+      continue;
+    }
+
+    if (meta.type === "spacer") continue;
 
     if (meta.type === "header") {
       requests.push({
@@ -217,7 +318,11 @@ export function buildFormatRequests(sheetId, rowMeta, columnCount) {
     }
   }
 
-  if (rowMeta.length > 1) {
+  // Summary-style tabs (title/section rows) shouldn't have a filter over merged headers.
+  const hasDashboardSections = rowMeta.some((m) =>
+    ["title", "section"].includes(m.type),
+  );
+  if (rowMeta.length > 1 && !hasDashboardSections) {
     requests.push({
       setBasicFilter: {
         filter: {
@@ -263,7 +368,7 @@ export function runSeparatorLabel(entry) {
 
 /** Extract a locator's human description from a Playwright error's call log. */
 export function extractLocatorFromError(raw) {
-  const text = String(raw ?? "");
+  const text = String(raw ?? "").replace(/\[[0-9;]*m/g, "");
   const m =
     text.match(/waiting for ([^\r\n]+)/i) ??
     text.match(/- (?:locator|selector): ([^\r\n]+)/i) ??
@@ -298,7 +403,10 @@ export function extractLocatorFromError(raw) {
  * can act on. Returns the friendly reason (no error codes / selectors).
  */
 export function friendlyFailureReason(raw, status = "failed") {
-  const text = String(raw ?? "").replace(/\s+/g, " ").trim();
+  const text = String(raw ?? "")
+    .replace(/\[[0-9;]*m/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 
   if (!text) {
     return status === "skipped" ? "Skipped without a recorded reason" : "Test failed — no error details were recorded";

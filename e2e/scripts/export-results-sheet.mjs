@@ -23,7 +23,16 @@ import {
   loadSheetRunHistory,
   saveSheetRunHistory,
 } from "./sheet-history.mjs";
-import { detectRunJourney, detectTestJourney } from "./sheet-format.mjs";
+import {
+  cleanTechnicalError,
+  detectRunJourney,
+  detectTestJourney,
+  friendlyExpected,
+  friendlyFailureReason,
+  friendlyModule,
+  friendlyStepsForTest,
+} from "./sheet-format.mjs";
+import { MANUAL_TEST_CASES } from "../data/manual-test-cases.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const catalogFile = path.join(root, "e2e/data/test-catalog.json");
@@ -239,20 +248,49 @@ export function exportSheetResults(options = {}) {
     const reason =
       result.status === "passed" ? "" : stripAnsi(result.reason ?? "");
     const specFile = result.file.replace(/\\/g, "/");
+    const rawReason = result.reason ?? "";
+
+    const testId =
+      catalogEntry?.id ??
+      result.title.match(/^(TC-[A-Z0-9-]+)/)?.[1] ??
+      "";
+    const title =
+      catalogEntry?.title ??
+      (result.title.replace(/^TC-[A-Z0-9-]+.*?—\s*/i, "").trim() ||
+        result.title);
+    const describe = catalogEntry?.describe ?? "";
+    // Fall back to the spec's section when the catalog has no entry (e.g. dynamic tests).
+    const sectionKey =
+      catalogEntry?.sectionKey ?? sectionKeyFromSpecPath(specFile);
+    const module = friendlyModule(describe, sectionKey);
+    const manual = testId ? MANUAL_TEST_CASES[testId] ?? null : null;
+    const failed = status !== "Pass";
 
     const row = {
-      testId: catalogEntry?.id ?? "",
-      title:
-        catalogEntry?.title ??
-        (result.title.replace(/^TC-[A-Z0-9-]+.*?—\s*/i, "").trim() ||
-          result.title),
+      testId,
+      title,
       rawTitle: result.title,
       priority: catalogEntry?.priority ?? "",
       type: catalogEntry?.type ?? "",
       tags: catalogEntry?.tags?.join(", ") ?? "",
       specFile,
       line: result.line,
-      describe: catalogEntry?.describe ?? "",
+      describe,
+      sectionKey,
+      module,
+      steps: friendlyStepsForTest({
+        manual,
+        title,
+        module,
+        specFile,
+        line: result.line,
+      }),
+      expected: friendlyExpected({ manual, title, status }),
+      friendlyReason: failed
+        ? friendlyFailureReason(rawReason || reason, result.status)
+        : "",
+      techReason: failed ? cleanTechnicalError(rawReason || reason) : "",
+      screenshot: result.screenshot ?? "",
       status,
       lastRunAt: run.runAt,
       durationSec: (result.durationMs / 1000).toFixed(2),
@@ -262,7 +300,7 @@ export function exportSheetResults(options = {}) {
       tab,
       journey: detectTestJourney({
         tags: catalogEntry?.tags?.join(", ") ?? "",
-        describe: catalogEntry?.describe ?? "",
+        describe,
         specFile,
         rawTitle: result.title,
       }),
