@@ -1,42 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { gotoApp } from "../../../helpers/navigate";
-import { skipEnvPrecondition } from "../../../helpers/skip";
 
 test.describe("Workspace & Account @smoke", () => {
-  test("Personal workspace message visible in sidebar", async ({ page }) => {
+  test("Account menu opens from user button", async ({ page }) => {
     await gotoApp(page, "agents");
-    await expect(
-      page.getByText(/personal workspace|Select a Clerk org/i),
-    ).toBeVisible({ timeout: 30_000 });
-  });
-
-  test("Organization switcher is present", async ({ page }, testInfo) => {
-    await gotoApp(page, "agents");
-    await expect(page.getByRole("heading", { name: /^Agents$/i })).toBeVisible({
-      timeout: 30_000,
+    // The account/workspace controls live in the user menu — no org switcher in the sidebar.
+    await page.getByRole("button", { name: /Open user menu|User menu/i }).click();
+    await expect(page.getByText(/Manage account/i)).toBeVisible({
+      timeout: 15_000,
     });
-
-    const orgSwitcher = page.locator(
-      ".cl-organizationSwitcherTrigger, .cl-organizationSwitcher",
-    );
-    if (await orgSwitcher.isVisible({ timeout: 10_000 }).catch(() => false)) {
-      return;
-    }
-
-    const personalWorkspace = page.getByText(
-      /personal workspace|Select a Clerk org/i,
-    );
-    if (
-      await personalWorkspace.isVisible({ timeout: 15_000 }).catch(() => false)
-    ) {
-      skipEnvPrecondition(
-        testInfo,
-        "Personal workspace — org switcher hidden until user joins an organization",
-      );
-      return;
-    }
-
-    await expect(orgSwitcher).toBeVisible({ timeout: 5_000 });
+    await expect(page.getByText(/Sign out/i)).toBeVisible();
   });
 
   test("User profile button is present", async ({ page }) => {

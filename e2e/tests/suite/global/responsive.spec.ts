@@ -8,11 +8,9 @@ test.describe("Global UI › Responsive @smoke", () => {
     await page.setViewportSize({ width: 375, height: 812 });
     await gotoApp(page, "agents");
     await expect(page).toHaveURL(/\/agents/);
-    // Mobile layout keeps sidebar open — main h1 can be off-screen; assert usable shell.
+    // At 375px the sidebar collapses behind the hamburger menu — assert the usable shell.
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.getByRole("link", { name: /New agent/i })).toBeVisible();
-    await expect(
-      page.getByRole("navigation").getByRole("link", { name: /^Agents$/i }),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /Open menu/i })).toBeVisible();
   });
 });

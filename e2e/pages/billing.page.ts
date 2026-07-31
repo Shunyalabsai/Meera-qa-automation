@@ -107,7 +107,7 @@ export class BillingPage {
 
   usageIntervalTab(label: string): Locator {
     return this.mainPanel()
-      .getByRole("button", { name: new RegExp(`^${label}$`, "i") })
+      .getByRole("tab", { name: new RegExp(`^${label}$`, "i") })
       .first();
   }
 
