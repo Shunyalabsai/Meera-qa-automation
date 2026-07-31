@@ -3,7 +3,6 @@ import {
   openStartFromScratchAgentForm,
   waitForAgentCreated,
 } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { START_FROM_SCRATCH } from "../../../../../data/start-from-scratch-template";
 import { uniqueName } from "../../../../../utils/test-data";
 

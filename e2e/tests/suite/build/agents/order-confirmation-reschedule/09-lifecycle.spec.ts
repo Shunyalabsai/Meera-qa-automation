@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { AgentsListPage } from "../../../../../pages/agents-list.page";
 import { AgentDetailPage } from "../../../../../pages/agent-detail.page";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import {
   createOrderConfirmationRescheduleAgent,
   openAgentEdit,

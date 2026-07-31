@@ -1,4 +1,4 @@
-import { Page, expect } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { gotoApp } from "./navigate";
 import { AgentTemplatePage } from "../pages/agent-template.page";
 import { AgentFormPage } from "../pages/agent-form.page";

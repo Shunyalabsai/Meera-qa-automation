@@ -3,7 +3,7 @@ import { openPromptTemplatesList } from "../../../../helpers/prompt-templates.he
 import { PromptTemplatesPage } from "../../../../pages/prompt-templates.page";
 import { skipProductGap } from "../../../../helpers/skip";
 import { PROMPT_TEMPLATE_SAMPLES } from "../../../../data/prompt-template-data";
-import { uniqueName, XSS_PAYLOAD } from "../../../../utils/test-data";
+import { uniqueName } from "../../../../utils/test-data";
 
 test.describe("BUILD › Prompts — Edge cases @edge @negative @prompts", () => {
   test.beforeEach(async ({ page }) => {

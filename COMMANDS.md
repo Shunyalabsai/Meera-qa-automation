@@ -80,6 +80,10 @@ npm run sheet:real-catalog  # → e2e/REAL-TEST-CATALOG.csv (real cases by secti
 npm run sheet:export        # merge last run → CSV per section tab
 npm run sheet:publish       # push results to Google Sheet (service account)
 npm run sheet:update        # export + publish (also runs automatically after npm test)
+npm run sheet:manual-cases  # re-fetch manual QA steps from the QA sheet
+npm run sheet:uat-fetch     # re-fetch the UAT bug-feedback snapshot (report "UAT July 2026" tab)
+npm run sheet:dashboard     # build the local HTML dashboard (e2e/data/results-sheets/)
+npm run issues:audit        # audit known issues against the latest run
 npm run report
 ```
 

@@ -6,10 +6,6 @@ export function getGoogleEmail(): string {
   return email;
 }
 
-export function getGooglePassword(): string | undefined {
-  return process.env.E2E_GOOGLE_PASSWORD || undefined;
-}
-
 /** True when a dedicated email+password Clerk test account is configured. */
 export function hasPasswordSignInCredentials(): boolean {
   return !!(process.env.E2E_CLERK_EMAIL && process.env.E2E_CLERK_PASSWORD);
@@ -23,20 +19,6 @@ export function getPasswordSignInCredentials(): { email: string; password: strin
   if (!email || !password) {
     throw new Error(
       "Set E2E_CLERK_EMAIL + E2E_CLERK_PASSWORD for email/password sign-in tests",
-    );
-  }
-
-  return { email, password };
-}
-
-/** @deprecated Prefer getPasswordSignInCredentials for sign-in tests. */
-export function getClerkCredentials(): { email: string; password: string } {
-  const email = process.env.E2E_CLERK_EMAIL ?? process.env.E2E_GOOGLE_EMAIL;
-  const password = process.env.E2E_CLERK_PASSWORD ?? process.env.E2E_GOOGLE_PASSWORD;
-
-  if (!email || !password) {
-    throw new Error(
-      "Set E2E_CLERK_EMAIL + E2E_CLERK_PASSWORD (or E2E_GOOGLE_*) in .env",
     );
   }
 

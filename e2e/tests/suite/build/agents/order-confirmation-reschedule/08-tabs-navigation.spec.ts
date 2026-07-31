@@ -1,6 +1,5 @@
 import { test } from "@playwright/test";
 import { openOrderConfirmationRescheduleAgentForm } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 
 test.describe("BUILD › Agents › Order Confirmation & Reschedule — Tab navigation @journey @order-confirmation-reschedule", () => {
   test("TC-AG-OC-070 @high @ui — All five tabs navigate in order", async ({

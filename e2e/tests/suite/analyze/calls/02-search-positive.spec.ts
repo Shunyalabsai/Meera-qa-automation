@@ -1,6 +1,6 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { openCallsList } from "../../../../helpers/calls.helper";
-import { CALLS_COPY, CALLS_FILTER_SAMPLES } from "../../../../data/calls-filter-data";
+import { CALLS_FILTER_SAMPLES } from "../../../../data/calls-filter-data";
 import { VALID_UUID } from "../../../../utils/test-data";
 
 test.describe("ANALYZE › Calls — Search & text filters @journey @new-user @calls @positive", () => {

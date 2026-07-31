@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { openInsights } from "../../../../helpers/insights.helper";
 import { INSIGHTS_DATE_PRESETS } from "../../../../data/insights-data";
 

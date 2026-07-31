@@ -39,7 +39,7 @@ test.describe("BUILD › Agents — List & detail CTAs @journey @existing-user @
 
   test("CTA-AG-EU-003 @high @cta — Agent row opens detail page", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(!agentName, "CTA-AG-EU-002 did not resolve agent");
     const agents = new AgentsListPage(page);
     await agents.open();
@@ -49,7 +49,7 @@ test.describe("BUILD › Agents — List & detail CTAs @journey @existing-user @
 
   test("CTA-AG-EU-004 @high @cta — Edit link opens agent edit form", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(!agentId, "CTA-AG-EU-002 did not resolve agent");
     const detail = new AgentDetailPage(page);
     await detail.open(agentId);
@@ -59,7 +59,7 @@ test.describe("BUILD › Agents — List & detail CTAs @journey @existing-user @
 
   test("CTA-AG-EU-005 @high @cta — Playground link navigates from detail", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(!agentId, "CTA-AG-EU-002 did not resolve agent");
     const detail = new AgentDetailPage(page);
     await detail.open(agentId);
@@ -69,7 +69,7 @@ test.describe("BUILD › Agents — List & detail CTAs @journey @existing-user @
 
   test("CTA-AG-EU-006 @medium @cta — Clone button creates copy", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(!agentName, "CTA-AG-EU-002 did not resolve agent");
     const agents = new AgentsListPage(page);
     await agents.open();

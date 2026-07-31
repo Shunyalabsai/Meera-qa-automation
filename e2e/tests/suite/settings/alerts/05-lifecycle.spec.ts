@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openNewRuleForm, openAddChannelForm } from "../../../../helpers/alerts.helper";
-import { AlertsPage } from "../../../../pages/alerts.page";
 import { ALERTS_SAMPLES } from "../../../../data/alerts-data";
 import { uniqueName } from "../../../../utils/test-data";
 

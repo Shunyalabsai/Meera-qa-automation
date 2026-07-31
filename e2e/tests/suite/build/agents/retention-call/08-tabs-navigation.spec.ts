@@ -1,6 +1,5 @@
 import { test } from "@playwright/test";
 import { openRetentionCallAgentForm } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 
 test.describe("BUILD › Agents › Retention Call — Tab navigation @journey @retention-call", () => {
   test("TC-AG-CS-070 @high @ui — All five tabs navigate in order", async ({

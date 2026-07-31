@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { openLiveCalls } from "../../../../helpers/live-calls.helper";
 import { reloadSpaRoute } from "../../../../helpers/navigate";
-import { LiveCallsPage } from "../../../../pages/live-calls.page";
 
 test.describe("RUN › Live Calls — Edge @journey @new-user @live-calls @edge", () => {
   test("TC-LC-E101 @medium @edge — Navigate away and back preserves empty state", async ({

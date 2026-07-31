@@ -3,7 +3,6 @@ import {
   openWebhooks,
   hasEnabledQuickApplyCheckboxes,
 } from "../../../../helpers/webhooks.helper";
-import { skipEnvPrecondition } from "../../../../helpers/skip";
 import { WEBHOOKS_SAMPLES, WEBHOOK_EVENTS } from "../../../../data/webhooks-data";
 
 test.describe("SETTINGS › Webhooks — Quick apply @journey @new-user @webhooks @positive", () => {
@@ -35,7 +34,7 @@ test.describe("SETTINGS › Webhooks — Quick apply @journey @new-user @webhook
 
   test("TC-WH-012 @medium @positive — Select all checks every event checkbox", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(
       !(await hasEnabledQuickApplyCheckboxes(page)),
       "[env-precondition] All quick-apply events already subscribed — checkboxes disabled",
@@ -49,7 +48,7 @@ test.describe("SETTINGS › Webhooks — Quick apply @journey @new-user @webhook
 
   test("TC-WH-013 @medium @positive — Clear unchecks all event checkboxes", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(
       !(await hasEnabledQuickApplyCheckboxes(page)),
       "[env-precondition] All quick-apply events already subscribed — checkboxes disabled",
@@ -64,7 +63,7 @@ test.describe("SETTINGS › Webhooks — Quick apply @journey @new-user @webhook
 
   test("TC-WH-014 @medium @positive — Selection count updates when events checked", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(
       !(await hasEnabledQuickApplyCheckboxes(page)),
       "[env-precondition] All quick-apply events already subscribed — checkboxes disabled",
@@ -90,7 +89,7 @@ test.describe("SETTINGS › Webhooks — Quick apply @journey @new-user @webhook
 
   test("TC-WH-016 @medium @positive — Apply button enabled when URL secret and event selected", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(
       !(await hasEnabledQuickApplyCheckboxes(page)),
       "[env-precondition] All quick-apply events already subscribed — checkboxes disabled",
@@ -106,7 +105,7 @@ test.describe("SETTINGS › Webhooks — Quick apply @journey @new-user @webhook
 
   test("TC-WH-017 @low @positive — Individual event checkbox toggles independently", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(
       !(await hasEnabledQuickApplyCheckboxes(page)),
       "[env-precondition] All quick-apply events already subscribed — checkboxes disabled",

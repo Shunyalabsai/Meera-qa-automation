@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openAppointmentReminderRescheduleAgentForm, waitForAgentCreated } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE } from "../../../../../data/appointment-reminder-reschedule-template";
 import { uniqueName } from "../../../../../utils/test-data";
 

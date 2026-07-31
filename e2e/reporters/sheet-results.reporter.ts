@@ -39,7 +39,6 @@ type SheetResultsFile = {
 
 function shouldAutoPublishSheet(): boolean {
   if (process.env.E2E_SHEET_AUTO_PUBLISH === "false") return false;
-  if (process.env.E2E_CATALOG === "true") return false;
   if (process.env.CI && process.env.E2E_SHEET_AUTO_PUBLISH !== "true") {
     return false;
   }

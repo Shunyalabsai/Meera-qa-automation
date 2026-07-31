@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { openAlerts, openNewRuleForm } from "../../../../../helpers/alerts.helper";
 import { reloadSpaRoute } from "../../../../../helpers/navigate";
-import { AlertsPage } from "../../../../../pages/alerts.page";
 import { ALERTS_SAMPLES } from "../../../../../data/alerts-data";
 
 test.describe("SETTINGS › Alerts — Edge @journey @existing-user @alerts @edge", () => {

@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openPlayground } from "../../../../helpers/playground.helper";
-import { PlaygroundPage } from "../../../../pages/playground.page";
 import { PLAYGROUND_SAMPLES } from "../../../../data/playground-data";
 import { gotoApp } from "../../../../helpers/navigate";
 import { INVALID_UUID } from "../../../../utils/test-data";

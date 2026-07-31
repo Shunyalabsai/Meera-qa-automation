@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openPlayground } from "../../../../helpers/playground.helper";
-import { PlaygroundPage } from "../../../../pages/playground.page";
 
 test.describe("BUILD › Playground — Main UI @journey @new-user @playground", () => {
   test("TC-PG-001 @high @ui — Playground header and subtitle visible", async ({

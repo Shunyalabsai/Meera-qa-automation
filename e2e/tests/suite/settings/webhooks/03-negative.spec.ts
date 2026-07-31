@@ -118,7 +118,7 @@ test.describe("SETTINGS › Webhooks — Negative @journey @new-user @webhooks @
 
   test("TC-WH-N107 @medium @negative — Short secret rejected on per-event Save subscription", async ({
     page,
-  }, testInfo) => {
+  }) => {
     test.skip(
       !(await hasAnySubscribeButton(page)),
       "[env-precondition] Events already subscribed — Subscribe flow not available",

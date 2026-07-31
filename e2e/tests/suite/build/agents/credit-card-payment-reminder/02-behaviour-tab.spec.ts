@@ -19,7 +19,6 @@ test.describe("BUILD › Agents › Credit Card Payment Reminder — Behaviour t
   test("TC-AG-010 @high @positive — First message is pre-filled and editable", async ({
     page,
   }) => {
-    const form = new AgentFormPage(page);
     const firstMessage = page.getByLabel(/First message/i);
     await expect(firstMessage).toBeVisible();
 

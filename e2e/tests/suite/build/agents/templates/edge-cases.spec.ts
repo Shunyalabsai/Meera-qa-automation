@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openAgentFormForEntry } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { TEMPLATE_FORM_ENTRIES } from "../../../../../pages/agent-template.page";
 import {
   AGENT_FORM_EDGE_CASES,

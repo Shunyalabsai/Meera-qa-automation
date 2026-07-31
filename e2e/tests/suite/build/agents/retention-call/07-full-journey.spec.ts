@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openRetentionCallAgentForm, waitForAgentCreated } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { RETENTION_CALL_TEMPLATE } from "../../../../../data/retention-call-template";
 import { uniqueName } from "../../../../../utils/test-data";
 

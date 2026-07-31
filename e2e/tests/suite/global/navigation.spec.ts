@@ -29,7 +29,7 @@ test.describe("Global UI › Navigation @smoke", () => {
   test("TC-UI-006 @high @positive — All dashboard sidebar routes load", async ({
     page,
   }) => {
-    for (const [group, routes] of Object.entries(DASHBOARD_ROUTES)) {
+    for (const [, routes] of Object.entries(DASHBOARD_ROUTES)) {
       for (const route of routes) {
         await gotoApp(page, route.path);
         await expect(

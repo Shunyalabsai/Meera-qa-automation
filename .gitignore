@@ -1,4 +1,5 @@
 node_modules/
+.DS_Store
 /test-results/
 /playwright-report/
 /blob-report/
@@ -16,4 +17,5 @@ e2e/data/test-results-history.json
 e2e/data/test-results-latest.json
 e2e/data/sheet-run-history.json
 e2e/data/test-catalog.json
+e2e/REAL-TEST-CATALOG.csv
 meera-500407-7ed504955ec2.json

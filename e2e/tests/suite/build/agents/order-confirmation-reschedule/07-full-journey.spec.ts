@@ -3,7 +3,6 @@ import {
   openOrderConfirmationRescheduleAgentForm,
   waitForAgentCreated,
 } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE } from "../../../../../data/order-confirmation-reschedule-template";
 import { uniqueName } from "../../../../../utils/test-data";
 

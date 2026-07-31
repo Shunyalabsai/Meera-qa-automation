@@ -1,5 +1,4 @@
 import { Page, expect } from "@playwright/test";
-import { getClerkCredentials } from "./credentials";
 
 export function clerkSignInRoot(page: Page) {
   return page.locator(".cl-signIn-root, .cl-rootBox").first();
@@ -122,13 +121,6 @@ export async function fillSignUpPassword(page: Page, value: string): Promise<voi
 
 export async function submitSignUpContinue(page: Page): Promise<void> {
   await page.getByRole("button", { name: /^Continue$/i }).click();
-}
-
-export async function signInWithEmailPassword(page: Page): Promise<void> {
-  const { email, password } = getClerkCredentials();
-  await fillSignInEmail(page, email);
-  await fillSignInPassword(page, password);
-  await submitSignInContinue(page);
 }
 
 export async function submitBlankSignIn(page: Page): Promise<void> {

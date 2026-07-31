@@ -4,7 +4,6 @@ import {
   openNewRuleForm,
   openAddChannelForm,
 } from "../../../../helpers/alerts.helper";
-import { AlertsPage } from "../../../../pages/alerts.page";
 
 test.describe("SETTINGS › Alerts — CTA functional @alerts @cta", () => {
   test("CTA-AL-010 @high @cta — New rule opens create form", async ({ page }) => {

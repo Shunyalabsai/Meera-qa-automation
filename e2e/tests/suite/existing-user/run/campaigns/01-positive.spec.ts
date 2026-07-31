@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { openCampaignsList } from "../../../../../helpers/campaigns.helper";
 import { skipUnlessHasCampaigns } from "../../../../../helpers/existing-user.helper";
 

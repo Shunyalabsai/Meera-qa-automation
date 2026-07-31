@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { openCampaignCreateForm } from "../../../../../helpers/campaigns.helper";
 import { CampaignsPage } from "../../../../../pages/campaigns.page";
-import { CAMPAIGN_SAMPLES } from "../../../../../data/campaign-data";
 import { uniqueName } from "../../../../../utils/test-data";
 
 test.describe("RUN › Campaigns — Validation @journey @existing-user @campaigns @negative", () => {

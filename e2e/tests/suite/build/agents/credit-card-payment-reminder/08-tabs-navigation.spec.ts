@@ -1,6 +1,5 @@
 import { test } from "@playwright/test";
 import { openCreditCardPaymentReminderAgentForm } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 
 test.describe("BUILD › Agents › Credit Card Payment Reminder — Tab navigation @journey @credit-card-payment-reminder", () => {
   test("TC-AG-DR-070 @high @ui — All five tabs navigate in order", async ({

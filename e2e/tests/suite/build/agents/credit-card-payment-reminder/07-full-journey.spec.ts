@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openCreditCardPaymentReminderAgentForm, waitForAgentCreated } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { uniqueName } from "../../../../../utils/test-data";
 
 test.describe("BUILD › Agents › Credit Card Payment Reminder — Full journey @journey @credit-card-payment-reminder", () => {

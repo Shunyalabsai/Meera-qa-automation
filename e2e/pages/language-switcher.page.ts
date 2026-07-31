@@ -8,7 +8,6 @@ import {
   type LanguageEntry,
 } from "../data/language-switcher-data";
 import {
-  E2E_DEFAULT_LANGUAGE,
   E2E_LANGUAGE_STORAGE_KEY,
 } from "../data/test-fixtures";
 

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { openRecordings } from "../../../../helpers/recordings.helper";
 import { RECORDINGS_SAMPLES } from "../../../../data/recordings-data";
 import { VALID_UUID } from "../../../../utils/test-data";

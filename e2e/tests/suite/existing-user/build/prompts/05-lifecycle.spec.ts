@@ -1,9 +1,8 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import {
   createPromptTemplate,
   openPromptTemplatesList,
 } from "../../../../../helpers/prompt-templates.helper";
-import { PromptTemplatesPage } from "../../../../../pages/prompt-templates.page";
 import { PROMPT_TEMPLATE_SAMPLES } from "../../../../../data/prompt-template-data";
 import { uniqueName } from "../../../../../utils/test-data";
 

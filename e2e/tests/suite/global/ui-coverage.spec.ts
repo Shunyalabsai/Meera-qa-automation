@@ -2,7 +2,6 @@ import { test, expect } from "@playwright/test";
 import { gotoApp } from "../../../helpers/navigate";
 import { openAgentFormFromScratch } from "../../../helpers/agent.helper";
 import { uniqueName } from "../../../utils/test-data";
-import { PROMPT_TEMPLATE_SAMPLES } from "../../../data/prompt-template-data";
 
 test.describe("Global UI — Positive @positive @global", () => {
   test("TC-UI-002 @high @positive — Tablet viewport (768px) on Agents", async ({

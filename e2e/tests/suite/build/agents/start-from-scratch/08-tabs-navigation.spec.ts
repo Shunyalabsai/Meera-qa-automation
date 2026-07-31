@@ -1,6 +1,5 @@
 import { test } from "@playwright/test";
 import { openStartFromScratchAgentForm } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 
 test.describe("BUILD › Agents › Start from scratch — Tab navigation @journey @start-from-scratch", () => {
   test("TC-AG-SFS-070 @high @ui — All five tabs navigate in order", async ({

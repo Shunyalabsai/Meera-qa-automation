@@ -1,6 +1,5 @@
 import { test } from "@playwright/test";
 import { openAppointmentReminderRescheduleAgentForm } from "../../../../../helpers/agent.helper";
-import { AgentFormPage } from "../../../../../pages/agent-form.page";
 
 test.describe("BUILD › Agents › Appointment Reminder & Reschedule — Tab navigation @journey @appointment-reminder-reschedule", () => {
   test("TC-AG-AR-070 @high @ui — All five tabs navigate in order", async ({

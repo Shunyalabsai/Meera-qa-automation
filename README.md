@@ -8,6 +8,8 @@ Sheet cases: [QA Google Sheet](https://docs.google.com/spreadsheets/d/1V56bydTla
 
 **Commands:** [COMMANDS.md](./COMMANDS.md)
 
+**Docs:** [How to Create a Voice Agent on Meera](./e2e/doc/How_to_Create_a_Voice_Agent_on_Meera.docx)
+
 ---
 
 ## Quick start

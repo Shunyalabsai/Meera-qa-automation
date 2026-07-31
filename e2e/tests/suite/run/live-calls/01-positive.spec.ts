@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openLiveCalls } from "../../../../helpers/live-calls.helper";
-import { LiveCallsPage } from "../../../../pages/live-calls.page";
 
 test.describe("RUN › Live Calls — Positive @journey @new-user @live-calls @positive", () => {
   test("TC-LC-010 @high @positive — Page loads at /live-calls", async ({

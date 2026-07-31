@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { openBilling } from "../../../../../helpers/billing.helper";
 import { skipUnlessHasBillingUsage } from "../../../../../helpers/existing-user.helper";
 

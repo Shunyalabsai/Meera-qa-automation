@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { openWebhooks } from "../../../../../helpers/webhooks.helper";
 import { skipUnlessHasWebhookSubscriptions } from "../../../../../helpers/existing-user.helper";
 
