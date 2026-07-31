@@ -13,15 +13,15 @@ const si=`${h}.${p}`;
 const s=crypto.sign("RSA-SHA256",Buffer.from(si),creds.private_key);
 const res=await fetch("https://oauth2.googleapis.com/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({grant_type:"urn:ietf:params:oauth:grant-type:jwt-bearer",assertion:`${si}.${b64url(s)}`})});
 const tok=(await res.json()).access_token;
-const id=process.env.GOOGLE_RESULTS_SHEET_ID;
-const meta=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}?fields=sheets.properties.title,sheets.properties.sheetId,sheets.merges`,{headers:{Authorization:`Bearer ${tok}`}}).then(r=>r.json());
-for (const s of meta.sheets??[]){
-  const merges = s.merges ?? [];
-  if (!merges.length) continue;
-  console.log(`\n== ${s.properties.title} (${merges.length} merges)`);
-  for (const m of merges){
-    const cols = m.endColumnIndex - m.startColumnIndex;
-    const rows = m.endRowIndex - m.startRowIndex;
-    console.log(`  rows ${m.startRowIndex+1}-${m.endRowIndex} × cols ${m.startColumnIndex+1}-${m.endColumnIndex} (${rows}r×${cols}c)`);
-  }
+const id="1V56bydTla54TIyYX4pdlDnUtRaN76oiVK24o6ZOQOaM";
+const meta=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}?fields=sheets.properties.title`,{headers:{Authorization:`Bearer ${tok}`}}).then(r=>r.json());
+console.log("MANUAL SHEET TABS:", (meta.sheets??[]).map(s=>s.properties.title).join(" | "));
+// Read first tab's first 6 rows, full cells
+const tab=meta.sheets[0].properties.title;
+const range=`'${tab.replace(/'/g,"''")}'!A1:H6`;
+const v=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(range)}?valueRenderOption=FORMATTED_VALUE`,{headers:{Authorization:`Bearer ${tok}`}}).then(r=>r.json());
+console.log(`\n== ${tab} A1:H6 ==`);
+for (const row of v.values??[]){
+  console.log("  ROW:");
+  row.forEach((c,i)=>console.log(`    ${"ABCDEFGH".split("")[i] ?? i}: ${JSON.stringify(String(c).slice(0,200))}`));
 }

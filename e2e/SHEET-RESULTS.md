@@ -2,51 +2,91 @@
 
 Live workbook: [Meera-Master-sheet-testCases](https://docs.google.com/spreadsheets/d/1MgzIeVQOLdquLraUnPH33vm-MvWBcijYmIZerHMG7Ro/edit)
 
-Each **tab** = one dashboard group (BUILD, RUN, ANALYZE, …).  
-Each **run** is appended — past and future runs stay on the sheet (nothing overwritten).
+Each **tab** = one dashboard section (BUILD, RUN, ANALYZE, …). The sheet is rebuilt
+from the **latest run only** — no stale rows, no run separators, nothing accumulated.
+Non-technical reviewers and engineers can both read every row: each test has a plain-
+English name, steps to test it, the expected result, and (on failure) a human-readable
+reason plus the raw error for debugging.
 
 **The sheet is never filled with catalog placeholders or fake Pass rows.**
 
-## New User vs Existing User
+## Summary tab
 
-Every test row has a **Journey** column:
+The first tab is a dashboard with five sections:
 
-| Journey | When |
-|---------|------|
-| **New User** | Test tagged `@new-user` |
-| **Existing User** | Test tagged `@existing-user` or under `e2e/tests/suite/existing-user/` |
-| **General** | Full suite / mixed runs without a journey tag |
+1. **LATEST RUN — OVERVIEW** — run date, environment, overall status, pass/fail/skipped
+   counts, pass rate, duration.
+2. **MODULE BREAKDOWN — LATEST RUN** — per-module pass/fail/skipped totals and pass rate.
+3. **MOST COMMON FAILURE REASONS — LATEST RUN** — the plain-English failure reasons that
+   occurred most, with counts.
+4. **RUN HISTORY** — one row per stored run (newest first) so you can compare runs over time.
 
-The **Summary** tab also has a **Journey** column per run (`New User`, `Existing User`, `Full Suite`, or partial labels when mixed).
+## Section tabs (latest run only)
 
-Override run-level journey when needed:
+Each dashboard group tab (e.g. `BUILD`, `ANALYZE`, `SETTINGS`) lists every test that ran in
+that section during the **latest** run. A tab is deleted if the latest run has no rows for it,
+so the workbook only ever contains the current run's sections.
 
-```bash
-E2E_SHEET_RUN_JOURNEY="Existing User" npm run test:existing-user
-```
+## Column layout (12 readable columns)
 
-## Visual layout (formatted on publish)
+| # | Column | Description |
+|---|--------|-------------|
+| 1 | Test ID | e.g. `TC-CL-001` — links to the spec line on GitHub |
+| 2 | Test Case | Human-readable test name — links to the spec line |
+| 3 | Module | Dashboard group › sub-group, e.g. `Analyze › Calls` |
+| 4 | Priority | `High` / `Medium` / `Low` / `Critical` |
+| 5 | Status | **Pass / Fail / Skipped** (real run outcome only) |
+| 6 | How to test | Real numbered steps from the manual QA sheet when the TC ID is registered; otherwise an honest pointer to the automated test code |
+| 7 | Expected result | What the test expected to happen |
+| 8 | Failure reason | Plain-English sentence a non-technical reviewer can act on (empty on Pass) |
+| 9 | Error detail | Raw Playwright error for engineers (empty on Pass) |
+| 10 | Screenshot | Failure screenshot — inline image on the sheet when Drive upload is enabled, otherwise the local file path |
+| 11 | Duration (s) | Test duration |
+| 12 | Spec file | Path under `e2e/tests/suite/` — links to the file on GitHub |
+
+### Failure reasons are rewritten in plain English
+
+`sheet-format.mjs` converts raw errors like
+
+> `Timeout 30000ms exceeded while waiting for locator('button.agent-submit') to be visible`
+
+into
+
+> `The test timed out (30 seconds) while waiting to click "Submit agent (button)". It never became available — the page may have loaded slowly, an earlier step failed, or the UI changed.`
+
+Network errors, timeouts, visibility/hidden/enabled/checked assertions, strict-mode
+violations, and JavaScript errors each have their own human sentence. The raw error is kept
+in **Error detail** for engineers.
+
+### Screenshots
+
+- Captured automatically on every failure (`sheet-results.reporter`).
+- Uploaded to a Drive folder (`Meera VAP Test Report Screenshots`) and embedded inline via
+  `IMAGE()` when the Drive API is enabled.
+- If the Drive API is disabled, the local path is shown instead (no crash, no missing rows).
+  Enable it at:
+  https://console.cloud.google.com/apis/api/drive.googleapis.com/overview
+
+## Visual formatting (applied on publish)
 
 | Element | Style |
 |---------|--------|
-| Header row | Dark blue background, white bold text, frozen |
+| Summary title / section rows | Merged across the tab, dark blue / blue-grey background |
+| Table headers | Dark blue background, white bold text, frozen |
 | **Fail** rows | Light red background, bold red text |
 | **Pass** rows | Light green background |
 | **Skipped** rows | Light yellow background |
-| **Run separator** | Grey merged row between runs (latest run at top) |
-| **Journey** cell | Blue tint (New User) or purple tint (Existing User) |
-| **Test ID / Title / Spec File** | Clickable links to GitHub (when `GOOGLE_SHEET_REPO_URL` is set) |
-| **Environment** | Clickable link to staging URL |
+| Test ID / Test Case / Spec File | Clickable links to GitHub (when `GOOGLE_SHEET_REPO_URL` is set) |
+| Environment (Summary) | Clickable link to the staging URL |
 
-Section tabs and Summary both use grey separators between runs so you can scroll from **latest → previous** runs.
+Every publish **unmerges all cells first**, clears the tab, writes fresh values, then
+re-applies formatting — so stale merges from an older layout can never hide data.
 
-## Run history (append-only)
+## Run history (local, for the Summary)
 
-Every publish **adds** a new block for that run. Older runs remain below (newest first).
+Publish history is stored locally in `e2e/data/sheet-run-history.json` (up to
+`SHEET_MAX_RUN_HISTORY` runs, default 100). The **Summary → RUN HISTORY** table reads from it.
 
-- **Section tabs:** header once, then test rows from every run (newest first). Grey separator row before each older run. **Run ID** column identifies the run.
-- **Summary tab:** one stats row per run, grey separator between runs.
-- History is stored locally in `e2e/data/sheet-run-history.json` (up to `SHEET_MAX_RUN_HISTORY` runs, default 100).
 - Re-publishing the same `Run ID` rebuilds the sheet but does **not** duplicate that run.
 
 ## Automatic updates
@@ -54,8 +94,10 @@ Every publish **adds** a new block for that run. Older runs remain below (newest
 After **every** Playwright run (`npm test`, `npm run test:existing-user`, `--grep`, etc.):
 
 1. `sheet-results.reporter` writes `test-results/sheet-results.json` (this run only)
-2. Export appends the run to `e2e/data/sheet-run-history.json`
-3. Google Sheet is rebuilt from **full history** and published when credentials are in `.env`
+2. `export-results-sheet.mjs` joins manual-case steps + friendly reasons, appends the run to
+   `e2e/data/sheet-run-history.json`, and writes the merged payload + CSVs
+3. `publish-google-sheet.mjs` rebuilds the Google Sheet (unmerge → clear → write → format)
+   when credentials are in `.env`
 
 No manual `npm run sheet:update` needed for normal local runs.
 
@@ -70,65 +112,55 @@ GOOGLE_SHEET_REPO_URL=https://github.com/yamini-pal-singh/Meera-VAP-Yamini
 | Env | Effect |
 |-----|--------|
 | `E2E_SHEET_AUTO_PUBLISH=true` | Force auto-publish (use in CI) |
-| `E2E_SHEET_AUTO_PUBLISH=false` | Disable auto-publish; export CSVs only via reporter JSON |
-| `GOOGLE_SHEET_REPO_URL` | Base GitHub URL for clickable Test ID / Title / Spec File links |
+| `E2E_SHEET_AUTO_PUBLISH=false` | Disable auto-publish; export CSVs only |
+| `GOOGLE_SHEET_REPO_URL` | Base GitHub URL for clickable Test ID / Test Case / Spec File links |
 | `E2E_SHEET_RUN_JOURNEY` | Force run journey label on Summary (optional) |
 | (unset locally) | Auto-publish enabled |
 | (unset in CI) | Auto-publish disabled |
 
-Manual re-publish without re-running tests (uses last run JSON):
+Manual re-publish without re-running tests (uses the last run's merged JSON):
 
 ```bash
 npm run sheet:update
 ```
 
-## No flaky / stale rows
+## Manual test cases (steps / expected)
 
-- **Retries:** only the **final** attempt per test is stored (failed-then-passed → Pass).
-- **History:** each run keeps its own rows — results are not merged into a single “latest” row per test.
-- **Summary tab:** lists **every stored run** (newest at top), separated by grey rows.
-- **Section tabs:** all runs’ test rows appended with grey run dividers.
+`e2e/scripts/fetch-manual-cases.mjs` pulls the manual QA cases from the
+[Meera VAP QA Test Cases sheet](https://docs.google.com/spreadsheets/d/1V56bydTla54TIyYX4pdlDnUtRaN76oiVK24o6ZOQOaM/edit)
+into `e2e/data/manual-test-cases.mjs` (run `npm run sheet:manual-cases`).
 
-## Column layout
-
-| Column | Description |
-|--------|-------------|
-| Test ID | e.g. `TC-CM-011` — links to spec line on GitHub |
-| Title | Human-readable test name — links to spec line |
-| **Journey** | New User / Existing User / General |
-| Priority | `@high`, `@medium`, `@low`, `@critical` |
-| Type | `@positive`, `@negative`, `@edge`, `@ui`, `@manual`, `@cta` |
-| Tags | All `@tags` from the test title |
-| Spec File | Path under `e2e/tests/suite/` — links to file on GitHub |
-| Describe Block | Parent `test.describe` name |
-| Status | **Pass / Fail / Skipped** (real run outcome only) |
-| Last Run At | ISO timestamp when that test last ran |
-| Duration (s) | Test duration |
-| Result Reason | Error message or skip reason (empty on pass) |
-| Environment | `PLAYWRIGHT_BASE_URL` — clickable staging URL |
-| Run ID | Unique id of the run that produced this row |
+Automated results whose TC ID matches a manual case inherit its real **steps to test** and
+**expected result**. Tests without a registered manual case get an honest auto-derived
+pointer to the automated spec code instead of a fabricated step list.
 
 ## Commands
 
 ```bash
-# New-user journey
+# Full new-user journey + auto-publish
 E2E_USE_SAVED_AUTH=true npm run test:new-user
 
-# Existing-user journey
+# Existing-user journey + auto-publish
 E2E_USE_SAVED_AUTH=true npm run test:existing-user
 
-# Manual export + publish (same as auto-update hook)
+# Manual export + publish (same as the auto-update hook)
 npm run sheet:update
 npm run sheet:export    # CSV only
 npm run sheet:publish   # push existing merged JSON
+
+# Re-fetch manual cases from the manual QA sheet
+npm run sheet:manual-cases
 
 # Catalog metadata only (not sent to Sheet alone)
 npm run sheet:catalog
 ```
 
-## Google Sheets API setup
+## Google Sheets / Drive API setup
 
-Share the spreadsheet with the service account email as **Editor**.
+1. Share the spreadsheet with the service account email as **Editor**.
+2. Enable the **Drive API** for inline failure screenshots:
+   https://console.cloud.google.com/apis/api/drive.googleapis.com/overview
+   (optional — without it, screenshots fall back to local file paths).
 
 ## CI example
 
@@ -144,12 +176,12 @@ Share the spreadsheet with the service account email as **Editor**.
 
 | Tab | Tests folder |
 |-----|----------------|
-| Authentication | `e2e/tests/suite/authentication/` |
 | BUILD | `e2e/tests/suite/build/` |
 | RUN | `e2e/tests/suite/run/` |
 | ANALYZE | `e2e/tests/suite/analyze/` |
 | SETTINGS | `e2e/tests/suite/settings/` |
 | Global UI | `e2e/tests/suite/global/` |
 | Workspace | `e2e/tests/suite/workspace/` |
+| Authentication | `e2e/tests/suite/authentication/` |
 | QA Registry | `e2e/tests/suite/qa/` |
-| Summary | One row per stored run (full history) |
+| Summary | Run overview, module breakdown, top failure reasons, run history |
