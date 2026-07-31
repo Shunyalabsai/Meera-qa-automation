@@ -375,19 +375,8 @@ export class WebhooksPage {
     await expect(this.applyButton()).toBeDisabled();
   }
 
-  async expectCustomEventTypeInvalid() {
-    const invalid = await this.customEventTypeInput().evaluate(
-      (el) => !(el as HTMLInputElement).validity.valid,
-    );
-    expect(invalid).toBe(true);
-  }
-
   async clickSaveSubscription() {
     await this.saveSubscriptionButton().click();
-  }
-
-  async clickCreateCustomEvent() {
-    await this.createCustomEventButton().click();
   }
 
   async expectSidebarLinkVisible() {

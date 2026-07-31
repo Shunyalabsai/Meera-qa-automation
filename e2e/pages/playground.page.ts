@@ -192,11 +192,6 @@ export class PlaygroundPage {
     await this.startPhoneCallButton().click();
   }
 
-  /** @deprecated use clickStartPhoneCall */
-  async clickDial() {
-    await this.clickStartPhoneCall();
-  }
-
   async expectReady() {
     await expect(this.agentSelect()).toBeVisible();
     await expect(this.startBrowserCallButton()).toBeVisible();
