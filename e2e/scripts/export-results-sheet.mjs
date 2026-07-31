@@ -123,6 +123,11 @@ function flattenPlaywrightJson(report) {
           reason = result.error?.message ?? "Interrupted";
         }
 
+        const screenshot =
+          result.attachments?.find(
+            (a) => a.contentType === "image/png" && a.path,
+          )?.path ?? undefined;
+
         tests.push({
           title: spec.title,
           file: specFilePath(spec.file),
@@ -131,6 +136,7 @@ function flattenPlaywrightJson(report) {
           reason: stripAnsi(reason).replace(/\s+/g, " ").trim().slice(0, 4000),
           durationMs: result.duration,
           retry: result.retry,
+          screenshot,
         });
       }
     }

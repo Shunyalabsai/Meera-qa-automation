@@ -17,6 +17,8 @@ type SheetTestResult = {
   reason: string;
   durationMs: number;
   retry: number;
+  /** Absolute path to the failure screenshot (image/png), when captured. */
+  screenshot?: string;
 };
 
 type SheetResultsFile = {
@@ -75,6 +77,9 @@ export default class SheetResultsReporter implements Reporter {
     }
 
     const file = path.relative(process.cwd(), test.location.file);
+    const screenshot =
+      result.attachments?.find((a) => a.contentType === "image/png" && a.path)?.path ??
+      undefined;
 
     this.resultsByKey.set(test.id, {
       title: test.title,
@@ -84,6 +89,7 @@ export default class SheetResultsReporter implements Reporter {
       reason: reason.replace(/\s+/g, " ").trim().slice(0, 4000),
       durationMs: result.duration,
       retry: result.retry,
+      screenshot,
     });
   }
 

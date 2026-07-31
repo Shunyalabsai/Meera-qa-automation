@@ -20,21 +20,23 @@ export const SECTION_TAB_NAMES = {
   qa: "QA Registry",
 };
 
+/**
+ * Readable report columns — plain-language first, engineer details at the end.
+ * "Failure reason" is a human sentence; "Error detail" keeps the raw error.
+ */
 export const RESULT_COLUMNS = [
   "Test ID",
-  "Title",
-  "Journey",
+  "Test Case",
+  "Module",
   "Priority",
-  "Type",
-  "Tags",
-  "Spec File",
-  "Describe Block",
   "Status",
-  "Last Run At",
+  "How to test",
+  "Expected result",
+  "Failure reason",
+  "Error detail",
+  "Screenshot",
   "Duration (s)",
-  "Result Reason",
-  "Environment",
-  "Run ID",
+  "Spec file",
 ];
 
 /**
