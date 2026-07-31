@@ -124,6 +124,19 @@ Manual re-publish without re-running tests (uses the last run's merged JSON):
 npm run sheet:update
 ```
 
+## UAT reference tab
+
+The report sheet also carries a **UAT July 2026** tab that mirrors the QA team's
+[UAT & functional bug-feedback log](https://docs.google.com/spreadsheets/d/1bR1d9NwurDtGvnZ-TvQsRLapaNOlqAx5NexIh01JCVQ/edit)
+(TC-001…043: scenario, preconditions, `>`-breadcrumb steps, expected result, priority,
+type, reference screenshot/mov, dev status). The tab is a committed snapshot —
+`e2e/scripts/fetch-uat-cases.mjs` pulls it into `e2e/data/uat-cases.mjs`
+(run `npm run sheet:uat-fetch`), and every publish re-writes the tab from that
+snapshot with a footer row that hyperlinks back to the live sheet.
+
+It is **reference-only**: UAT cases have no automation coverage, so they don't join
+the run-based section tabs or the Summary.
+
 ## Manual test cases (steps / expected)
 
 `e2e/scripts/fetch-manual-cases.mjs` pulls the manual QA cases from the
@@ -150,6 +163,9 @@ npm run sheet:publish   # push existing merged JSON
 
 # Re-fetch manual cases from the manual QA sheet
 npm run sheet:manual-cases
+
+# Re-fetch the UAT bug-feedback snapshot (used by the "UAT July 2026" tab)
+npm run sheet:uat-fetch
 
 # Catalog metadata only (not sent to Sheet alone)
 npm run sheet:catalog

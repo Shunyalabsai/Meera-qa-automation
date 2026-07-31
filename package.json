@@ -67,7 +67,8 @@
     "issues:audit": "node e2e/scripts/audit-known-issues.mjs",
     "report": "playwright show-report",
     "install:browsers": "playwright install chromium",
-    "sheet:manual-cases": "node e2e/scripts/fetch-manual-cases.mjs"
+    "sheet:manual-cases": "node e2e/scripts/fetch-manual-cases.mjs",
+    "sheet:uat-fetch": "node e2e/scripts/fetch-uat-cases.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",

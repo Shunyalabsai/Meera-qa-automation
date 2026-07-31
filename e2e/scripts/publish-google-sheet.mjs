@@ -18,16 +18,24 @@ import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
 import {
   RESULTS_SHEET_ID,
-  SECTION_TAB_NAMES,
   SUMMARY_TAB,
 } from "../data/sheet-sections.mjs";
-import { buildFormatRequests } from "./sheet-format.mjs";
+import {
+  COLORS,
+  buildFormatRequests,
+} from "./sheet-format.mjs";
 import {
   SUMMARY_WIDTH,
   buildSummarySheetRows,
   buildTabSheetRows,
   loadSheetRunHistory,
 } from "./sheet-history.mjs";
+import {
+  UAT_CASES,
+  UAT_HEADER,
+  UAT_SOURCE_URL,
+  UAT_TAB,
+} from "../data/uat-cases.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 dotenv.config({ path: path.join(root, ".env") });
@@ -432,6 +440,87 @@ async function applyTabFormatting(token, title, rowMeta, columnCount, sheetIdMap
   });
 }
 
+/**
+ * Build the UAT reference tab rows: header + the committed snapshot + a
+ * footer row that links back to the live source sheet.
+ */
+function buildUatRows() {
+  const sourceRow = Array(UAT_HEADER.length).fill("");
+  sourceRow[0] = "Source: Meera_UAT_and_functional_july2026 (QA bug-feedback log)";
+  sourceRow[1] = `=HYPERLINK("${UAT_SOURCE_URL}", "Open the live UAT sheet →")`;
+  return [UAT_HEADER, ...UAT_CASES, sourceRow];
+}
+
+/** Pixel widths for the UAT tab's 9 mirrored columns. */
+const UAT_COL_WIDTHS = [70, 360, 220, 430, 430, 90, 150, 170, 120];
+
+/** Format the UAT reference tab: frozen header, wrapped rows, sized columns. */
+function buildUatFormatRequests(sheetId, rowCount) {
+  const requests = [];
+  const allCols = { startColumnIndex: 0, endColumnIndex: UAT_HEADER.length };
+
+  requests.push({
+    updateSheetProperties: {
+      properties: { sheetId, gridProperties: { frozenRowCount: 1 } },
+      fields: "gridProperties.frozenRowCount",
+    },
+  });
+
+  // Header row — same look as the section tabs.
+  requests.push({
+    repeatCell: {
+      range: { sheetId, startRowIndex: 0, endRowIndex: 1, ...allCols },
+      cell: {
+        userEnteredFormat: {
+          backgroundColor: COLORS.headerBg,
+          textFormat: { bold: true, foregroundColor: COLORS.headerFg },
+          horizontalAlignment: "LEFT",
+          verticalAlignment: "MIDDLE",
+        },
+      },
+      fields: "userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment)",
+    },
+  });
+
+  // Data rows — wrap long Test Steps / Expected Result text.
+  if (rowCount > 2) {
+    requests.push({
+      repeatCell: {
+        range: { sheetId, startRowIndex: 1, endRowIndex: rowCount - 1, ...allCols },
+        cell: { userEnteredFormat: { wrapStrategy: "WRAP", verticalAlignment: "TOP" } },
+        fields: "userEnteredFormat(wrapStrategy,verticalAlignment)",
+      },
+    });
+  }
+
+  // Source-link footer row — subtle tint so it reads as a footer.
+  requests.push({
+    repeatCell: {
+      range: { sheetId, startRowIndex: rowCount - 1, endRowIndex: rowCount, ...allCols },
+      cell: {
+        userEnteredFormat: {
+          backgroundColor: { red: 0.94, green: 0.96, blue: 0.99 },
+          textFormat: { italic: true },
+          verticalAlignment: "MIDDLE",
+        },
+      },
+      fields: "userEnteredFormat(backgroundColor,textFormat,verticalAlignment)",
+    },
+  });
+
+  UAT_COL_WIDTHS.forEach((width, col) => {
+    requests.push({
+      updateDimensionProperties: {
+        range: { sheetId, dimension: "COLUMNS", startIndex: col, endIndex: col + 1 },
+        properties: { pixelSize: width },
+        fields: "pixelSize",
+      },
+    });
+  });
+
+  return requests;
+}
+
 function normalizeTabPayload(tabData, fallbackMeta) {
   if (Array.isArray(tabData)) {
     return { rows: tabData, rowMeta: fallbackMeta ?? [] };
@@ -523,7 +612,9 @@ export async function publishSheetResults(options = {}) {
     return false;
   }
 
-  const tabNames = [SUMMARY_TAB, ...sheetPayload.tabNames];
+  // Keep the Summary, the UAT reference tab, and every section tab for this
+  // run; everything else (stale/legacy tabs) is deleted below.
+  const tabNames = [...new Set([SUMMARY_TAB, UAT_TAB, ...sheetPayload.tabNames])];
 
   let token;
   try {
@@ -589,6 +680,25 @@ export async function publishSheetResults(options = {}) {
     if (log) {
       console.log(`  ✓ ${tab} (${dataRows} row(s))`);
     }
+  }
+
+  // UAT reference tab — mirrors the committed UAT-sheet snapshot so the report
+  // sheet shows both automated results and the QA bug-feedback log in one place.
+  const uatRows = buildUatRows();
+  await unmergeAllCells(token, sheetIdMap[UAT_TAB], mergeMap[UAT_TAB]);
+  await clearTab(token, UAT_TAB);
+  await writeTab(token, UAT_TAB, uatRows);
+  const uatFormat = buildUatFormatRequests(sheetIdMap[UAT_TAB], uatRows.length);
+  if (uatFormat.length) {
+    await sheetsFetch(token, ":batchUpdate", {
+      method: "POST",
+      body: JSON.stringify({ requests: uatFormat }),
+    });
+  }
+  if (log) {
+    console.log(
+      `  ✓ ${UAT_TAB} (${UAT_CASES.length} reference case(s) + link to live sheet)`,
+    );
   }
 
   await setScreenshotRowHeights(token, sheetPayload.sheetTabs, sheetIdMap);
