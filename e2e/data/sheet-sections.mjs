@@ -23,6 +23,8 @@ export const SECTION_TAB_NAMES = {
 /**
  * Readable report columns — plain-language first, engineer details at the end.
  * "Failure reason" is a human sentence; "Error detail" keeps the raw error.
+ * Matches the manual QA sheet's structure: Preconditions + bulleted Test Steps.
+ * Screenshot is the 11th column (0-based index 10).
  */
 export const RESULT_COLUMNS = [
   "Test ID",
@@ -30,6 +32,7 @@ export const RESULT_COLUMNS = [
   "Module",
   "Priority",
   "Status",
+  "Preconditions",
   "How to test",
   "Expected result",
   "Failure reason",

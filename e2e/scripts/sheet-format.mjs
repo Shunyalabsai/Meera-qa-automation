@@ -571,16 +571,41 @@ export function friendlyModule(describe = "", sectionKey = "") {
 }
 
 /**
- * Human "how to test" for one result row.
- * Uses the manual sheet's real numbered steps when the TC ID is registered;
+ * Render a list of steps as clean bulleted lines
+ * ("1. Click X\n2. Enter Y" → "• Click X\n• Enter Y"). One step per line,
+ * matching the manual QA sheet's step format.
+ */
+function bulletLines(text) {
+  return String(text ?? "")
+    .split("\n")
+    .map((line) =>
+      line
+        .trim()
+        .replace(/^\d+[.)]\s*/, "")
+        .replace(/^[-•*]\s*/, ""),
+    )
+    .filter(Boolean)
+    .map((step) => `• ${step}`)
+    .join("\n");
+}
+
+/**
+ * Human "how to test" for one result row — bulleted steps, one per line.
+ * Uses the manual sheet's real steps when the TC ID is registered;
  * otherwise a plain, honest pointer at the automated spec.
  */
 export function friendlyStepsForTest({ manual, title, module, specFile, line }) {
-  if (manual?.steps) return manual.steps;
-  const what = String(title ?? "").replace(/[.;]?\s*$/, "").toLowerCase();
+  if (manual?.steps) return bulletLines(manual.steps);
+  const what = String(title ?? "").replace(/[.;]?\s*$/, "");
   const url = githubSpecUrl(specFile, line);
-  const specRef = url ? hyperlinkCell(url, "test code") : "the linked test code";
-  return `Automated test — opens ${module || "the page"} and verifies: “${what}”. Exact clicks and assertions are in ${specRef}.`;
+  const specRef = url ? hyperlinkCell(url, "open the test code") : "the linked test code";
+  return `• Open ${module || "the page"}\n• Verify: “${what}”\n• This check is automated — exact clicks and assertions are in ${specRef}.`;
+}
+
+/** Preconditions for a row — the manual sheet's value when registered, else an honest automated default. */
+export function friendlyPreconditions({ manual }) {
+  if (manual?.preconditions) return manual.preconditions;
+  return "Automated E2E run (saved-auth session on the staging app)";
 }
 
 /** Expected result for one row — manual value when registered, else the title (which is an outcome statement). */

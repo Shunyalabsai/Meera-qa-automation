@@ -61,6 +61,7 @@
     "sheet:catalog": "node e2e/scripts/scan-test-catalog.mjs",
     "sheet:real-catalog": "node e2e/scripts/build-real-catalog.mjs",
     "sheet:export": "node e2e/scripts/export-results-sheet.mjs",
+    "sheet:dashboard": "node e2e/scripts/build-dashboard.mjs",
     "sheet:publish": "node e2e/scripts/publish-google-sheet.mjs",
     "sheet:update": "node e2e/scripts/sheet-auto-update.mjs",
     "issues:audit": "node e2e/scripts/audit-known-issues.mjs",

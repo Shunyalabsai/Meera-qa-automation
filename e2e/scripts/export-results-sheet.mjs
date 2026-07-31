@@ -30,6 +30,7 @@ import {
   friendlyExpected,
   friendlyFailureReason,
   friendlyModule,
+  friendlyPreconditions,
   friendlyStepsForTest,
 } from "./sheet-format.mjs";
 import { MANUAL_TEST_CASES } from "../data/manual-test-cases.mjs";
@@ -278,6 +279,7 @@ export function exportSheetResults(options = {}) {
       describe,
       sectionKey,
       module,
+      preconditions: friendlyPreconditions({ manual }),
       steps: friendlyStepsForTest({
         manual,
         title,

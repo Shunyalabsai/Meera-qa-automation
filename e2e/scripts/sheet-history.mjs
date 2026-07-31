@@ -82,6 +82,7 @@ export function resultRowToCells(row, { withLinks = true } = {}) {
     row.module ?? "",
     friendlyPriority(row.priority),
     row.status,
+    row.preconditions ?? "",
     row.steps ?? "",
     row.expected ?? "",
     row.friendlyReason ?? "",

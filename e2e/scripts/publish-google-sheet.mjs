@@ -37,9 +37,9 @@ const mergedFile = path.join(root, "e2e/data/test-results-merged.json");
 const csvDir = path.join(root, "e2e/data/results-sheets");
 
 /** Column index of "Screenshot" in RESULT_COLUMNS (0-based). */
-const SCREENSHOT_COL = 9;
+const SCREENSHOT_COL = 10;
 const SCREENSHOT_ROW_HEIGHT = 180;
-const RESULT_COLUMNS_LENGTH = 12;
+const RESULT_COLUMNS_LENGTH = 13;
 
 /** Drive folder that holds uploaded failure screenshots. */
 const SCREENSHOT_ROOT_FOLDER = "Meera VAP Test Report Screenshots";
