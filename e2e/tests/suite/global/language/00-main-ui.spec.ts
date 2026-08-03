@@ -59,11 +59,13 @@ test.describe("Global › Language switcher — Main UI @journey @new-user @lang
     await switcher.expectGoogleTranslateElementHidden();
   });
 
-  test("TC-LG-007 @medium @ui — Trigger shows globe icon and chevron", async ({
+  test("TC-LG-007 @medium @ui — Trigger shows flag icon and chevron", async ({
     page,
   }) => {
     const switcher = await openLanguageSwitcher(page);
-    await expect(switcher.triggerButton().locator("svg")).toHaveCount(2);
+    // The trigger shows a flag emoji + chevron (single svg) — the old globe
+    // icon + chevron pair was replaced.
+    await expect(switcher.triggerButton().locator("svg")).toHaveCount(1);
   });
 
   test("TC-LG-008 @medium @ui — Language panel scrollable list container visible", async ({

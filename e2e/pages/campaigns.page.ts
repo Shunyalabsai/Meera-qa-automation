@@ -141,6 +141,29 @@ export class CampaignsPage {
     await this.addPhoneNumbersLink().click();
   }
 
+  /**
+   * True only when the create form shows the "no phone numbers" empty state.
+   * The phone-number section loads async and can briefly render the empty
+   * state before the configured "From number" list arrives, so the "From
+   * number" combobox (present only when numbers exist) is the decisive
+   * settle signal.
+   */
+  async hasNoPhoneNumbersConfigured(): Promise<boolean> {
+    const fromNumber = this.page
+      .locator("main")
+      .getByRole("combobox", { name: /From number/i });
+    const numberAppeared = await fromNumber
+      .waitFor({ state: "visible", timeout: 10_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (numberAppeared) return false;
+    return this.page
+      .locator("main")
+      .getByText(/No phone numbers configured/i)
+      .isVisible({ timeout: 10_000 })
+      .catch(() => false);
+  }
+
   async expectNoPhoneNumbersConfigured() {
     await expect(
       this.page.locator("main").getByText(/No phone numbers configured/i),

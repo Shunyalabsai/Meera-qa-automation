@@ -52,7 +52,7 @@ test.describe("BUILD › Playground — Edge @journey @new-user @playground @edg
     await playground.fillToNumber("9".repeat(25));
     await playground.clickStartPhoneCall();
     await expect(
-      page.getByText(/invalid|too long|phone|error|E\.164/i).first(),
+      page.locator("main").getByText(/invalid|too long|phone|error|E\.164/i).first(),
     ).toBeVisible({ timeout: 15_000 });
   });
 

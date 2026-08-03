@@ -19,7 +19,7 @@ test.describe("SETTINGS › Billing — Usage dashboard @journey @existing-user 
   }) => {
     const billing = await openBilling(page);
     await billing.expectDashboardLoaded();
-    expect(await billing.parseTotalMinutes()).toBeGreaterThan(0);
+    expect(await billing.readTotalMinutes()).toBeGreaterThan(0);
   });
 
   test("TC-BL-EU-003 @medium @ui — Usage interval tabs visible", async ({

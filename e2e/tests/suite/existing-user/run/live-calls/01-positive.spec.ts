@@ -42,6 +42,12 @@ test.describe("RUN › Live Calls — Positive @journey @existing-user @live-cal
   }, testInfo) => {
     await skipUnlessHasLiveCalls(page, testInfo);
     const liveCalls = await openLiveCalls(page);
+    // Live calls are ephemeral — the guard's check may precede the calls
+    // ending. Re-check after opening to avoid a false negative.
+    test.skip(
+      await liveCalls.isEmptyState(),
+      "Live calls ended between the guard check and this test",
+    );
     await expect(liveCalls.callsTable()).toBeVisible();
     expect(await liveCalls.callRows().count()).toBeGreaterThan(0);
   });

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { openLanguagePanel, openLanguageSwitcher } from "../../../../helpers/language-switcher.helper";
-import { reloadSpaRoute } from "../../../../helpers/navigate";
+import { gotoApp, reloadSpaRoute } from "../../../../helpers/navigate";
 import { SOUTH_INDIA_LANGUAGES } from "../../../../data/language-switcher-data";
 
 test.describe("Global › Language switcher — Edge @language @edge", () => {
@@ -61,8 +61,13 @@ test.describe("Global › Language switcher — Edge @language @edge", () => {
     page,
   }) => {
     await page.setViewportSize({ width: 375, height: 812 });
-    const switcher = await openLanguageSwitcher(page);
-    await switcher.openPanel();
+    // At 375px the sidebar (and its language trigger) collapses behind the
+    // hamburger menu — open it, then use the trigger inside the drawer.
+    await gotoApp(page, "agents");
+    await page.getByRole("button", { name: /Open menu/i }).first().click();
+    const trigger = page.locator("button.lang-trigger").filter({ visible: true }).first();
+    await expect(trigger).toBeVisible({ timeout: 10_000 });
+    await trigger.click();
     await expect(page.locator(".lang-dropdown--mobile")).toBeVisible();
   });
 

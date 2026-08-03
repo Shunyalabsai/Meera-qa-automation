@@ -68,7 +68,9 @@ export class BillingPage {
 
   async expectHasUsageData() {
     await this.expectDashboardLoaded();
-    expect(await this.parseTotalMinutes()).toBeGreaterThan(0);
+    // Read only after usage has settled — otherwise Total minutes is still 0
+    // while the data fetch is in flight (false negative).
+    expect(await this.readTotalMinutes()).toBeGreaterThan(0);
   }
 
   async expectEmptyState() {

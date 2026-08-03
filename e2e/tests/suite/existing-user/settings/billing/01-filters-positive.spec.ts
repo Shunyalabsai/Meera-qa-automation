@@ -13,7 +13,7 @@ test.describe("SETTINGS › Billing — Filters with usage @journey @existing-us
   }) => {
     const billing = await openBilling(page);
     await billing.selectTimeRange("This month");
-    expect(await billing.parseTotalMinutes()).toBeGreaterThan(0);
+    expect(await billing.readTotalMinutes()).toBeGreaterThan(0);
   });
 
   test("TC-BL-EU-011 @medium @positive — Last 30 days keeps dashboard stable", async ({
@@ -40,6 +40,6 @@ test.describe("SETTINGS › Billing — Filters with usage @journey @existing-us
     const billing = await openBilling(page);
     await billing.clickUsageInterval("week");
     await billing.expectUsageOverTimeSection();
-    expect(await billing.parseTotalMinutes()).toBeGreaterThanOrEqual(0);
+    expect(await billing.readTotalMinutes()).toBeGreaterThanOrEqual(0);
   });
 });

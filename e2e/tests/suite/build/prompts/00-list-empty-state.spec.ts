@@ -20,8 +20,9 @@ test.describe("BUILD › Prompts — List empty state @journey @new-user @prompt
   test("TC-PT-002 @high @ui — Header and subtitle visible", async ({ page }) => {
     const prompts = new PromptTemplatesPage(page);
     await prompts.expectListHeader();
+    // Subtitle copy: versioning/rollback pitch (mirrors expectListHeader).
     await expect(
-      page.getByText(/Reusable system prompts|branching version history/i).first(),
+      page.getByText(/roll back to any earlier version/i).first(),
     ).toBeVisible();
   });
 

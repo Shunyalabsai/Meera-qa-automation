@@ -104,10 +104,9 @@ export class PlaygroundPage {
   }
 
   toNumberInput() {
-    return this.page
-      .getByLabel(/To number/i)
-      .or(this.page.getByPlaceholder(/9876543210|to number|phone/i))
-      .first();
+    // The field is a country-code button + <input type="tel">; the wrapping
+    // label is not itself fillable, so target the tel input by placeholder.
+    return this.page.locator("main").getByPlaceholder(/9876543210/).first();
   }
 
   contextVariablesInput() {

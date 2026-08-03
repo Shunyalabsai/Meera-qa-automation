@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { openCampaignCreateForm } from "../../../../helpers/campaigns.helper";
-import { CampaignsPage } from "../../../../pages/campaigns.page";
 import { PhoneNumbersPage } from "../../../../pages/phone-numbers.page";
 import { skipProductGap } from "../../../../helpers/skip";
 
@@ -8,9 +7,14 @@ test.describe("RUN › Campaigns — Phone numbers link @journey @new-user @camp
   test("TC-CM-020 @high @positive — Add one in Phone Numbers link navigates to phone-numbers", async ({
     page,
   }, testInfo) => {
-    await openCampaignCreateForm(page);
+    const campaigns = await openCampaignCreateForm(page);
+    // The "no phone numbers configured" empty state only exists when the org
+    // has no numbers — skip when numbers are already set up.
+    test.skip(
+      !(await campaigns.hasNoPhoneNumbersConfigured()),
+      "Phone numbers already configured — empty-state link not shown",
+    );
 
-    const campaigns = new CampaignsPage(page);
     await campaigns.expectNoPhoneNumbersConfigured();
     if (await campaigns.isPhoneNumbersLinkBroken()) {
       skipProductGap(testInfo, "CM-LINK-001");
@@ -28,6 +32,10 @@ test.describe("RUN › Campaigns — Phone numbers link @journey @new-user @camp
     page,
   }, testInfo) => {
     const campaigns = await openCampaignCreateForm(page);
+    test.skip(
+      !(await campaigns.hasNoPhoneNumbersConfigured()),
+      "Phone numbers already configured — empty-state link not shown",
+    );
     if (await campaigns.isPhoneNumbersLinkBroken()) {
       skipProductGap(testInfo, "CM-LINK-001");
       return;

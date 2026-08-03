@@ -14,8 +14,9 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     );
 
     await playground.clickStartBrowserCall();
+    // Scope to <main> — the sidebar nav matches /agent|phone|error/.
     await expect(
-      page.getByText(/select.*agent|pick.*agent|required|error|choose/i).first(),
+      page.locator("main").getByText(/select.*agent|pick.*agent|required|error|choose/i).first(),
     ).toBeVisible({ timeout: 10_000 });
   });
 
@@ -31,7 +32,7 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
 
     await playground.clickStartPhoneCall();
     await expect(
-      page.getByText(/select.*agent|pick.*agent|required|error|choose/i).first(),
+      page.locator("main").getByText(/select.*agent|pick.*agent|required|error|choose/i).first(),
     ).toBeVisible({ timeout: 10_000 });
   });
 
@@ -43,7 +44,7 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     await playground.fillToNumber("");
     await playground.clickStartPhoneCall();
     await expect(
-      page.getByText(/invalid|required|enter|phone|number|error/i).first(),
+      page.locator("main").getByText(/invalid|required|enter|phone|number|error/i).first(),
     ).toBeVisible({ timeout: 15_000 });
   });
 
@@ -55,7 +56,7 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     await playground.fillToNumber(PLAYGROUND_SAMPLES.malformedPhone);
     await playground.clickStartPhoneCall();
     await expect(
-      page.getByText(/invalid|malformed|phone|error|E\.164/i).first(),
+      page.locator("main").getByText(/invalid|malformed|phone|error|E\.164/i).first(),
     ).toBeVisible({ timeout: 15_000 });
   });
 
@@ -67,7 +68,7 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     await playground.fillToNumber(PLAYGROUND_SAMPLES.shortInvalidNumber);
     await playground.clickStartPhoneCall();
     await expect(
-      page.getByText(/invalid|failed|error|malformed|phone/i).first(),
+      page.locator("main").getByText(/invalid|failed|error|malformed|phone/i).first(),
     ).toBeVisible({ timeout: 20_000 });
   });
 
@@ -80,7 +81,7 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     await playground.fillContextVariables(PLAYGROUND_SAMPLES.invalidContextJson);
     await playground.clickStartPhoneCall();
     await expect(
-      page.getByText(/invalid|JSON|parse|malformed|phone|error/i).first(),
+      page.locator("main").getByText(/invalid|JSON|parse|malformed|phone|error/i).first(),
     ).toBeVisible({ timeout: 15_000 });
   });
 

@@ -7,8 +7,10 @@ test.describe("BUILD › Agents — Negative @journey @existing-user @agents @ne
     page,
   }) => {
     await page.goto("/vap/agents/not-a-real-agent-id");
+    // The SPA keeps the app shell intact and shows an inline error in <main>
+    // ("Request failed with status code 422") instead of crashing or going blank.
     await expect(
-      page.getByText(/404|not found|Agents|Agent/i).first(),
+      page.locator("main").getByText(/Request failed with status code \d+/i),
     ).toBeVisible({ timeout: 15_000 });
   });
 

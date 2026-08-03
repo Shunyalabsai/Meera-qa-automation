@@ -18,7 +18,7 @@ test.describe("BUILD › Playground — Negative @journey @existing-user @playgr
   }) => {
     await page.goto("/vap/playground/not-valid");
     await expect(
-      page.getByText(/404|not found|Playground/i).first(),
+      page.locator("main").getByText(/404|not found|Playground/i).first(),
     ).toBeVisible({ timeout: 15_000 });
   });
 
@@ -32,7 +32,7 @@ test.describe("BUILD › Playground — Negative @journey @existing-user @playgr
     await playground.fillToNumber("");
     await playground.clickStartPhoneCall();
     await expect(
-      page.getByText(/invalid|required|enter|phone|number|error/i).first(),
+      page.locator("main").getByText(/invalid|required|enter|phone|number|error/i).first(),
     ).toBeVisible({ timeout: 15_000 });
   });
 });

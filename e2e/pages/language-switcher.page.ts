@@ -33,15 +33,14 @@ export class LanguageSwitcherPage {
   }
 
   languageOption(entry: LanguageEntry | string): Locator {
-    const label =
-      typeof entry === "string"
-        ? entry
-        : entry.label.includes(" — ")
-          ? entry.label
-          : entry.label;
+    const raw = typeof entry === "string" ? entry : entry.label;
+    // UI renders "हिन्दी - Hindi" with a hyphen; data labels use an em dash.
+    const label = raw
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/[—–]/g, "[-—–]");
     return this.dropdownPanel()
       .locator(".lang-option")
-      .filter({ hasText: new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) });
+      .filter({ hasText: new RegExp(label) });
   }
 
   groupLabel(group: string): Locator {
@@ -108,8 +107,9 @@ export class LanguageSwitcherPage {
   }
 
   async expectTriggerShowsEnglish() {
+    // Trigger renders the language name (e.g. "🇺🇸 English (US)"); the old "EN"
+    // code chip was removed from the UI.
     await this.expectTriggerShowsLanguage("English");
-    await expect(this.triggerButton()).toContainText("EN");
   }
 
   async expectAllRegionGroupsVisible() {

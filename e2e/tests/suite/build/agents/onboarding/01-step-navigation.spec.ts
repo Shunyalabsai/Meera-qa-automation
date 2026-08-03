@@ -4,6 +4,7 @@ import { PhoneNumbersPage } from "../../../../../pages/phone-numbers.page";
 import { PlaygroundPage } from "../../../../../pages/playground.page";
 import { CampaignsPage } from "../../../../../pages/campaigns.page";
 import { isAgentsEmptyState } from "../../../../../helpers/new-user-dashboard";
+import { isPhoneNumbersEmptyState } from "../../../../../helpers/phone-numbers.helper";
 
 test.describe("BUILD › Agents — Onboarding step navigation @journey @new-user @onboarding", () => {
   test.beforeEach(async ({ page }) => {
@@ -33,6 +34,11 @@ test.describe("BUILD › Agents — Onboarding step navigation @journey @new-use
   test("TC-AG-ON-012 @high @positive — Step 2 Add a phone number opens Phone numbers page", async ({
     page,
   }) => {
+    // Empty-state assertions only hold for a genuinely new workspace.
+    test.skip(
+      !(await isPhoneNumbersEmptyState(page)),
+      "Phone numbers already configured — onboarding empty state not shown",
+    );
     const onboarding = new AgentsOnboardingPage(page);
     await onboarding.clickAddPhoneNumberStep();
     await expect(page).toHaveURL(/\/phone-numbers/, { timeout: 30_000 });
@@ -70,6 +76,11 @@ test.describe("RUN › Phone numbers — From onboarding @journey @new-user @onb
   test("TC-AG-ON-020 @high @ui — Phone numbers empty state for new user", async ({
     page,
   }) => {
+    // Empty-state assertions only hold for a genuinely new workspace.
+    test.skip(
+      !(await isPhoneNumbersEmptyState(page)),
+      "Phone numbers already configured — empty state not shown",
+    );
     const phoneNumbers = new PhoneNumbersPage(page);
     await phoneNumbers.open();
     await phoneNumbers.expectEmptyState();
@@ -79,6 +90,10 @@ test.describe("RUN › Phone numbers — From onboarding @journey @new-user @onb
   test("TC-AG-ON-021 @medium @ui — Telephony accounts section shows zero count", async ({
     page,
   }) => {
+    test.skip(
+      !(await isPhoneNumbersEmptyState(page)),
+      "Phone numbers already configured — zero count not shown",
+    );
     const phoneNumbers = new PhoneNumbersPage(page);
     await phoneNumbers.open();
     await expect(page.getByText(/Telephony accounts\s*\(\s*0\s*\)/i)).toBeVisible({

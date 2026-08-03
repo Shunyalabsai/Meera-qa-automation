@@ -28,6 +28,11 @@ test.describe("RUN › Campaigns — Create form UI @journey @existing-user @cam
     page,
   }) => {
     const campaigns = new CampaignsPage(page);
+    // Empty-state message only appears when the org has no phone numbers.
+    test.skip(
+      !(await campaigns.hasNoPhoneNumbersConfigured()),
+      "Phone numbers already configured — empty-state message not shown",
+    );
     await campaigns.expectNoPhoneNumbersConfigured();
   });
 

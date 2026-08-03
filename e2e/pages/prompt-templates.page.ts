@@ -43,9 +43,11 @@ export class PromptTemplatesPage {
   }
 
   templateListItems(): Locator {
-    return this.page.locator("main li").filter({
-      has: this.page.getByRole("button", { name: /^View$/i }),
-    });
+    return this.page
+      .locator("main section, main article, main [class*='card']")
+      .filter({
+        has: this.page.getByRole("button", { name: /^View$/i }),
+      });
   }
 
   async expectPopulatedList() {

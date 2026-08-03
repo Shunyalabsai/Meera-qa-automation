@@ -75,10 +75,15 @@ export class PhoneNumbersPage {
     await this.expectAddNumberModal();
   }
 
+  /**
+   * The Add phone number modal renders in a portal at the document root
+   * (outside <main>), so it can't be scoped via a `main`-relative locator.
+   * Resolve it as the nearest ancestor that also contains the submit button.
+   */
   addNumberPanel(): Locator {
-    return this.page.locator("main").filter({
-      has: this.page.getByRole("heading", { name: /^Add phone number$/i }),
-    });
+    return this.page
+      .getByRole("heading", { name: /^Add phone number$/i })
+      .locator("xpath=ancestor::div[.//button[normalize-space()='Add number']][1]");
   }
 
   addNumberModal(): Locator {

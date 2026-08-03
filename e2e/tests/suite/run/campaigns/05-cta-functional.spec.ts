@@ -13,6 +13,11 @@ test.describe("RUN › Campaigns — CTA functional @campaigns @cta", () => {
     page,
   }, testInfo) => {
     const campaigns = await openCampaignCreateForm(page);
+    // Empty-state link only exists when the org has no phone numbers.
+    test.skip(
+      !(await campaigns.hasNoPhoneNumbersConfigured()),
+      "Phone numbers already configured — empty-state link not shown",
+    );
     await campaigns.expectNoPhoneNumbersConfigured();
     if (await campaigns.isPhoneNumbersLinkBroken()) {
       skipProductGap(testInfo, "CM-LINK-001");

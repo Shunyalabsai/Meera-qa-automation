@@ -35,8 +35,9 @@ test.describe("BUILD › Playground — Phone Call mode @journey @new-user @play
     page,
   }) => {
     const playground = new PlaygroundPage(page);
-    await expect(page.getByText(/To number/i).first()).toBeVisible();
-    await expect(page.getByText(/\+91|9876543210/i).first()).toBeVisible();
+    await expect(page.locator("main").getByText(/To number/i).first()).toBeVisible();
+    // Assert the tel input by placeholder — an unscoped getByText(/\+91/) matches
+    // the hidden From-number <option> ("+918031137171 - …") before the input.
     await expect(playground.toNumberInput()).toBeVisible();
   });
 

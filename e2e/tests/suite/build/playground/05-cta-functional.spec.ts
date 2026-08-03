@@ -29,8 +29,12 @@ test.describe("BUILD › Playground — CTA functional @playground @cta", () => 
     );
     await playground.selectFirstAgent();
     await playground.clickStartBrowserCall();
+    // Scope to <main> — an unscoped getByText matches the hidden sidebar brand
+    // "Voice Agent Platform" (via /agent/i) before any visible call status.
+    // The live log shows e.g. "Log connected … ticket minted … WS open …
+    // mic capture failed" (headless Chromium cannot capture the mic).
     await expect(
-      page.getByText(/connecting|idle|error|agent|call|microphone|permission/i).first(),
+      page.locator("main").getByText(/connected|requesting call|minted|WS open|mic capture|failed|error/i).first(),
     ).toBeVisible({ timeout: 20_000 });
   });
 
@@ -47,7 +51,7 @@ test.describe("BUILD › Playground — CTA functional @playground @cta", () => 
     await playground.fillToNumber(PLAYGROUND_SAMPLES.validIndianNumber);
     await playground.clickStartPhoneCall();
     await expect(
-      page.getByText(/dial|call|error|invalid|connecting|agent/i).first(),
+      page.locator("main").getByText(/dial|call|error|invalid|connecting/i).first(),
     ).toBeVisible({ timeout: 20_000 });
   });
 });
