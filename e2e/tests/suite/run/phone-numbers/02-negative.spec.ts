@@ -5,7 +5,8 @@ import { PHONE_NUMBER_SAMPLES } from "../../../../data/phone-number-data";
 
 test.describe("RUN › Phone numbers — Validation @journey @new-user @phone-numbers @negative", () => {
   test.beforeEach(async ({ page }) => {
-    await openAddNumberModal(page);
+    const phoneNumbers = await openAddNumberModal(page);
+    await phoneNumbers.ensureNewAccountMode();
   });
 
   test("TC-PN-N101 @high @negative — Add number without required fields blocked", async ({

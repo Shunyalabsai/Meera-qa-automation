@@ -5,15 +5,15 @@ import { skipEnvPrecondition } from "../../../../helpers/skip";
 import { PHONE_NUMBER_SAMPLES } from "../../../../data/phone-number-data";
 
 test.describe("RUN › Phone numbers — Edge @journey @new-user @phone-numbers @edge", () => {
-  test("TC-PN-E101 @medium @edge — Toggle Plivo ↔ Twilio preserves number field", async ({
+  test("TC-PN-E101 @medium @edge — Toggling new/existing account mode preserves number field", async ({
     page,
   }) => {
     await openAddNumberModal(page);
     const phoneNumbers = new PhoneNumbersPage(page);
 
     await phoneNumbers.numberInput().fill(PHONE_NUMBER_SAMPLES.e164Number);
-    await phoneNumbers.switchToTwilio();
-    await phoneNumbers.plivoProviderRadio().click();
+    await phoneNumbers.ensureNewAccountMode();
+    await phoneNumbers.switchToExistingAccount();
     await expect(phoneNumbers.numberInput()).toHaveValue(
       PHONE_NUMBER_SAMPLES.e164Number,
     );

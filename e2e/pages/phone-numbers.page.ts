@@ -110,12 +110,18 @@ export class PhoneNumbersPage {
     });
   }
 
-  plivoProviderRadio(): Locator {
-    return this.addNumberPanel().getByRole("radio", { name: /^Plivo$/i });
-  }
-
-  twilioProviderRadio(): Locator {
-    return this.addNumberPanel().getByRole("radio", { name: /^Twilio$/i });
+  /**
+   * The modal defaults to "Use an existing account" when the org already has a
+   * telephony account — which hides the Plivo/Twilio provider radios. Ensure
+   * the "Set up a new account" form is active before interacting with those.
+   * No-op when the modal already defaults to the new-account form.
+   */
+  async ensureNewAccountMode() {
+    const existing = this.useExistingAccountRadio();
+    if (await existing.isChecked().catch(() => false)) {
+      await this.setupNewAccountRadio().click();
+      await expect(this.setupNewAccountRadio()).toBeChecked();
+    }
   }
 
   accountLabelInput(): Locator {
@@ -159,15 +165,10 @@ export class PhoneNumbersPage {
   }
 
   async expectNewAccountPlivoFields() {
+    await this.ensureNewAccountMode();
     await expect(this.setupNewAccountRadio()).toBeChecked();
-    await expect(this.plivoProviderRadio()).toBeChecked();
     await expect(this.authIdInput()).toBeVisible();
     await expect(this.authTokenInput()).toBeVisible();
-  }
-
-  async switchToTwilio() {
-    await this.twilioProviderRadio().click();
-    await expect(this.twilioProviderRadio()).toBeChecked();
   }
 
   async switchToExistingAccount() {

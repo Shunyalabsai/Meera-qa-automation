@@ -14,19 +14,23 @@ test.describe("RUN › Phone numbers — CTA functional @journey @existing-user 
     await expect(phoneNumbers.addNumberButton()).toBeVisible();
   });
 
-  test("CTA-PN-003 @medium @cta — Plivo provider radio selectable", async ({
+  test("CTA-PN-003 @medium @cta — Set up a new account reveals Plivo credential fields", async ({
     page,
   }) => {
     const phoneNumbers = await openAddNumberModal(page);
-    await phoneNumbers.plivoProviderRadio().click();
-    await expect(phoneNumbers.plivoProviderRadio()).toBeChecked();
+    await phoneNumbers.ensureNewAccountMode();
+    await expect(phoneNumbers.setupNewAccountRadio()).toBeChecked();
+    await expect(phoneNumbers.authIdInput()).toBeVisible();
+    await expect(phoneNumbers.authTokenInput()).toBeVisible();
   });
 
-  test("CTA-PN-004 @medium @cta — Twilio provider radio selectable", async ({
+  test("CTA-PN-004 @medium @cta — Switch to existing account hides new-account fields", async ({
     page,
   }) => {
     const phoneNumbers = await openAddNumberModal(page);
-    await phoneNumbers.switchToTwilio();
-    await expect(phoneNumbers.twilioProviderRadio()).toBeChecked();
+    await phoneNumbers.ensureNewAccountMode();
+    await phoneNumbers.switchToExistingAccount();
+    await expect(phoneNumbers.useExistingAccountRadio()).toBeChecked();
+    await expect(phoneNumbers.authIdInput()).not.toBeVisible();
   });
 });

@@ -26,13 +26,13 @@ test.describe("RUN › Phone numbers — Add modal UI @journey @new-user @phone-
     await expect(phoneNumbers.authIdInput()).toHaveAccessibleName(/Plivo Auth ID/i);
   });
 
-  test("TC-PN-012 @medium @positive — Switch provider to Twilio", async ({
+  test("TC-PN-012 @medium @positive — New-account form is Plivo-scoped", async ({
     page,
   }) => {
     const phoneNumbers = new PhoneNumbersPage(page);
-    await phoneNumbers.switchToTwilio();
+    await phoneNumbers.expectNewAccountPlivoFields();
     await expect(
-      page.getByText(/Twilio|Account SID|Auth Token/i).first(),
+      page.getByText(/belongs to the Plivo account/i).first(),
     ).toBeVisible();
   });
 
