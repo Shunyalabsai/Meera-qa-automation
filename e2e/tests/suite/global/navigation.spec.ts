@@ -43,9 +43,11 @@ test.describe("Global UI › Navigation @smoke", () => {
     page,
   }) => {
     await gotoApp(page, "agents");
+    await waitForLoadingToClear(page);
 
     const deleteBtn = page.getByRole("button", { name: "Delete" }).first();
-    if (!(await deleteBtn.isVisible().catch(() => false))) {
+    const visible = await deleteBtn.isVisible({ timeout: 10_000 }).catch(() => false);
+    if (!visible) {
       test.skip(true, "No agents to test delete confirmation");
       return;
     }
