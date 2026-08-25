@@ -68,7 +68,8 @@
     "report": "playwright show-report",
     "install:browsers": "playwright install chromium",
     "sheet:manual-cases": "node e2e/scripts/fetch-manual-cases.mjs",
-    "sheet:uat-fetch": "node e2e/scripts/fetch-uat-cases.mjs"
+    "sheet:uat-fetch": "node e2e/scripts/fetch-uat-cases.mjs",
+    "sheet:populate-input": "node e2e/scripts/populate-input-sheet.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",

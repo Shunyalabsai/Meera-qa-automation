@@ -8,6 +8,8 @@ node_modules/
 .env
 .env.local
 *.log
+/doc
+
 
 # Generated test run exports — never commit; publish only from live staging runs
 e2e/data/results-sheets/
