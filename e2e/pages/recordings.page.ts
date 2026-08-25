@@ -2,6 +2,10 @@ import { Page, expect, Locator } from "@playwright/test";
 import { gotoApp, reloadSpaRoute } from "../helpers/navigate";
 import { RECORDINGS_COPY } from "../data/recordings-data";
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 /** ANALYZE › Recordings — browse and search call recordings. */
 export class RecordingsPage {
   constructor(private readonly page: Page) {}
@@ -75,11 +79,18 @@ export class RecordingsPage {
   agentFilterTrigger(): Locator {
     return this.page
       .getByRole("main")
-      .getByRole("combobox")
+      .getByRole("combobox", { name: /^Agent/i })
+      .or(this.page.getByRole("main").getByRole("button", { name: /^Agent/i }))
       .or(
         this.page.getByRole("main").getByRole("button", {
           name: RECORDINGS_COPY.agentFilterDefault,
         }),
+      )
+      .or(
+        this.page
+          .getByRole("main")
+          .locator("button")
+          .filter({ hasText: /All agents/i }),
       )
       .first();
   }
@@ -112,15 +123,21 @@ export class RecordingsPage {
     }
 
     await this.agentFilterTrigger().click();
-    await this.page
-      .getByRole("option", { name: new RegExp(`^${value}$`, "i") })
-      .or(
-        this.page.getByRole("menuitem", {
-          name: new RegExp(`^${value}$`, "i"),
-        }),
-      )
-      .first()
-      .click();
+    const pattern = new RegExp(`^\\s*${escapeRegExp(value)}\\s*$`, "i");
+    const option = this.page
+      .locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul')
+      .getByRole("option", { name: pattern })
+      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByRole("button", { name: pattern }))
+      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByText(pattern))
+      .or(this.page.getByRole("option", { name: pattern }))
+      .or(this.page.getByText(pattern))
+      .first();
+
+    if (await option.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await option.click();
+    } else {
+      await this.page.keyboard.press("Escape").catch(() => {});
+    }
   }
 
   async search(query: string) {

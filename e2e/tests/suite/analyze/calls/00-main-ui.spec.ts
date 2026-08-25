@@ -43,6 +43,7 @@ test.describe("ANALYZE › Calls — Main UI @journey @new-user @calls", () => {
     await calls.open();
     await expect(calls.callIdSearchInput()).toBeVisible();
     await expect(calls.goButton()).toBeVisible();
+    await calls.callIdSearchInput().fill("sample-id");
     await expect(calls.goButton()).toBeEnabled();
   });
 

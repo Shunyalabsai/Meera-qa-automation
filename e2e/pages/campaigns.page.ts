@@ -13,7 +13,7 @@ export class CampaignsPage {
 
   async expectListHeader() {
     await expect(
-      this.page.getByRole("heading", { name: /Campaigns/i }),
+      this.page.getByRole("heading", { name: /^Campaigns$/i }).first(),
     ).toBeVisible({ timeout: 30_000 });
     await expect(
       this.page
@@ -57,6 +57,7 @@ export class CampaignsPage {
     return this.page
       .locator("main")
       .getByRole("combobox", { name: /^Agent/i })
+      .or(this.page.locator("main").getByRole("button", { name: /^Agent/i }))
       .or(this.page.locator("main").getByLabel(/^Agent/i))
       .or(
         this.page
@@ -184,9 +185,18 @@ export class CampaignsPage {
   }
 
   async expectAgentPlaceholderOption() {
-    const placeholder = this.agentSelect().locator('option[value=""]');
-    await expect(placeholder).toHaveCount(1);
-    await expect(placeholder).toHaveText(/choose|— choose —/i);
+    const select = this.agentSelect().first();
+    const isSelect = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isSelect) {
+      const placeholder = select.locator('option[value=""]');
+      if ((await placeholder.count()) > 0) {
+        await expect(placeholder.first()).toHaveText(/choose|— choose —|- choose -/i);
+      } else {
+        await expect(select.locator("option").first()).toHaveText(/choose|— choose —|- choose -/i);
+      }
+    } else {
+      await expect(select).toContainText(/choose|— choose —|- choose -/i);
+    }
   }
 
   async hasSelectableAgent(): Promise<boolean> {

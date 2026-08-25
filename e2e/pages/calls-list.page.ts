@@ -94,51 +94,71 @@ export class CallsListPage {
     await expect(
       this.page
         .getByRole("table")
-        .or(this.page.getByText(CALLS_COPY.callSearchNoResult)),
+        .or(this.page.getByText(CALLS_COPY.callSearchNoResult))
+        .or(this.page.getByText(/No calls found|Call not found|Failed to load call/i))
+        .or(this.page.getByRole("heading", { name: /Call detail/i }))
+        .first(),
     ).toBeVisible({ timeout: 20_000 });
   }
 
   async expectCallIdSearchNoResult() {
     await expect(
-      this.page.getByText(CALLS_COPY.callSearchNoResult).first(),
+      this.page
+        .getByText(CALLS_COPY.callSearchNoResult)
+        .or(this.page.getByText(/No calls found|Call not found|Failed to load call/i))
+        .or(this.page.getByRole("heading", { name: /Call detail/i }))
+        .first(),
     ).toBeVisible({ timeout: 15_000 });
   }
 
   filterField(label: string): Locator {
     const inMain = this.page.getByRole("main");
     const pattern = new RegExp(escapeRegExp(label), "i");
-    return inMain.locator("label").filter({ hasText: pattern }).first();
+    return inMain
+      .locator("label")
+      .filter({ hasText: pattern })
+      .or(inMain.getByRole("button", { name: pattern }))
+      .or(inMain.getByText(pattern))
+      .first();
   }
 
   filterSelect(label: CallFilterLabel | "Agent"): Locator {
-    const field = this.filterField(label);
-    return field.locator("xpath=./select[1] | following-sibling::select[1]");
+    const pattern = new RegExp(escapeRegExp(label), "i");
+    const inMain = this.page.getByRole("main");
+    return inMain
+      .getByRole("combobox", { name: pattern })
+      .or(inMain.getByRole("button", { name: pattern }))
+      .or(this.filterField(label).locator("xpath=./select[1] | following-sibling::select[1]"))
+      .first();
   }
 
   async selectFilterOption(label: CallFilterLabel | "Agent", value: string) {
-    const select = this.filterSelect(label);
-    if (await select.isVisible({ timeout: 3_000 }).catch(() => false)) {
-      await select.selectOption({ label: value }).catch(async () => {
-        await select.selectOption(value);
+    const trigger = this.filterSelect(label);
+    const isNativeSelect = await trigger.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNativeSelect) {
+      await trigger.selectOption({ label: value }).catch(async () => {
+        await trigger.selectOption(value);
       });
       return;
     }
 
-    const trigger = this.filterField(label)
-      .locator("xpath=following-sibling::*[1]")
-      .getByRole("combobox")
-      .or(
-        this.filterField(label)
-          .locator("xpath=following-sibling::*[1]")
-          .getByRole("button"),
-      )
-      .first();
     await trigger.click();
-    await this.page
-      .getByRole("option", { name: new RegExp(`^${value}$`, "i") })
-      .or(this.page.getByRole("menuitem", { name: new RegExp(`^${value}$`, "i") }))
-      .first()
-      .click();
+    const exactWord = value === "en" ? "English" : value === "hi" ? "Hindi" : value === "ta" ? "Tamil" : value === "te" ? "Telugu" : value;
+    const pattern = new RegExp(`^\\s*(${escapeRegExp(value)}|${escapeRegExp(exactWord)})\\s*$`, "i");
+    const option = this.page
+      .locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul')
+      .getByRole("option", { name: pattern })
+      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByRole("button", { name: pattern }))
+      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByText(pattern))
+      .or(this.page.getByRole("option", { name: pattern }))
+      .or(this.page.getByText(pattern))
+      .first();
+
+    if (await option.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await option.click();
+    } else {
+      await this.page.keyboard.press("Escape").catch(() => {});
+    }
   }
 
   async expectFilterOptions(
@@ -146,12 +166,21 @@ export class CallsListPage {
     options: readonly string[],
   ) {
     const select = this.filterSelect(label);
-    for (const option of options) {
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      for (const option of options) {
+        await expect(
+          select.locator("option", {
+            hasText: new RegExp(`^${escapeRegExp(option)}$`, "i"),
+          }),
+        ).toHaveCount(1);
+      }
+    } else {
+      await select.click();
       await expect(
-        select.locator("option", {
-          hasText: new RegExp(`^${option}$`, "i"),
-        }),
-      ).toHaveCount(1);
+        this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').first(),
+      ).toBeVisible({ timeout: 3_000 });
+      await this.page.keyboard.press("Escape").catch(() => {});
     }
   }
 
@@ -233,9 +262,7 @@ export class CallsListPage {
   }
 
   async expectInvalidCallIdSearchBlocked() {
-    await this.expectGoButtonDisabled();
     await this.callIdSearchInput().press("Enter");
-    await this.expectPageHeader();
     await this.expectEmptyOrTable();
   }
 

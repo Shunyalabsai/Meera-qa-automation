@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { openAddNumberModal, openPhoneNumbers } from "../../../../helpers/phone-numbers.helper";
+import { skipEnvPrecondition } from "../../../../helpers/skip";
 
 test.describe("RUN › Phone numbers — CTA functional @phone-numbers @cta", () => {
   test("CTA-PN-001 @high @cta — Add number opens modal", async ({ page }) => {
@@ -26,8 +27,14 @@ test.describe("RUN › Phone numbers — CTA functional @phone-numbers @cta", ()
 
   test("CTA-PN-004 @medium @cta — Switch to existing account hides new-account fields", async ({
     page,
-  }) => {
+  }, testInfo) => {
     const phoneNumbers = await openAddNumberModal(page);
+    if (!(await phoneNumbers.canUseExistingAccount())) {
+      skipEnvPrecondition(
+        testInfo,
+        "No telephony accounts — existing account option disabled",
+      );
+    }
     await phoneNumbers.ensureNewAccountMode();
     await phoneNumbers.switchToExistingAccount();
     await expect(phoneNumbers.useExistingAccountRadio()).toBeChecked();

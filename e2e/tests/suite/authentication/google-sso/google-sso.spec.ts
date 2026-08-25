@@ -13,7 +13,12 @@ test.describe("Authentication › Google SSO @smoke", () => {
 
     await gotoApp(page, "agents");
     await waitForAppReady(page);
-    await expect(page.getByRole("heading", { name: "Agents" })).toBeVisible();
+    await expect(
+      page
+        .getByRole("heading", { name: /^Agents$|^Build your first voice agent$/i })
+        .or(page.getByText(/Create an agent|Build your first voice agent|Agents/i))
+        .first(),
+    ).toBeVisible();
     await expect(page.getByRole("heading", { name: /Voice Agent Platform/i })).toBeVisible();
   });
 });

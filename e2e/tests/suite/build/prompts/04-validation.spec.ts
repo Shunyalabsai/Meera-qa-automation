@@ -54,16 +54,16 @@ test.describe("BUILD › Prompts — Validation @negative @edge @prompts", () =>
     await prompts.basePromptInput().fill(PROMPT_TEMPLATE_SAMPLES.basePrompt);
     await prompts.submitCreate();
 
-    const isBlocked = await prompts
-      .createButton()
-      .isVisible({ timeout: 3_000 })
+    // Check if form stayed open / showed error (blocked) or returned to list (accepted)
+    const newTemplateBtn = prompts.newTemplateButton();
+    const createdOrReturnedToList = await newTemplateBtn
+      .isVisible({ timeout: 5_000 })
       .catch(() => false);
 
-    if (!isBlocked) {
+    if (createdOrReturnedToList) {
       // If server accepted whitespace name (product gap), clean up created item
-      await page.waitForTimeout(1_000);
       const deleteButtons = page.getByRole("button", { name: /Delete/i });
-      if (await deleteButtons.first().isVisible({ timeout: 2_000 }).catch(() => false)) {
+      if (await deleteButtons.first().isVisible({ timeout: 3_000 }).catch(() => false)) {
         page.once("dialog", (d) => d.accept());
         await deleteButtons.first().click().catch(() => {});
       }

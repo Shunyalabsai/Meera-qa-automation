@@ -24,11 +24,6 @@ test.describe("ANALYZE › Calls — Filter dropdowns @journey @new-user @calls 
     page,
   }) => {
     const calls = await openCallsList(page);
-    const select = calls.filterSelect("State");
-    test.skip(
-      !(await select.isVisible({ timeout: 5_000 }).catch(() => false)),
-      "State filter not a native select",
-    );
     await calls.expectFilterOptions("State", CALL_STATE_OPTIONS);
   });
 
@@ -36,11 +31,6 @@ test.describe("ANALYZE › Calls — Filter dropdowns @journey @new-user @calls 
     page,
   }) => {
     const calls = await openCallsList(page);
-    const select = calls.filterSelect("Outcome");
-    test.skip(
-      !(await select.isVisible({ timeout: 5_000 }).catch(() => false)),
-      "Outcome filter not a native select",
-    );
     await calls.expectFilterOptions("Outcome", CALL_OUTCOME_OPTIONS);
   });
 
@@ -48,11 +38,6 @@ test.describe("ANALYZE › Calls — Filter dropdowns @journey @new-user @calls 
     page,
   }) => {
     const calls = await openCallsList(page);
-    const select = calls.filterSelect("Sentiment");
-    test.skip(
-      !(await select.isVisible({ timeout: 5_000 }).catch(() => false)),
-      "Sentiment filter not a native select",
-    );
     await calls.expectFilterOptions("Sentiment", CALL_SENTIMENT_OPTIONS);
   });
 
@@ -60,11 +45,6 @@ test.describe("ANALYZE › Calls — Filter dropdowns @journey @new-user @calls 
     page,
   }) => {
     const calls = await openCallsList(page);
-    const select = calls.filterSelect("Language");
-    test.skip(
-      !(await select.isVisible({ timeout: 5_000 }).catch(() => false)),
-      "Language filter not a native select",
-    );
     await calls.expectFilterOptions("Language", CALL_LANGUAGE_OPTIONS);
   });
 

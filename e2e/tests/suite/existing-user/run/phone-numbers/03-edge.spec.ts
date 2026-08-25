@@ -7,9 +7,16 @@ import { PHONE_NUMBER_SAMPLES } from "../../../../../data/phone-number-data";
 test.describe("RUN › Phone numbers — Edge @journey @existing-user @phone-numbers @edge", () => {
   test("TC-PN-E101 @medium @edge — Toggling new/existing account mode preserves number field", async ({
     page,
-  }) => {
+  }, testInfo) => {
     await openAddNumberModal(page);
     const phoneNumbers = new PhoneNumbersPage(page);
+
+    if (!(await phoneNumbers.canUseExistingAccount())) {
+      skipEnvPrecondition(
+        testInfo,
+        "No telephony accounts — existing account option disabled",
+      );
+    }
 
     await phoneNumbers.numberInput().fill(PHONE_NUMBER_SAMPLES.e164Number);
     await phoneNumbers.ensureNewAccountMode();
