@@ -110,10 +110,7 @@ test.describe("SETTINGS › Webhooks — Negative @journey @new-user @webhooks @
     const webhooks = await openWebhooks(page);
     await webhooks.clickSubscribeForEvent("call.completed");
     await webhooks.perEventUrlInput().fill(WEBHOOKS_SAMPLES.validUrl);
-    await webhooks.clickSaveSubscription();
-    await expect(
-      page.getByText(/required|secret|16|Fix the highlighted/i).first(),
-    ).toBeVisible({ timeout: 10_000 });
+    await expect(webhooks.saveSubscriptionButton()).toBeDisabled();
   });
 
   test("TC-WH-N107 @medium @negative — Short secret rejected on per-event Save subscription", async ({

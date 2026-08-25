@@ -252,14 +252,10 @@ export class WebhooksPage {
   }
 
   eventRow(eventName: string): Locator {
-    const escaped = eventName.replace(".", "\\.");
-    return this.mainPanel()
-      .locator("div")
+    return this.eventSubscriptionsSection()
+      .locator("div.rounded.border")
       .filter({
-        hasText: new RegExp(
-          `${escaped}\\s+(?:subscribed|not subscribed)`,
-          "i",
-        ),
+        has: this.page.getByText(eventName, { exact: true }),
       })
       .first();
   }
@@ -284,19 +280,21 @@ export class WebhooksPage {
   }
 
   perEventUrlInput(): Locator {
-    return this.mainPanel()
-      .getByRole("textbox", { name: /^URL$/i })
-      .last();
+    return this.eventSubscriptionsSection()
+      .getByPlaceholder("https://your-app/webhook")
+      .first();
   }
 
   perEventSecretInput(): Locator {
-    return this.mainPanel()
-      .getByRole("textbox", { name: /Secret.*16 chars/i })
-      .last();
+    return this.eventSubscriptionsSection()
+      .getByPlaceholder(/shunya-demo|secret/i)
+      .first();
   }
 
   saveSubscriptionButton(): Locator {
-    return this.mainPanel().getByRole("button", { name: /Save subscription/i });
+    return this.eventSubscriptionsSection()
+      .getByRole("button", { name: /^Save subscription$/i })
+      .first();
   }
 
   customEventLink(): Locator {
@@ -348,7 +346,9 @@ export class WebhooksPage {
   }
 
   cancelSubscriptionButton(): Locator {
-    return this.mainPanel().getByRole("button", { name: /^Cancel$/i }).first();
+    return this.eventSubscriptionsSection()
+      .getByRole("button", { name: /^Cancel$/i })
+      .first();
   }
 
   async fillQuickApply(url: string, secret: string) {
@@ -428,5 +428,21 @@ export class WebhooksPage {
       timeout: 20_000,
     });
     return this.countSubscribedToUrl(url);
+  }
+
+  async removeAllSubscriptions(): Promise<void> {
+    await this.open();
+    this.page.on("dialog", async (d) => {
+      await d.accept().catch(() => {});
+    });
+    while (true) {
+      const removeBtn = this.eventSubscriptionsSection()
+        .getByRole("button", { name: /^Remove$/i })
+        .first();
+      const visible = await removeBtn.isVisible({ timeout: 2000 }).catch(() => false);
+      if (!visible) break;
+      await removeBtn.click().catch(() => {});
+      await this.page.waitForTimeout(1000);
+    }
   }
 }

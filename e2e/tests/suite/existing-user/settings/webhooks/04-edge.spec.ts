@@ -49,9 +49,10 @@ test.describe("SETTINGS › Webhooks — Edge @journey @existing-user @webhooks 
     );
     const webhooks = await openWebhooks(page);
     await webhooks.clickSubscribeForEvent("call.triggered");
-    await expect(webhooks.saveSubscriptionButton()).toBeVisible();
+    await expect(webhooks.eventRow("call.triggered").getByRole("button", { name: /^Save subscription$/i })).toBeVisible();
     await webhooks.clickSubscribeForEvent("call.connected");
-    await expect(webhooks.saveSubscriptionButton()).toBeVisible();
+    await expect(webhooks.eventRow("call.connected").getByRole("button", { name: /^Save subscription$/i })).toBeVisible();
+    await webhooks.eventRow("call.triggered").getByRole("button", { name: /^Cancel$/i }).click();
     await expect(webhooks.subscribeButtonForEvent("call.triggered")).toBeVisible();
   });
 

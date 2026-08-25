@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { gotoApp } from "../../../helpers/navigate";
+import { gotoApp, waitForLoadingToClear } from "../../../helpers/navigate";
 
 /** Sidebar routes grouped exactly like the dashboard. */
 const DASHBOARD_ROUTES = {
@@ -43,10 +43,11 @@ test.describe("Global UI › Navigation @smoke", () => {
     page,
   }) => {
     await gotoApp(page, "agents");
+    await expect(page.getByRole("heading", { name: /^Agents$/i })).toBeVisible({ timeout: 30_000 });
     await waitForLoadingToClear(page);
 
-    const deleteBtn = page.getByRole("button", { name: "Delete" }).first();
-    const visible = await deleteBtn.isVisible({ timeout: 10_000 }).catch(() => false);
+    const deleteBtn = page.getByRole("button", { name: /^Delete$/i }).first();
+    const visible = await deleteBtn.waitFor({ state: "visible", timeout: 15_000 }).then(() => true).catch(() => false);
     if (!visible) {
       test.skip(true, "No agents to test delete confirmation");
       return;

@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { openWebhooks } from "../../../../helpers/webhooks.helper";
+import { WebhooksPage } from "../../../../pages/webhooks.page";
 import {
   E2E_REAL_WEBHOOK_URL,
   E2E_REAL_WEBHOOK_SECRET,
@@ -98,5 +99,13 @@ test.describe("SETTINGS › Webhooks — E2E delivery @webhooks @e2e @serial", (
       hasSignature,
       `Delivery should include a signature header. Got: ${headerKeys.join(", ")}`,
     ).toBe(true);
+  });
+
+  test.afterAll(async ({ browser }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    const webhooks = new WebhooksPage(page);
+    await webhooks.removeAllSubscriptions().catch(() => {});
+    await context.close();
   });
 });
