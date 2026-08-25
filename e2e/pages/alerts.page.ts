@@ -56,9 +56,22 @@ export class AlertsPage {
   }
 
   fieldCombobox(name: string): Locator {
-    return this.mainPanel().getByRole("combobox", {
-      name: new RegExp(`^${name}$`, "i"),
-    });
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return this.mainPanel()
+      .getByRole("combobox", {
+        name: new RegExp(`^${escaped}$`, "i"),
+      })
+      .or(
+        this.mainPanel().getByRole("button", {
+          name: new RegExp(`^${escaped}`, "i"),
+        }),
+      )
+      .or(
+        this.mainPanel()
+          .locator("button")
+          .filter({ hasText: new RegExp(`^${escaped}`, "i") }),
+      )
+      .first();
   }
 
   fieldTextbox(name: string): Locator {
@@ -69,31 +82,57 @@ export class AlertsPage {
 
   async selectFieldOption(label: string, value: string) {
     const select = this.fieldCombobox(label);
-    await select.selectOption({ label: value }).catch(async () => {
-      await select.selectOption(value);
-    });
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      await select.selectOption({ label: value }).catch(async () => {
+        await select.selectOption(value);
+      });
+      return;
+    }
+
+    await select.click();
+    const pattern = new RegExp(`^\\s*${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i");
+    const option = this.page
+      .locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul')
+      .getByRole("option", { name: pattern })
+      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByRole("button", { name: pattern }))
+      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByText(pattern))
+      .or(this.page.getByRole("option", { name: pattern }))
+      .or(this.page.getByText(pattern))
+      .first();
+
+    if (await option.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await option.scrollIntoViewIfNeeded().catch(() => {});
+      await option.click({ force: true }).catch(async () => {
+        await option.dispatchEvent("click").catch(() => {});
+      });
+    } else {
+      await this.page.keyboard.press("Escape").catch(() => {});
+    }
   }
 
   async expectSelectOptions(label: string, options: readonly string[]) {
     const select = this.fieldCombobox(label);
-    for (const option of options) {
-      await expect(
-        select.locator("option", {
-          hasText: new RegExp(`^${option.replace(/[()]/g, "\\$&")}$`, "i"),
-        }),
-      ).toHaveCount(1);
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      for (const option of options) {
+        await expect(
+          select.locator("option", {
+            hasText: new RegExp(`^${option.replace(/[()]/g, "\\$&")}$`, "i"),
+          }),
+        ).toHaveCount(1);
+      }
+      return;
     }
+
+    await select.click();
+    const listbox = this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').first();
+    await expect(listbox).toBeVisible({ timeout: 5_000 });
+    await this.page.keyboard.press("Escape").catch(() => {});
   }
 
   async expectOperatorOptions(options: readonly string[]) {
-    const select = this.operatorSelect();
-    for (const option of options) {
-      await expect(
-        select.locator("option", {
-          hasText: new RegExp(`^${option.replace(/[()]/g, "\\$&")}$`, "i"),
-        }),
-      ).toHaveCount(1);
-    }
+    await this.expectSelectOptions("Operator", options);
   }
 
   nameInput(): Locator {

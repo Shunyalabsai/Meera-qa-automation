@@ -87,11 +87,20 @@ async function clientNavigate(page: Page, route: string): Promise<void> {
   }, target);
 }
 
+export async function dismissOnboardingIfPresent(page: Page): Promise<void> {
+  const skipBtn = page.getByRole("button", { name: /^Skip$/i }).or(page.getByText(/^Skip$/i));
+  if (await skipBtn.first().isVisible({ timeout: 1_500 }).catch(() => false)) {
+    await skipBtn.first().click().catch(() => {});
+  }
+}
+
 export async function gotoApp(page: Page, route = ""): Promise<void> {
   const trimmed = route.replace(/^\//, "");
   const shellResponse = await page.goto(appPath(""), {
     waitUntil: "domcontentloaded",
   });
+
+  await dismissOnboardingIfPresent(page);
 
   const shellOk =
     (shellResponse?.ok() ?? false) || (await isSpaShell(page));
@@ -103,6 +112,7 @@ export async function gotoApp(page: Page, route = ""): Promise<void> {
   if (!shellOk) {
     await page.goto(appPath(trimmed), { waitUntil: "domcontentloaded" });
     assertSignedIn(page);
+    await dismissOnboardingIfPresent(page);
     await waitForLoadingToClear(page);
     return;
   }
@@ -113,6 +123,7 @@ export async function gotoApp(page: Page, route = ""): Promise<void> {
     if (await link.isVisible({ timeout: 15_000 }).catch(() => false)) {
       await link.click();
       assertSignedIn(page);
+      await dismissOnboardingIfPresent(page);
       await waitForLoadingToClear(page);
       return;
     }
@@ -120,6 +131,7 @@ export async function gotoApp(page: Page, route = ""): Promise<void> {
 
   await clientNavigate(page, trimmed);
   assertSignedIn(page);
+  await dismissOnboardingIfPresent(page);
   await waitForLoadingToClear(page);
 }
 

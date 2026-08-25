@@ -79,10 +79,9 @@ export class PlaygroundPage {
   agentSelect(): Locator {
     return this.page
       .getByRole("main")
-      .getByRole("combobox", { name: /^Agent/i })
-      .or(this.page.getByRole("main").getByRole("button", { name: /^Agent/i }))
+      .locator('button[role="combobox"], [role="combobox"], button[aria-haspopup="listbox"], button[aria-haspopup="menu"]')
       .or(this.page.getByRole("main").locator("button").filter({ hasText: /Pick an agent/i }))
-      .or(this.page.getByRole("main").getByRole("combobox"))
+      .or(this.page.getByRole("main").getByRole("button", { name: /^Agent/i }))
       .or(this.page.getByRole("main").locator("select"))
       .first();
   }
@@ -152,7 +151,7 @@ export class PlaygroundPage {
     if (isNative) {
       return select.inputValue();
     }
-    return (await select.textContent()) ?? "";
+    return (await select.textContent())?.trim() ?? "";
   }
 
   /** Wait until the agent dropdown is populated beyond the "Pick an agent" placeholder. */
@@ -177,19 +176,20 @@ export class PlaygroundPage {
       return false;
     }
 
-    await select.click();
-    const options = this.page.locator('[role="listbox"] [role="option"], [role="menu"] [role="menuitem"], div[data-radix-popper-content-wrapper] [role="option"], div[data-radix-popper-content-wrapper] button, ul li');
-    const count = await options.count().catch(() => 0);
-    let found = false;
-    for (let i = 0; i < count; i++) {
-      const text = (await options.nth(i).textContent()) ?? "";
-      if (text.trim() && !/pick an agent|select agent/i.test(text)) {
-        found = true;
-        break;
-      }
-    }
+    await select.click({ force: true }).catch(() => {});
+
+    const popover = this.page.locator(
+      '[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div[data-radix-select-content]',
+    );
+    const option = popover
+      .locator('[role="option"], [role="menuitem"], [data-radix-select-item], [data-radix-collection-item]')
+      .filter({ hasNotText: /^\s*$/ })
+      .filter({ hasNotText: /pick an agent|select agent/i })
+      .first();
+
+    const visible = await option.isVisible({ timeout: 4_000 }).catch(() => false);
     await this.page.keyboard.press("Escape").catch(() => {});
-    return found;
+    return visible;
   }
 
   async selectFirstAgent(): Promise<string | null> {
@@ -210,15 +210,23 @@ export class PlaygroundPage {
       return null;
     }
 
-    await select.click();
-    const option = this.page
-      .locator('[role="listbox"] [role="option"], [role="menu"] [role="menuitem"], div[data-radix-popper-content-wrapper] [role="option"], div[data-radix-popper-content-wrapper] button, ul li')
-      .filter({ hasNotText: /pick an agent/i })
+    await select.click({ force: true }).catch(() => {});
+
+    const popover = this.page.locator(
+      '[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div[data-radix-select-content]',
+    );
+    const option = popover
+      .locator('[role="option"], [role="menuitem"], [data-radix-select-item], [data-radix-collection-item]')
+      .filter({ hasNotText: /^\s*$/ })
+      .filter({ hasNotText: /pick an agent|select agent/i })
       .first();
 
-    if (await option.isVisible({ timeout: 2_000 }).catch(() => false)) {
+    if (await option.isVisible({ timeout: 4_000 }).catch(() => false)) {
       const text = (await option.textContent())?.trim() ?? "agent";
-      await option.click();
+      await option.scrollIntoViewIfNeeded().catch(() => {});
+      await option.click({ force: true }).catch(async () => {
+        await option.dispatchEvent("click").catch(() => {});
+      });
       return text;
     }
     await this.page.keyboard.press("Escape").catch(() => {});

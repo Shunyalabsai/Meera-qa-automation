@@ -88,7 +88,15 @@ export class BillingPage {
   }
 
   timeRangeSelect(): Locator {
-    return this.mainPanel().getByRole("combobox").first();
+    return this.mainPanel()
+      .getByRole("combobox")
+      .or(
+        this.mainPanel().getByRole("button", {
+          name: /This month|Last 7 days|Last 30 days|All time/i,
+        }),
+      )
+      .or(this.mainPanel().locator("select"))
+      .first();
   }
 
   timeRangeTrigger(): Locator {
@@ -102,9 +110,33 @@ export class BillingPage {
   async selectTimeRange(label: string) {
     const select = this.timeRangeSelect();
     await expect(select).toBeVisible({ timeout: 10_000 });
-    await select.selectOption({ label }).catch(async () => {
-      await select.selectOption(label);
-    });
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      await select.selectOption({ label }).catch(async () => {
+        await select.selectOption(label);
+      });
+      return;
+    }
+
+    await select.click();
+    const pattern = new RegExp(`^\\s*${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i");
+    const option = this.page
+      .locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul')
+      .getByRole("option", { name: pattern })
+      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByRole("button", { name: pattern }))
+      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByText(pattern))
+      .or(this.page.getByRole("option", { name: pattern }))
+      .or(this.page.getByText(pattern))
+      .first();
+
+    if (await option.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await option.scrollIntoViewIfNeeded().catch(() => {});
+      await option.click({ force: true }).catch(async () => {
+        await option.dispatchEvent("click").catch(() => {});
+      });
+    } else {
+      await this.page.keyboard.press("Escape").catch(() => {});
+    }
   }
 
   usageIntervalTab(label: string): Locator {

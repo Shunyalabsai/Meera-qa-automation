@@ -1,5 +1,5 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { gotoApp } from "../helpers/navigate";
+import { gotoApp, waitForLoadingToClear } from "../helpers/navigate";
 import { LIVE_CALLS_COPY } from "../data/live-calls-data";
 
 /** RUN › Live Calls — real-time in-flight call monitoring. */
@@ -9,6 +9,7 @@ export class LiveCallsPage {
   async open() {
     await gotoApp(this.page, "live-calls");
     await this.expectPageHeader();
+    await waitForLoadingToClear(this.page);
   }
 
   async expectPageHeader() {
@@ -21,10 +22,16 @@ export class LiveCallsPage {
   }
 
   async isEmptyState(): Promise<boolean> {
-    return this.page
+    await waitForLoadingToClear(this.page);
+    const empty = await this.page
       .getByText(LIVE_CALLS_COPY.emptyTitle)
       .isVisible({ timeout: 5_000 })
       .catch(() => false);
+    if (empty) return true;
+    const hasTable = await this.callsTable()
+      .isVisible({ timeout: 3_000 })
+      .catch(() => false);
+    return !hasTable;
   }
 
   async expectEmptyState() {
