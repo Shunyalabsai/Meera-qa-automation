@@ -26,9 +26,14 @@ test.describe("BUILD › Playground — Phone Call mode @journey @new-user @play
     await expect(page.getByText(/From number/i).first()).toBeVisible();
     const fromSelect = playground.fromNumberSelect();
     await expect(fromSelect).toBeVisible();
-    await expect(
-      fromSelect.locator("option").filter({ hasText: /Use org default|org default/i }),
-    ).toHaveCount(1);
+    const isNative = await fromSelect.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      await expect(
+        fromSelect.locator("option").filter({ hasText: /Use org default|org default/i }),
+      ).toHaveCount(1);
+    } else {
+      await expect(fromSelect).toContainText(/Use org default|org default/i);
+    }
   });
 
   test("TC-PG-022 @high @positive — To number field with country code", async ({

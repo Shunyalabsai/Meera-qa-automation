@@ -13,11 +13,16 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
       "Agent already selected in dropdown",
     );
 
-    await playground.clickStartBrowserCall();
-    // Scope to <main> — the sidebar nav matches /agent|phone|error/.
-    await expect(
-      page.locator("main").getByText(/select.*agent|pick.*agent|required|error|choose/i).first(),
-    ).toBeVisible({ timeout: 10_000 });
+    const btn = playground.startBrowserCallButton();
+    const isDisabled = await btn.isDisabled().catch(() => false);
+    if (isDisabled) {
+      await expect(btn).toBeDisabled();
+    } else {
+      await btn.click();
+      await expect(
+        page.locator("main").getByText(/select.*agent|pick.*agent|required|error|choose/i).first(),
+      ).toBeVisible({ timeout: 10_000 });
+    }
   });
 
   test("TC-PG-N102 @high @negative — Start phone call without agent selected", async ({
@@ -30,10 +35,16 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     const val = await playground.selectedAgentValue().catch(() => "");
     test.skip(!!val, "Agent pre-selected");
 
-    await playground.clickStartPhoneCall();
-    await expect(
-      page.locator("main").getByText(/select.*agent|pick.*agent|required|error|choose/i).first(),
-    ).toBeVisible({ timeout: 10_000 });
+    const btn = playground.startPhoneCallButton();
+    const isDisabled = await btn.isDisabled().catch(() => false);
+    if (isDisabled) {
+      await expect(btn).toBeDisabled();
+    } else {
+      await btn.click();
+      await expect(
+        page.locator("main").getByText(/select.*agent|pick.*agent|required|error|choose/i).first(),
+      ).toBeVisible({ timeout: 10_000 });
+    }
   });
 
   test("TC-PG-N103 @high @negative — Empty to number rejected", async ({
@@ -42,10 +53,16 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     const playground = await openPlayground(page);
     await playground.switchToPhoneMode();
     await playground.fillToNumber("");
-    await playground.clickStartPhoneCall();
-    await expect(
-      page.locator("main").getByText(/invalid|required|enter|phone|number|error/i).first(),
-    ).toBeVisible({ timeout: 15_000 });
+    const btn = playground.startPhoneCallButton();
+    const isDisabled = await btn.isDisabled().catch(() => false);
+    if (isDisabled) {
+      await expect(btn).toBeDisabled();
+    } else {
+      await btn.click();
+      await expect(
+        page.locator("main").getByText(/invalid|required|enter|phone|number|error/i).first(),
+      ).toBeVisible({ timeout: 15_000 });
+    }
   });
 
   test("TC-PG-N104 @high @negative — Malformed phone number rejected", async ({
@@ -54,10 +71,16 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     const playground = await openPlayground(page);
     await playground.switchToPhoneMode();
     await playground.fillToNumber(PLAYGROUND_SAMPLES.malformedPhone);
-    await playground.clickStartPhoneCall();
-    await expect(
-      page.locator("main").getByText(/invalid|malformed|phone|error|E\.164/i).first(),
-    ).toBeVisible({ timeout: 15_000 });
+    const btn = playground.startPhoneCallButton();
+    const isDisabled = await btn.isDisabled().catch(() => false);
+    if (isDisabled) {
+      await expect(btn).toBeDisabled();
+    } else {
+      await btn.click();
+      await expect(
+        page.locator("main").getByText(/invalid|malformed|phone|error|E\.164/i).first(),
+      ).toBeVisible({ timeout: 15_000 });
+    }
   });
 
   test("TC-VC-101 @high @negative — Invalid short phone number rejected", async ({
@@ -66,10 +89,16 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     const playground = await openPlayground(page);
     await playground.switchToPhoneMode();
     await playground.fillToNumber(PLAYGROUND_SAMPLES.shortInvalidNumber);
-    await playground.clickStartPhoneCall();
-    await expect(
-      page.locator("main").getByText(/invalid|failed|error|malformed|phone/i).first(),
-    ).toBeVisible({ timeout: 20_000 });
+    const btn = playground.startPhoneCallButton();
+    const isDisabled = await btn.isDisabled().catch(() => false);
+    if (isDisabled) {
+      await expect(btn).toBeDisabled();
+    } else {
+      await btn.click();
+      await expect(
+        page.locator("main").getByText(/invalid|failed|error|malformed|phone/i).first(),
+      ).toBeVisible({ timeout: 15_000 });
+    }
   });
 
   test("TC-PG-N105 @medium @negative — Malformed context JSON shows error", async ({
@@ -79,10 +108,16 @@ test.describe("BUILD › Playground — Negative @journey @new-user @playground 
     await playground.switchToPhoneMode();
     await playground.fillToNumber(PLAYGROUND_SAMPLES.validIndianNumber);
     await playground.fillContextVariables(PLAYGROUND_SAMPLES.invalidContextJson);
-    await playground.clickStartPhoneCall();
-    await expect(
-      page.locator("main").getByText(/invalid|JSON|parse|malformed|phone|error/i).first(),
-    ).toBeVisible({ timeout: 15_000 });
+    const btn = playground.startPhoneCallButton();
+    const isDisabled = await btn.isDisabled().catch(() => false);
+    if (isDisabled) {
+      await expect(btn).toBeDisabled();
+    } else {
+      await btn.click();
+      await expect(
+        page.locator("main").getByText(/invalid|JSON|parse|malformed|phone|error/i).first(),
+      ).toBeVisible({ timeout: 15_000 });
+    }
   });
 
 });

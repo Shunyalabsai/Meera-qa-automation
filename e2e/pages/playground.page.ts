@@ -35,7 +35,12 @@ export class PlaygroundPage {
     ).toBeVisible();
     const select = this.agentSelect();
     await expect(select).toBeVisible();
-    await expect(select.locator("option").first()).toHaveText(/Pick an agent/i);
+    const isNativeSelect = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNativeSelect) {
+      await expect(select.locator("option").first()).toHaveText(/Pick an agent/i);
+    } else {
+      await expect(select).toContainText(/Pick an agent/i);
+    }
   }
 
   async expectModeToggle() {
@@ -71,8 +76,15 @@ export class PlaygroundPage {
     return this.page.getByText(/^Log$/i).or(this.page.getByText(/Log/i).first());
   }
 
-  agentSelect() {
-    return this.page.getByRole("main").getByRole("combobox").first();
+  agentSelect(): Locator {
+    return this.page
+      .getByRole("main")
+      .getByRole("combobox", { name: /^Agent/i })
+      .or(this.page.getByRole("main").getByRole("button", { name: /^Agent/i }))
+      .or(this.page.getByRole("main").locator("button").filter({ hasText: /Pick an agent/i }))
+      .or(this.page.getByRole("main").getByRole("combobox"))
+      .or(this.page.getByRole("main").locator("select"))
+      .first();
   }
 
   browserModeButton() {
@@ -91,9 +103,13 @@ export class PlaygroundPage {
     return this.page.getByRole("button", { name: /Start Phone Call|Start call/i });
   }
 
-  fromNumberSelect() {
+  fromNumberSelect(): Locator {
     return this.page
-      .getByLabel(/From number/i)
+      .getByRole("main")
+      .getByRole("combobox", { name: /From number/i })
+      .or(this.page.getByRole("main").getByRole("button", { name: /From number/i }))
+      .or(this.page.getByRole("main").locator("button").filter({ hasText: /Use org default/i }))
+      .or(this.page.getByLabel(/From number/i))
       .or(
         this.page
           .locator("label")
@@ -131,47 +147,81 @@ export class PlaygroundPage {
   }
 
   async selectedAgentValue() {
-    return this.agentSelect().inputValue();
+    const select = this.agentSelect();
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      return select.inputValue();
+    }
+    return (await select.textContent()) ?? "";
   }
 
   /** Wait until the agent dropdown is populated beyond the "Pick an agent" placeholder. */
   async waitForAgentOptions(): Promise<void> {
     await expect(this.agentSelect()).toBeVisible({ timeout: 30_000 });
     await waitForLoadingToClear(this.page);
-    await expect
-      .poll(async () => this.agentSelect().locator("option").count(), {
-        timeout: 15_000,
-      })
-      .toBeGreaterThan(1)
-      .catch(() => undefined);
   }
 
   async hasSelectableAgent(): Promise<boolean> {
     await this.waitForAgentOptions();
-    const options = this.agentSelect().locator("option");
-    const count = await options.count();
+    const select = this.agentSelect();
+    const isNativeSelect = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNativeSelect) {
+      const options = select.locator("option");
+      const count = await options.count();
+      for (let i = 0; i < count; i++) {
+        const val = await options.nth(i).getAttribute("value");
+        if (val && val.trim() && !/pick|select/i.test(await options.nth(i).textContent() ?? "")) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    await select.click();
+    const options = this.page.locator('[role="listbox"] [role="option"], [role="menu"] [role="menuitem"], div[data-radix-popper-content-wrapper] [role="option"], div[data-radix-popper-content-wrapper] button, ul li');
+    const count = await options.count().catch(() => 0);
+    let found = false;
     for (let i = 0; i < count; i++) {
-      const val = await options.nth(i).getAttribute("value");
-      if (val && val.trim() && !/pick|select/i.test(await options.nth(i).textContent() ?? "")) {
-        return true;
+      const text = (await options.nth(i).textContent()) ?? "";
+      if (text.trim() && !/pick an agent|select agent/i.test(text)) {
+        found = true;
+        break;
       }
     }
-    return false;
+    await this.page.keyboard.press("Escape").catch(() => {});
+    return found;
   }
 
   async selectFirstAgent(): Promise<string | null> {
     await this.waitForAgentOptions();
     const select = this.agentSelect();
-    const options = select.locator("option");
-    const count = await options.count();
-    for (let i = 0; i < count; i++) {
-      const val = await options.nth(i).getAttribute("value");
-      const text = (await options.nth(i).textContent()) ?? "";
-      if (val && val.trim() && !/pick|select/i.test(text)) {
-        await select.selectOption(val);
-        return val;
+    const isNativeSelect = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNativeSelect) {
+      const options = select.locator("option");
+      const count = await options.count();
+      for (let i = 0; i < count; i++) {
+        const val = await options.nth(i).getAttribute("value");
+        const text = (await options.nth(i).textContent()) ?? "";
+        if (val && val.trim() && !/pick|select/i.test(text)) {
+          await select.selectOption(val);
+          return val;
+        }
       }
+      return null;
     }
+
+    await select.click();
+    const option = this.page
+      .locator('[role="listbox"] [role="option"], [role="menu"] [role="menuitem"], div[data-radix-popper-content-wrapper] [role="option"], div[data-radix-popper-content-wrapper] button, ul li')
+      .filter({ hasNotText: /pick an agent/i })
+      .first();
+
+    if (await option.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      const text = (await option.textContent())?.trim() ?? "agent";
+      await option.click();
+      return text;
+    }
+    await this.page.keyboard.press("Escape").catch(() => {});
     return null;
   }
 

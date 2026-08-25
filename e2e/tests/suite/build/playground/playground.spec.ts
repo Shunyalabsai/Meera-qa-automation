@@ -14,9 +14,15 @@ test.describe("BUILD › Playground @smoke", () => {
     const playground = new PlaygroundPage(page);
     await playground.open();
     const agentId = await playground.selectedAgentValue();
-    test.skip(!agentId, "No agents available");
+    test.skip(!agentId || /pick|select/i.test(agentId), "No agents available");
 
     await playground.open(agentId);
-    await expect(playground.agentSelect()).toHaveValue(agentId);
+    const select = playground.agentSelect();
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      await expect(select).toHaveValue(agentId);
+    } else {
+      await expect(select).toContainText(agentId);
+    }
   });
 });

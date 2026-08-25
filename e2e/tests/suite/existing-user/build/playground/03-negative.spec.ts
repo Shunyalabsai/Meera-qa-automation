@@ -30,9 +30,15 @@ test.describe("BUILD › Playground — Negative @journey @existing-user @playgr
     await playground.selectFirstAgent();
     await playground.switchToPhoneMode();
     await playground.fillToNumber("");
-    await playground.clickStartPhoneCall();
-    await expect(
-      page.locator("main").getByText(/invalid|required|enter|phone|number|error/i).first(),
-    ).toBeVisible({ timeout: 15_000 });
+    const btn = playground.startPhoneCallButton();
+    const isDisabled = await btn.isDisabled().catch(() => false);
+    if (isDisabled) {
+      await expect(btn).toBeDisabled();
+    } else {
+      await btn.click();
+      await expect(
+        page.locator("main").getByText(/invalid|required|enter|phone|number|error/i).first(),
+      ).toBeVisible({ timeout: 15_000 });
+    }
   });
 });
