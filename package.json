@@ -35,6 +35,7 @@
     "test:alerts": "playwright test e2e/tests/suite/settings/alerts --grep @alerts",
     "test:billing": "playwright test e2e/tests/suite/settings/billing --grep @billing",
     "test:webhooks": "playwright test e2e/tests/suite/settings/webhooks --grep @webhooks",
+    "test:whatsapp": "playwright test --grep @whatsapp",
     "test:language": "playwright test e2e/tests/suite/global/language --grep @language",
     "test:new-user": "playwright test --grep @new-user",
     "test:existing-user": "playwright test --grep @existing-user",
