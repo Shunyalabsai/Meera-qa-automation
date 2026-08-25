@@ -18,6 +18,7 @@ e2e/data/test-results-merged.json
 e2e/data/test-results-history.json
 e2e/data/test-results-latest.json
 e2e/data/sheet-run-history.json
+e2e/data/all-failed-tests.json
 e2e/data/test-catalog.json
 e2e/REAL-TEST-CATALOG.csv
 meera-500407-7ed504955ec2.json

@@ -71,7 +71,7 @@ function toBase64Png(filePath) {
   }
 }
 
-function buildDashboard() {
+export function buildDashboard(options = {}) {
   const merged = loadJson(mergedFile, { run: {}, runSummary: {} });
   const history = loadJson(historyFile, { runs: [] });
   const catalog = loadJson(catalogFile, { tests: [] });
@@ -1360,4 +1360,9 @@ function renderHtml(data) {
 </html>`;
 }
 
-buildDashboard();
+export const buildDashboardFile = buildDashboard;
+
+// Auto-run if executed directly
+if (process.argv[1] && process.argv[1].endsWith("build-dashboard.mjs")) {
+  buildDashboard();
+}

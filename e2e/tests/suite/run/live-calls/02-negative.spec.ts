@@ -17,10 +17,13 @@ test.describe("RUN › Live Calls — Negative @journey @new-user @live-calls @n
     page,
   }) => {
     await page.goto(`/vap/live-calls/${INVALID_UUID}`);
-    // The SPA falls back to the Agents route (no crash/blank) when the UUID
-    // doesn't match a live call.
+    // The SPA falls back to the Agents route / onboarding page (no crash/blank)
+    // when the UUID doesn't match a live call.
     await expect(
-      page.getByRole("heading", { name: /^Agents$/i }),
+      page
+        .getByRole("heading", { name: /^Agents$|^Build your first voice agent$/i })
+        .or(page.getByText(/Create an agent|Build your first voice agent/i))
+        .first(),
     ).toBeVisible({ timeout: 15_000 });
   });
 

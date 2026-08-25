@@ -25,10 +25,10 @@ export const INSIGHTS_KPI_EMPTY = {
 export const INSIGHTS_CHART_TITLES = [
   "Calls Over Time",
   "Outcome Distribution",
+  "Call Distribution",
   "Agent Performance",
   "Sentiment Trends",
-  "Latency Trends",
-  "Hourly Call Heatmap",
+  "Campaign Performance",
 ] as const;
 
 export const INSIGHTS_DATE_PRESETS = [

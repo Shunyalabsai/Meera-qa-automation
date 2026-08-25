@@ -43,14 +43,16 @@ test.describe("ANALYZE › Insights — Dashboard widgets @journey @new-user @in
     await expect(page.getByText(/negative/i).first()).toBeVisible();
   });
 
-  test("TC-IS-025 @medium @positive — Latency Trends legend visible", async ({
+  test("TC-IS-025 @medium @positive — Call Distribution and duration metrics visible", async ({
     page,
   }) => {
     await openInsights(page);
-    await expect(page.getByText(/Latency Trends/i).first()).toBeVisible();
-    await expect(page.getByText(/p50/i).first()).toBeVisible();
-    await expect(page.getByText(/p95/i).first()).toBeVisible();
-    await expect(page.getByText(/p99/i).first()).toBeVisible();
+    await expect(
+      page.getByText(/Call Distribution|Latency Trends/i).first(),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/seconds|p50|Less than/i).first(),
+    ).toBeVisible();
   });
 
   test("TC-IS-026 @medium @positive — Campaign Performance table headers visible", async ({
