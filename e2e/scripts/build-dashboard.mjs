@@ -5,21 +5,8 @@
  *
  * Generates:
  *  - docs/index.html (for GitHub Pages deployment)
+ *  - index.html (root copy for GitHub Pages root deployment)
  *  - e2e/data/results-sheets/dashboard.html (local artifact)
- *
- * Features:
- *  - Clean dark/light theme styling with Inter font & glassmorphic header
- *  - Top KPI cards, subsystem coverage progress bars, icon badges
- *  - Interactive Chart.js charts (Donut status, Line trend, Subsystem bar)
- *  - 4 Navigation Tabs:
- *      1. Current Run Overview
- *      2. All Test Cases Matrix (1,269 Cases)
- *      3. Execution History & Trends
- *      4. UAT Bug Feedback Log
- *  - Search, Priority, Type, Status & Category Filters
- *  - Interactive Test Inspection Modal with screenshots & step details
- *  - JSON / CSV Export & Print controls
- *  - Direct links to Google Sheets (Input & Output)
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -32,6 +19,7 @@ const mergedFile = path.join(root, "e2e/data/test-results-merged.json");
 const historyFile = path.join(root, "e2e/data/sheet-run-history.json");
 const catalogFile = path.join(root, "e2e/data/test-catalog.json");
 const docsOutFile = path.join(root, "docs/index.html");
+const rootOutFile = path.join(root, "index.html");
 const localOutFile = path.join(root, "e2e/data/results-sheets/dashboard.html");
 
 function loadJson(file, fallback) {
@@ -235,7 +223,7 @@ function buildDashboard() {
     };
   });
 
-  const executedCount = latestRows.length || run.stats?.expected + run.stats?.unexpected + run.stats?.skipped || 18;
+  const executedCount = latestRows.length || (run.stats?.expected || 0) + (run.stats?.unexpected || 0) + (run.stats?.skipped || 0) || 18;
   const passedCount = run.stats?.expected ?? summary.pass ?? 15;
   const failedCount = run.stats?.unexpected ?? summary.fail ?? 1;
   const skippedCount = run.stats?.skipped ?? summary.skipped ?? 2;
@@ -269,15 +257,17 @@ function buildDashboard() {
 
   const html = renderHtml(dashboardData);
 
-  // Write to docs/index.html (GitHub Pages) and e2e/data/results-sheets/dashboard.html
+  // Write to docs/index.html, index.html, and e2e/data/results-sheets/dashboard.html
   fs.mkdirSync(path.dirname(docsOutFile), { recursive: true });
   fs.writeFileSync(docsOutFile, html, "utf8");
+  fs.writeFileSync(rootOutFile, html, "utf8");
 
   fs.mkdirSync(path.dirname(localOutFile), { recursive: true });
   fs.writeFileSync(localOutFile, html, "utf8");
 
   console.log(`\n Dashboard HTML successfully built:`);
-  console.log(` → ${docsOutFile} (GitHub Pages)`);
+  console.log(` → ${docsOutFile} (GitHub Pages docs/)`);
+  console.log(` → ${rootOutFile} (GitHub Pages root)`);
   console.log(` → ${localOutFile} (Local artifact)`);
 }
 
@@ -288,7 +278,7 @@ function renderHtml(data) {
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Shunya Labs — Meera Voice Agent Platform QA Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -317,25 +307,34 @@ function renderHtml(data) {
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', sans-serif;
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
       background-color: var(--bg);
       color: var(--text);
+      font-family: 'Inter', sans-serif;
       line-height: 1.5;
-      padding-bottom: 60px;
       -webkit-font-smoothing: antialiased;
     }
 
     /* Glassmorphism Header */
     header {
-      background: rgba(17, 24, 39, 0.85);
+      background: rgba(17, 24, 39, 0.88);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--card-border);
       position: sticky;
       top: 0;
       z-index: 100;
-      padding: 16px 32px;
+      width: 100%;
+      padding: 14px 24px;
     }
     .header-inner {
       max-width: 1440px;
@@ -344,45 +343,47 @@ function renderHtml(data) {
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 14px;
     }
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
     .logo-badge {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       background: linear-gradient(135deg, #4F46E5, #06B6D4);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: #FFF;
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.35);
+      flex-shrink: 0;
     }
     .brand-text h1 {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
       letter-spacing: -0.02em;
+      line-height: 1.2;
     }
     .brand-text p {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
     }
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .btn {
-      padding: 8px 14px;
+      padding: 7px 12px;
       border-radius: 8px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
@@ -393,6 +394,7 @@ function renderHtml(data) {
       background: var(--card-bg);
       color: var(--text);
       text-decoration: none;
+      white-space: nowrap;
     }
     .btn:hover {
       background: var(--card-hover);
@@ -404,9 +406,6 @@ function renderHtml(data) {
       border: none;
       color: #FFF;
       box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-    }
-    .btn-primary:hover {
-      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.5);
     }
     .status-pill {
       padding: 4px 10px;
@@ -436,23 +435,24 @@ function renderHtml(data) {
     /* Container & Navigation */
     .container {
       max-width: 1440px;
-      margin: 24px auto 0;
-      padding: 0 32px;
+      margin: 20px auto 0;
+      padding: 0 24px 60px;
+      width: 100%;
     }
     .nav-tabs {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       border-bottom: 1px solid var(--card-border);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       overflow-x: auto;
       padding-bottom: 2px;
     }
     .nav-tab {
-      padding: 12px 20px;
+      padding: 10px 18px;
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       border-bottom: 2px solid transparent;
@@ -462,9 +462,7 @@ function renderHtml(data) {
       align-items: center;
       gap: 8px;
     }
-    .nav-tab:hover {
-      color: var(--text);
-    }
+    .nav-tab:hover { color: var(--text); }
     .nav-tab.active {
       color: var(--primary);
       border-bottom-color: var(--primary);
@@ -475,31 +473,26 @@ function renderHtml(data) {
       background: rgba(255, 255, 255, 0.1);
       padding: 2px 8px;
       border-radius: 12px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
     }
     .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .tab-content.active { display: block; }
 
     /* KPI Cards */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
       margin-bottom: 24px;
     }
     .kpi-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: var(--border-radius);
-      padding: 20px;
+      padding: 18px;
       position: relative;
       overflow: hidden;
-      transition: all 0.2s;
+      transition: transform 0.2s, border-color 0.2s;
     }
     .kpi-card:hover {
       border-color: rgba(99, 102, 241, 0.4);
@@ -518,77 +511,71 @@ function renderHtml(data) {
     .kpi-card.cyan::before { background: var(--cyan); }
 
     .kpi-title {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
     }
     .kpi-value {
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 800;
       letter-spacing: -0.03em;
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
+      line-height: 1.1;
     }
     .kpi-sub {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--text-dim);
       margin-top: 6px;
     }
 
     /* Subsystem Performance Breakdown */
     .section-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      margin: 28px 0 16px;
+      margin: 24px 0 14px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .subsystems-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
       margin-bottom: 24px;
     }
     .subsystem-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: var(--border-radius);
-      padding: 18px;
-      transition: all 0.2s;
-    }
-    .subsystem-card:hover {
-      border-color: rgba(99, 102, 241, 0.3);
+      padding: 16px;
     }
     .subsystem-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .subsystem-name {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .subsystem-rate {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 800;
     }
     .progress-bar-bg {
-      height: 8px;
+      height: 7px;
       background: #1F2937;
       border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .progress-bar-fill {
       height: 100%;
@@ -598,16 +585,17 @@ function renderHtml(data) {
     .subsystem-counts {
       display: flex;
       justify-content: space-between;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
     }
 
-    /* Charts Grid */
+    /* Charts Grid - Strictly Constrained */
     .charts-grid {
       display: grid;
       grid-template-columns: 1fr 2fr;
-      gap: 20px;
-      margin-bottom: 28px;
+      gap: 16px;
+      margin-bottom: 24px;
+      width: 100%;
     }
     @media (max-width: 1024px) {
       .charts-grid { grid-template-columns: 1fr; }
@@ -616,14 +604,24 @@ function renderHtml(data) {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: var(--border-radius);
-      padding: 20px;
-      min-height: 320px;
+      padding: 16px;
+      width: 100%;
+      height: 320px;
+      display: flex;
+      flex-direction: column;
     }
     .chart-title {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      margin-bottom: 16px;
-      color: var(--text);
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+    .chart-wrapper {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: calc(100% - 30px);
+      min-height: 0;
     }
 
     /* Filters Bar */
@@ -631,11 +629,11 @@ function renderHtml(data) {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: var(--border-radius);
-      padding: 16px;
-      margin-bottom: 20px;
+      padding: 14px;
+      margin-bottom: 16px;
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
       justify-content: space-between;
     }
@@ -645,14 +643,12 @@ function renderHtml(data) {
       color: #FFF;
       padding: 8px 14px;
       border-radius: 8px;
-      font-size: 0.85rem;
-      min-width: 280px;
+      font-size: 0.82rem;
+      min-width: 260px;
       outline: none;
       transition: border-color 0.2s;
     }
-    .search-input:focus {
-      border-color: var(--primary);
-    }
+    .search-input:focus { border-color: var(--primary); }
     .filter-group {
       display: flex;
       align-items: center;
@@ -663,76 +659,81 @@ function renderHtml(data) {
       background: #1F2937;
       border: 1px solid transparent;
       color: var(--text-muted);
-      padding: 6px 12px;
+      padding: 5px 11px;
       border-radius: 20px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
-    .filter-chip:hover {
-      color: #FFF;
-      background: #374151;
-    }
+    .filter-chip:hover { color: #FFF; background: #374151; }
     .filter-chip.active {
       background: var(--primary);
       color: #FFF;
       border-color: var(--primary);
     }
 
-    /* Test Matrix Table */
+    /* Test Matrix Table - Strict Layout */
     .table-container {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: var(--border-radius);
       overflow-x: auto;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
+      table-layout: fixed;
     }
     thead th {
       background: #0F172A;
       color: var(--text-muted);
-      padding: 12px 16px;
+      padding: 12px 14px;
       font-weight: 600;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       border-bottom: 1px solid var(--card-border);
       white-space: nowrap;
+      position: sticky;
+      top: 0;
     }
     tbody tr {
-      border-bottom: 1px solid rgba(31, 41, 55, 0.6);
+      border-bottom: 1px solid rgba(31, 41, 55, 0.5);
       transition: background-color 0.15s;
     }
-    tbody tr:hover {
-      background-color: rgba(30, 41, 59, 0.7);
-    }
+    tbody tr:hover { background-color: rgba(30, 41, 59, 0.6); }
     tbody td {
-      padding: 12px 16px;
+      padding: 10px 14px;
       vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .tc-id {
       font-family: var(--font-mono);
       font-weight: 700;
       color: #93C5FD;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       background: rgba(59, 130, 246, 0.1);
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 2px 7px;
+      border-radius: 5px;
       display: inline-block;
     }
     .badge {
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.03em;
       display: inline-block;
+      white-space: nowrap;
     }
     .badge-pass { background: rgba(16, 185, 129, 0.15); color: #34D399; }
     .badge-fail { background: rgba(239, 68, 68, 0.15); color: #F87171; }
@@ -743,41 +744,35 @@ function renderHtml(data) {
     .badge-p2 { background: rgba(59, 130, 246, 0.2); color: #93C5FD; }
     .badge-p3 { background: rgba(107, 114, 128, 0.2); color: #D1D5DB; }
 
-    .badge-category {
-      background: rgba(139, 92, 246, 0.15);
-      color: #C4B5FD;
-    }
-    .badge-module {
-      background: rgba(6, 182, 212, 0.15);
-      color: #67E8F9;
-    }
+    .badge-category { background: rgba(139, 92, 246, 0.15); color: #C4B5FD; }
+    .badge-module { background: rgba(6, 182, 212, 0.15); color: #67E8F9; }
 
-    /* Test Detail Modal */
+    /* Modal Inspection Overlay */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       z-index: 200;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
     }
-    .modal-overlay.active { display: flex; animation: fadeIn 0.2s ease; }
+    .modal-overlay.active { display: flex; }
     .modal-box {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      max-width: 840px;
+      border-radius: 14px;
+      max-width: 800px;
       width: 100%;
-      max-height: 90vh;
+      max-height: 88vh;
       overflow-y: auto;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     }
     .modal-head {
-      padding: 20px 24px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--card-border);
       display: flex;
       justify-content: space-between;
@@ -791,41 +786,37 @@ function renderHtml(data) {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       cursor: pointer;
       line-height: 1;
     }
     .modal-close:hover { color: #FFF; }
-    .modal-body {
-      padding: 24px;
-    }
-    .detail-section {
-      margin-bottom: 20px;
-    }
+    .modal-body { padding: 20px; }
+    .detail-section { margin-bottom: 16px; }
     .detail-label {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .detail-content {
       background: #0B0F19;
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 14px;
-      font-size: 0.88rem;
+      padding: 12px;
+      font-size: 0.85rem;
       white-space: pre-wrap;
       word-break: break-word;
     }
     .code-box {
       font-family: var(--font-mono);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       background: #000;
       color: #F87171;
       border: 1px solid rgba(239, 68, 68, 0.3);
-      padding: 14px;
+      padding: 12px;
       border-radius: 8px;
       overflow-x: auto;
     }
@@ -833,7 +824,7 @@ function renderHtml(data) {
       max-width: 100%;
       border-radius: 8px;
       border: 1px solid var(--card-border);
-      margin-top: 10px;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -918,11 +909,15 @@ function renderHtml(data) {
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-title">Status Distribution</div>
-          <canvas id="statusChart"></canvas>
+          <div class="chart-wrapper">
+            <canvas id="statusChart"></canvas>
+          </div>
         </div>
         <div class="chart-card">
           <div class="chart-title">Pass Rate Trend Across Executions</div>
-          <canvas id="trendChart"></canvas>
+          <div class="chart-wrapper">
+            <canvas id="trendChart"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -951,14 +946,14 @@ function renderHtml(data) {
         <table id="matrixTable">
           <thead>
             <tr>
-              <th>TC ID</th>
-              <th>Source</th>
-              <th>Module</th>
-              <th>Test Scenario / Title</th>
-              <th>Priority</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th style="width: 120px;">TC ID</th>
+              <th style="width: 110px;">Source</th>
+              <th style="width: 140px;">Module</th>
+              <th style="width: 400px;">Test Scenario / Title</th>
+              <th style="width: 90px;">Priority</th>
+              <th style="width: 100px;">Type</th>
+              <th style="width: 90px;">Status</th>
+              <th style="width: 90px;">Action</th>
             </tr>
           </thead>
           <tbody id="matrixBody">
@@ -970,22 +965,24 @@ function renderHtml(data) {
 
     <!-- TAB 3: EXECUTION HISTORY -->
     <div id="tab-trends" class="tab-content">
-      <div class="chart-card" style="margin-bottom: 24px;">
+      <div class="chart-card" style="margin-bottom: 20px; height: 320px;">
         <div class="chart-title">Historical Execution Progression</div>
-        <canvas id="historyBarChart"></canvas>
+        <div class="chart-wrapper">
+          <canvas id="historyBarChart"></canvas>
+        </div>
       </div>
 
       <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th>Run ID</th>
-              <th>Execution Timestamp</th>
-              <th>Passed</th>
-              <th>Failed</th>
-              <th>Skipped</th>
-              <th>Pass Rate</th>
-              <th>Duration</th>
+              <th style="width: 200px;">Run ID</th>
+              <th style="width: 220px;">Execution Timestamp</th>
+              <th style="width: 100px;">Passed</th>
+              <th style="width: 100px;">Failed</th>
+              <th style="width: 100px;">Skipped</th>
+              <th style="width: 120px;">Pass Rate</th>
+              <th style="width: 120px;">Duration</th>
             </tr>
           </thead>
           <tbody>
@@ -1011,14 +1008,14 @@ function renderHtml(data) {
         <table>
           <thead>
             <tr>
-              <th>TC ID</th>
-              <th>Scenario</th>
-              <th>Preconditions</th>
-              <th>Test Steps</th>
-              <th>Expected / Suggestion</th>
-              <th>Priority</th>
-              <th>Type</th>
-              <th>Dev Status</th>
+              <th style="width: 100px;">TC ID</th>
+              <th style="width: 240px;">Scenario</th>
+              <th style="width: 180px;">Preconditions</th>
+              <th style="width: 320px;">Test Steps</th>
+              <th style="width: 320px;">Expected / Suggestion</th>
+              <th style="width: 90px;">Priority</th>
+              <th style="width: 110px;">Type</th>
+              <th style="width: 110px;">Dev Status</th>
             </tr>
           </thead>
           <tbody>
@@ -1044,7 +1041,7 @@ function renderHtml(data) {
   <div class="modal-overlay" id="inspectModal" onclick="closeModal(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
       <div class="modal-head">
-        <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
           <span class="tc-id" id="modal-tcid">TC-001</span>
           <span class="badge badge-category" id="modal-category">Automated</span>
           <span class="badge badge-module" id="modal-module">BUILD</span>
@@ -1078,7 +1075,7 @@ function renderHtml(data) {
         </div>
         <div class="detail-section">
           <div class="detail-label">Spec File Pointer</div>
-          <div class="detail-content" id="modal-specfile" style="font-family: var(--font-mono); font-size: 0.8rem;"></div>
+          <div class="detail-content" id="modal-specfile" style="font-family: var(--font-mono); font-size: 0.78rem;"></div>
         </div>
       </div>
     </div>
@@ -1118,7 +1115,7 @@ function renderHtml(data) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-              legend: { position: 'bottom', labels: { color: '#9CA3AF', font: { family: 'Inter', size: 12 } } }
+              legend: { position: 'bottom', labels: { color: '#9CA3AF', font: { family: 'Inter', size: 11 } } }
             },
             cutout: '70%'
           }
@@ -1136,7 +1133,7 @@ function renderHtml(data) {
               label: 'Pass Rate %',
               data: DASHBOARD_DATA.trend.map(t => t.passRate),
               borderColor: '#6366F1',
-              backgroundColor: 'rgba(99, 102, 241, 0.15)',
+              backgroundColor: 'rgba(99, 102, 241, 0.12)',
               fill: true,
               tension: 0.35,
               pointBackgroundColor: '#6366F1',
@@ -1218,19 +1215,18 @@ function renderHtml(data) {
 
       document.getElementById('matrix-count').innerText = filtered.length;
 
-      // Render rows (limit to 300 for snappy DOM rendering, with notice)
-      const renderList = filtered.slice(0, 400);
-      renderList.forEach(t => {
+      // Render items
+      filtered.forEach(t => {
         const tr = document.createElement('tr');
         tr.innerHTML = \`
           <td><span class="tc-id">\${t.id}</span></td>
           <td><span class="badge badge-category">\${t.category}</span></td>
           <td><span class="badge badge-module">\${t.module}</span></td>
-          <td style="font-weight: 500;">\${t.title}</td>
+          <td style="font-weight: 500;" title="\${t.title}">\${t.title}</td>
           <td><span class="badge \${t.priority === 'P0' || t.priority === 'HIGH' ? 'badge-p0' : 'badge-p1'}">\${t.priority}</span></td>
           <td><span class="badge badge-category">\${t.type}</span></td>
           <td><span class="badge \${t.status === 'Pass' ? 'badge-pass' : t.status === 'Fail' ? 'badge-fail' : 'badge-skip'}">\${t.status}</span></td>
-          <td><button class="btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick="inspectTest('\${t.id}')">Inspect</button></td>
+          <td><button class="btn" style="padding: 3px 8px; font-size: 0.72rem;" onclick="inspectTest('\${t.id}')">Inspect</button></td>
         \`;
         tbody.appendChild(tr);
       });
