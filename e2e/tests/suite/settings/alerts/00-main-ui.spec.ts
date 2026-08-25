@@ -4,21 +4,22 @@ import { isAlertsRulesEmpty } from "../../../../helpers/alerts.helper";
 import { ALERTS_COPY } from "../../../../data/alerts-data";
 
 test.describe("SETTINGS › Alerts — Main UI @journey @new-user @alerts", () => {
-  test.beforeEach(async ({ page }) => {
+  test("TC-AL-002 @high @ui — Rules tab empty state shows No alert rules yet", async ({
+    page,
+  }) => {
     test.skip(
       !(await isAlertsRulesEmpty(page)),
       "Alert rules exist — empty state not shown",
     );
-  });
-
-  test("TC-AL-002 @high @ui — Rules tab empty state shows No alert rules yet", async ({
-    page,
-  }) => {
     const alerts = new AlertsPage(page);
     await alerts.expectRulesEmptyState();
   });
 
   test("TC-AL-003 @high @ui — Recent events empty state", async ({ page }) => {
+    test.skip(
+      !(await isAlertsRulesEmpty(page)),
+      "Alert rules exist — empty state not shown",
+    );
     const alerts = new AlertsPage(page);
     await alerts.open();
     await alerts.rulesTab().click();
@@ -44,6 +45,10 @@ test.describe("SETTINGS › Alerts — Main UI @journey @new-user @alerts", () =
   });
 
   test("TC-AL-006 @medium @ui — Channels tab empty state", async ({ page }) => {
+    test.skip(
+      !(await isAlertsRulesEmpty(page)),
+      "Alert rules exist — empty state not shown",
+    );
     const alerts = new AlertsPage(page);
     await alerts.open();
     await alerts.expectChannelsEmptyState();

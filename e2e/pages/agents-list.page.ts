@@ -33,6 +33,7 @@ export class AgentsListPage {
     const name = await this.agentListItems()
       .first()
       .locator("span.font-medium")
+      .first()
       .textContent()
       .catch(() => null);
     return name?.trim() || null;
@@ -57,7 +58,7 @@ export class AgentsListPage {
     return this.page
       .locator("li")
       .filter({
-        has: this.page.locator("span.font-medium", {
+        has: this.page.locator("span.font-medium").filter({
           hasText: new RegExp(`^${escaped}$`),
         }),
       })
