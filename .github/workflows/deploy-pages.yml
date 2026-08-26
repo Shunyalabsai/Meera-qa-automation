@@ -31,8 +31,10 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Dashboard
-        run: node e2e/scripts/build-dashboard.mjs
+      - name: Scan Test Catalog & Build Dashboard
+        run: |
+          node e2e/scripts/scan-test-catalog.mjs
+          node e2e/scripts/build-dashboard.mjs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
