@@ -46,20 +46,6 @@ function formatDate(iso) {
   }
 }
 
-function shortDate(iso) {
-  if (!iso) return "";
-  try {
-    return new Date(iso).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return iso;
-  }
-}
-
 function toBase64Png(filePath) {
   if (!filePath || !fs.existsSync(filePath)) return "";
   try {
@@ -71,7 +57,7 @@ function toBase64Png(filePath) {
   }
 }
 
-export function buildDashboard(options = {}) {
+export function buildDashboard() {
   const history = loadJson(historyFile, { runs: [] });
   const catalog = loadJson(catalogFile, { tests: [] });
 
@@ -84,11 +70,11 @@ export function buildDashboard(options = {}) {
     return timeB - timeA;
   });
 
-  // Find the largest full regression execution run
+  // Find full regression execution run
   const fullRegressionRun = sortedRuns.find(r => (r.stats?.expected || r.passed || 0) > 500) || sortedRuns[0] || {};
   const latestRun = sortedRuns[0] || {};
 
-  // Build aggregated execution map from full regression run + latest runs
+  // Build aggregated execution map
   const executionMap = new Map();
 
   for (const r of [...sortedRuns].reverse()) {
@@ -111,7 +97,7 @@ export function buildDashboard(options = {}) {
     }
   }
 
-  // Build Master Test Matrix (1,301 Total: Automated + Manual QA + UAT Cases)
+  // Build Unified Master Test Matrix (1,301 Total Tests in one collection)
   const masterTests = [];
 
   // 1. Automated Catalog Tests (1,126)
@@ -119,7 +105,7 @@ export function buildDashboard(options = {}) {
     const exec = executionMap.get(t.id);
     masterTests.push({
       id: t.id || "TC-AUTO",
-      category: "Automated",
+      source: "Automated",
       module: t.tab || t.sectionKey || "BUILD",
       title: t.title || t.rawTitle || "",
       describe: t.describe || "",
@@ -143,7 +129,7 @@ export function buildDashboard(options = {}) {
   for (const m of Object.values(manual.MANUAL_TEST_CASES || {})) {
     masterTests.push({
       id: m.id || "TC-MANUAL",
-      category: "Manual QA",
+      source: "Manual QA",
       module: m.module || "General",
       title: m.name || "",
       describe: "Manual QA Verification Plan",
@@ -167,7 +153,7 @@ export function buildDashboard(options = {}) {
   for (const u of (uat.UAT_CASES || [])) {
     masterTests.push({
       id: u[0] || "UAT-CASE",
-      category: "UAT",
+      source: "UAT Feedback",
       module: "UAT Feedback (July 2026)",
       title: u[1] || "",
       describe: `UAT Scenario: ${u[1]} (${u[6] || "Suggestion"})`,
@@ -242,7 +228,6 @@ export function buildDashboard(options = {}) {
     const runId = r.runId || (r.runAt ? `RUN-${r.runAt.replace(/[:.]/g, "-")}` : `RUN-${idx + 1}`);
     const isoDate = r.runAt || r.runId || new Date().toISOString();
 
-    // Extract module breakdown if available
     const modules = {};
     const runTests = [];
 
@@ -332,7 +317,7 @@ export function buildDashboard(options = {}) {
   fs.writeFileSync(localOutFile, html, "utf8");
 
   console.log("\n✨ Wide Screen QA Dashboard successfully built:");
-  console.log(` → Total Inventory: ${dashboardData.summary.totalInventory} (${dashboardData.summary.autoInventory} Auto + ${dashboardData.summary.manualInventory} Manual + ${dashboardData.summary.uatInventory} UAT)`);
+  console.log(` → Total Unified Inventory: ${dashboardData.summary.totalInventory} Tests`);
   console.log(` → Total Execution History Runs: ${dashboardData.runs.length}`);
   console.log(` → Overall Pass Rate: ${dashboardData.summary.passRate}%`);
   console.log(` → Output: ${docsOutFile}\n`);
@@ -346,6 +331,9 @@ function generateWideScreenHtml(data) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Shunya Labs AI — Meera Voice Agent Platform QA Automation Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -396,7 +384,7 @@ function generateWideScreenHtml(data) {
       padding: 0 32px 64px 32px;
     }
 
-    /* Glassmorphism Sticky Header without Target */
+    /* Glassmorphism Sticky Header */
     header {
       background: rgba(22, 27, 34, 0.94);
       backdrop-filter: blur(16px);
@@ -976,7 +964,7 @@ function generateWideScreenHtml(data) {
       margin-top: 2px;
     }
 
-    /* ── Modal Dialog (Run Details & Test Inspection) ── */
+    /* ── Modal Dialog ── */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -1108,7 +1096,7 @@ function generateWideScreenHtml(data) {
 </head>
 <body>
 
-  <!-- Sticky Glass Header without Target -->
+  <!-- Sticky Glass Header -->
   <header>
     <div class="header-inner">
       <div class="brand">
@@ -1133,14 +1121,14 @@ function generateWideScreenHtml(data) {
 
   <div class="dashboard-container">
 
-    <!-- Primary Navigation Tabs -->
+    <!-- Primary Navigation Tabs (Single Unified All Test Cases Tab) -->
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchTab('overview', this)">
         <span>Current Run Overview</span>
       </button>
       <button class="nav-tab" onclick="switchTab('matrix', this)">
-        <span>All Test Cases Matrix</span>
-        <span class="tab-badge">${data.summary.totalInventory}</span>
+        <span>All Test Cases</span>
+        <span class="tab-badge">${data.summary.totalInventory.toLocaleString()}</span>
       </button>
       <button class="nav-tab" onclick="switchTab('history', this)">
         <span>Execution History</span>
@@ -1157,9 +1145,9 @@ function generateWideScreenHtml(data) {
       <!-- Top KPI Summary Cards -->
       <div class="kpi-grid">
         <div class="kpi-card">
-          <div class="kpi-title">Total Test Inventory <span>📋</span></div>
+          <div class="kpi-title">Total Test Suite Inventory <span>📋</span></div>
           <div class="kpi-value">${data.summary.totalInventory.toLocaleString()}</div>
-          <div class="kpi-sub">${data.summary.autoInventory} Automated + ${data.summary.manualInventory} Manual + ${data.summary.uatInventory} UAT</div>
+          <div class="kpi-sub">Complete QA & Automation Test Suite</div>
         </div>
         <div class="kpi-card success">
           <div class="kpi-title">Passed Executions <span>✅</span></div>
@@ -1216,7 +1204,7 @@ function generateWideScreenHtml(data) {
 
     </div>
 
-    <!-- TAB 2: TEST CASES MATRIX (1,301 Total) -->
+    <!-- TAB 2: UNIFIED ALL TEST CASES (1,301 Total) -->
     <div id="tab-matrix" class="tab-content">
       <div class="filter-bar">
         <div class="filter-top-row">
@@ -1224,22 +1212,13 @@ function generateWideScreenHtml(data) {
           <span id="showingCount" class="counter-badge">Showing 1,301 of 1,301</span>
         </div>
 
-        <!-- Source Filters -->
-        <div class="filter-group" id="categoryFilters">
-          <span style="font-size:12px; font-weight:700; color:var(--muted); margin-right:4px;">Source:</span>
-          <button class="filter-chip active" onclick="setFilter('category', 'ALL', this)">All (${data.summary.totalInventory})</button>
-          <button class="filter-chip" onclick="setFilter('category', 'Automated', this)">Automated (${data.summary.autoInventory})</button>
-          <button class="filter-chip" onclick="setFilter('category', 'Manual QA', this)">Manual QA (${data.summary.manualInventory})</button>
-          <button class="filter-chip" onclick="setFilter('category', 'UAT', this)">UAT Cases (${data.summary.uatInventory})</button>
-        </div>
-
-        <!-- Status Filters -->
+        <!-- Unified Status Filters -->
         <div class="filter-group" id="statusFilters">
-          <span style="font-size:12px; font-weight:700; color:var(--muted); margin-right:4px;">Status:</span>
-          <button class="filter-chip active" onclick="setFilter('status', 'ALL', this)">All Statuses</button>
-          <button class="filter-chip" onclick="setFilter('status', 'Pass', this)">Passed</button>
-          <button class="filter-chip" onclick="setFilter('status', 'Fail', this)">Failed</button>
-          <button class="filter-chip" onclick="setFilter('status', 'Skipped', this)">Skipped</button>
+          <span style="font-size:12px; font-weight:700; color:var(--muted); margin-right:4px;">Status Filter:</span>
+          <button class="filter-chip active" onclick="setFilter('status', 'ALL', this)">All (${data.summary.totalInventory.toLocaleString()})</button>
+          <button class="filter-chip" onclick="setFilter('status', 'Pass', this)">Passed (${data.summary.passed.toLocaleString()})</button>
+          <button class="filter-chip" onclick="setFilter('status', 'Fail', this)">Failed (${data.summary.failed})</button>
+          <button class="filter-chip" onclick="setFilter('status', 'Skipped', this)">Skipped (${data.summary.skipped})</button>
         </div>
       </div>
 
@@ -1247,9 +1226,8 @@ function generateWideScreenHtml(data) {
         <table>
           <thead>
             <tr>
-              <th style="width: 130px;">Test Case ID</th>
-              <th style="width: 120px;">Source</th>
-              <th style="width: 160px;">Module</th>
+              <th style="width: 140px;">Test Case ID</th>
+              <th style="width: 180px;">Module</th>
               <th>Scenario / Title</th>
               <th style="width: 100px;">Priority</th>
               <th style="width: 110px;">Type</th>
@@ -1264,7 +1242,7 @@ function generateWideScreenHtml(data) {
       </div>
 
       <div class="pagination-bar">
-        <div style="font-size:13px; color:var(--muted);" id="paginationInfo">Showing 1 to 50 of 1,301 tests</div>
+        <div style="font-size:13px; color:var(--muted);" id="paginationInfo">Showing 1 to 100 of 1,301 tests</div>
         <div class="pagination-controls">
           <button class="btn" id="btnPrevPage" onclick="changePage(-1)">&larr; Previous</button>
           <span id="pageNumberDisplay" style="font-size:13px; font-weight:700; color:#FFF; padding:0 8px;">Page 1</span>
@@ -1323,7 +1301,6 @@ function generateWideScreenHtml(data) {
     const historyData = DASHBOARD_DATA.runs || [];
 
     // State for filtering & pagination
-    let currentCategory = 'ALL';
     let currentStatus = 'ALL';
     let currentSearch = '';
     let currentModalRun = null;
@@ -1392,7 +1369,6 @@ function generateWideScreenHtml(data) {
 
     function getFilteredData() {
       return DASHBOARD_DATA.tests.filter(t => {
-        const matchCat = currentCategory === 'ALL' || t.category === currentCategory;
         const matchStatus = currentStatus === 'ALL' || t.status === currentStatus;
         const q = currentSearch.toLowerCase();
         const matchSearch = !q ||
@@ -1400,7 +1376,7 @@ function generateWideScreenHtml(data) {
           (t.title && t.title.toLowerCase().includes(q)) ||
           (t.module && t.module.toLowerCase().includes(q)) ||
           (t.steps && t.steps.toLowerCase().includes(q));
-        return matchCat && matchStatus && matchSearch;
+        return matchStatus && matchSearch;
       });
     }
 
@@ -1440,13 +1416,11 @@ function generateWideScreenHtml(data) {
 
       tbody.innerHTML = pageData.map(t => {
         const badgeClass = t.status === 'Pass' ? 'badge-pass' : t.status === 'Fail' ? 'badge-fail' : 'badge-skip';
-        const sourceBadge = t.category === 'Automated' ? 'badge-pass' : t.category === 'Manual QA' ? 'badge-p1' : 'badge-pass';
         return \`
           <tr>
             <td class="tc-id">\${esc(t.id)}</td>
-            <td><span class="badge \${sourceBadge}">\${esc(t.category)}</span></td>
-            <td>\${esc(t.module)}</td>
-            <td style="color: #FFF; font-weight: 500;">\${esc(t.title)}</td>
+            <td style="color: #FFF; font-weight: 600;">\${esc(t.module)}</td>
+            <td style="color: #E6EDF3; font-weight: 500;">\${esc(t.title)}</td>
             <td><span class="badge badge-p1">\${esc(t.priority)}</span></td>
             <td>\${esc(t.type)}</td>
             <td><span class="badge \${badgeClass}">\${esc(t.status)}</span></td>
@@ -1470,13 +1444,8 @@ function generateWideScreenHtml(data) {
 
     function setFilter(type, value, btn) {
       currentPage = 1;
-      if (type === 'category') {
-        currentCategory = value;
-        document.querySelectorAll('#categoryFilters .filter-chip').forEach(c => c.classList.remove('active'));
-      } else {
-        currentStatus = value;
-        document.querySelectorAll('#statusFilters .filter-chip').forEach(c => c.classList.remove('active'));
-      }
+      currentStatus = value;
+      document.querySelectorAll('#statusFilters .filter-chip').forEach(c => c.classList.remove('active'));
       btn.classList.add('active');
       renderMatrix();
     }
@@ -1793,10 +1762,9 @@ function generateWideScreenHtml(data) {
     }
 
     function exportMatrixCsv() {
-      const headers = ['Test Case ID', 'Source', 'Module', 'Title', 'Priority', 'Type', 'Status'];
+      const headers = ['Test Case ID', 'Module', 'Title', 'Priority', 'Type', 'Status'];
       const rows = DASHBOARD_DATA.tests.map(t => [
         t.id,
-        t.category,
         t.module,
         \`"\${(t.title || '').replace(/"/g, '""')}"\`,
         t.priority,
@@ -1807,7 +1775,7 @@ function generateWideScreenHtml(data) {
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement('a');
       link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'meera_qa_test_matrix.csv');
+      link.setAttribute('download', 'meera_qa_all_test_cases.csv');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
