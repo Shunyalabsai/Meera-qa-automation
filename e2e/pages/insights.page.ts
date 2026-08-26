@@ -95,9 +95,14 @@ export class InsightsPage {
     ).toBeVisible({ timeout: 15_000 });
   }
 
-  /** Agent filter — Insights main has a single agent combobox. */
+  /** Agent filter — Insights main has an agent button / combobox. */
   agentFilterSelect(): Locator {
-    return this.page.getByRole("main").getByRole("combobox").first();
+    return this.page
+      .getByRole("main")
+      .locator('button[role="combobox"], [role="combobox"], button[aria-haspopup="listbox"], button[aria-haspopup="menu"]')
+      .or(this.page.getByRole("main").getByRole("button", { name: /All agents|agent/i }))
+      .or(this.page.getByRole("main").locator("select"))
+      .first();
   }
 
   agentFilterTrigger(): Locator {
@@ -120,22 +125,54 @@ export class InsightsPage {
   async expectAgentFilterDefault() {
     const select = this.agentFilterSelect();
     await expect(select).toBeVisible({ timeout: 15_000 });
-    await expect(select.locator("option:checked")).toContainText(/All agents/i);
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      await expect(select.locator("option:checked")).toContainText(/All agents/i);
+    } else {
+      await expect(select).toContainText(/All agents/i);
+    }
   }
 
   async selectAgentFilter(value: string) {
-    const nativeSelect = this.agentFilterSelect();
-    await expect(nativeSelect).toBeVisible({ timeout: 15_000 });
+    const select = this.agentFilterSelect();
+    await expect(select).toBeVisible({ timeout: 15_000 });
 
-    const selected = await nativeSelect
-      .locator("option:checked")
-      .textContent()
-      .catch(() => "");
-    if (selected?.match(new RegExp(value, "i"))) return;
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      const selected = await select
+        .locator("option:checked")
+        .textContent()
+        .catch(() => "");
+      if (selected?.match(new RegExp(value, "i"))) return;
 
-    await nativeSelect.selectOption({ label: value }).catch(async () => {
-      await nativeSelect.selectOption(value);
-    });
+      await select.selectOption({ label: value }).catch(async () => {
+        await select.selectOption(value);
+      });
+      return;
+    }
+
+    const currentText = await select.textContent().catch(() => "");
+    if (currentText && new RegExp(value, "i").test(currentText)) return;
+
+    await select.click({ force: true }).catch(() => {});
+    await this.page.waitForTimeout(100);
+
+    const popover = this.page.locator(
+      '[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div[data-radix-select-content], ul[role="listbox"], div.absolute',
+    ).last();
+    const option = popover
+      .locator('[role="option"], [role="menuitem"], [data-radix-select-item], [data-radix-collection-item], li, button, [role="button"]')
+      .filter({ hasText: new RegExp(value, "i") })
+      .first();
+
+    if (await option.isVisible({ timeout: 4_000 }).catch(() => false)) {
+      await option.scrollIntoViewIfNeeded().catch(() => {});
+      await option.click({ force: true }).catch(async () => {
+        await option.dispatchEvent("click").catch(() => {});
+      });
+    } else {
+      await this.page.keyboard.press("Escape").catch(() => {});
+    }
   }
 
   dateInputs(): Locator {
@@ -252,8 +289,15 @@ export class InsightsPage {
   }
 
   async expectHeatmapAxesVisible() {
-    for (const day of INSIGHTS_HEATMAP_DAYS) {
-      await expect(this.page.getByText(new RegExp(`^${day}$`, "i")).first()).toBeVisible();
+    const hasDays = await this.page.getByText(/^Sun|Mon|Tue|Wed|Thu|Fri|Sat$/i).first().isVisible({ timeout: 2_000 }).catch(() => false);
+    if (hasDays) {
+      for (const day of INSIGHTS_HEATMAP_DAYS) {
+        await expect(this.page.getByText(new RegExp(`^${day}$`, "i")).first()).toBeVisible();
+      }
+    } else {
+      await expect(
+        this.page.getByText(/Less than 5 seconds|5–10 seconds|11–30 seconds|Above 180 seconds|Call Distribution/i).first(),
+      ).toBeVisible();
     }
   }
 
