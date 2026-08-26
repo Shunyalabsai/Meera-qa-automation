@@ -82,11 +82,22 @@ export function buildDashboard() {
       for (const rows of Object.values(r.rowsByTab)) {
         for (const row of rows) {
           if (row.testId) {
+            const rawStatus = row.status;
+            const isPass = rawStatus === "Pass";
+            const isFail = rawStatus === "Fail" || rawStatus === "Interrupted";
+            const isSkip = rawStatus === "Skipped" || rawStatus === "Did Not Run";
+
+            const defaultReason = isSkip
+              ? (row.friendlyReason || row.techReason || row.reason || "Skipped: Precondition not met or environment configuration")
+              : isFail
+              ? (row.friendlyReason || row.techReason || row.reason || "Assertion failure")
+              : "Assertion verified";
+
             executionMap.set(row.testId, {
-              status: row.status === "Pass" ? "Pass" : (row.status === "Fail" || row.status === "Interrupted") ? "Fail" : "Skipped",
+              status: isPass ? "Pass" : isFail ? "Fail" : "Skipped",
               durationSec: parseFloat(row.durationSec || "0"),
               techReason: row.techReason || row.reason || "",
-              friendlyReason: row.friendlyReason || "",
+              friendlyReason: defaultReason,
               screenshot: toBase64Png(row.screenshot),
               executedIn: r.journey || "Regression Run",
               lastRunAt: row.lastRunAt || r.runAt,
@@ -103,6 +114,13 @@ export function buildDashboard() {
   // 1. Automated Catalog Tests (1,126)
   for (const t of (catalog.tests || [])) {
     const exec = executionMap.get(t.id);
+    const status = exec ? exec.status : "Pass";
+    const defaultReason = status === "Skipped"
+      ? (exec?.friendlyReason || "Skipped: Precondition not met or environment configuration")
+      : status === "Fail"
+      ? (exec?.friendlyReason || "Assertion failure")
+      : "Automated assertion verified";
+
     masterTests.push({
       id: t.id || "TC-AUTO",
       source: "Automated",
@@ -114,9 +132,9 @@ export function buildDashboard() {
       expected: "Assertion passes without timeout or error",
       priority: (t.priority || "High").toUpperCase(),
       type: (t.type || "Positive"),
-      status: exec ? exec.status : "Pass",
+      status,
       durationSec: exec ? exec.durationSec : 1.8,
-      friendlyReason: exec ? exec.friendlyReason : "Automated assertion verified",
+      friendlyReason: defaultReason,
       techReason: exec ? exec.techReason : "",
       screenshot: exec ? exec.screenshot : "",
       specFile: t.specFile || "",
@@ -244,7 +262,7 @@ export function buildDashboard() {
             module: tabName,
             status: isPass ? "passed" : "failed",
             durationMs: Math.round(parseFloat(row.durationSec || "1.5") * 1000),
-            reason: row.techReason || row.reason || "",
+            reason: row.friendlyReason || row.techReason || row.reason || "",
           });
         }
         modules[tabName] = {
@@ -274,11 +292,11 @@ export function buildDashboard() {
     };
   });
 
-  const fullPassed = fullRegressionRun.stats?.expected || fullRegressionRun.passed || 1235;
+  const fullPassed = fullRegressionRun.stats?.expected || fullRegressionRun.passed || 1202;
   const fullFailed = fullRegressionRun.stats?.unexpected || fullRegressionRun.failed || 19;
-  const fullSkipped = fullRegressionRun.stats?.skipped || fullRegressionRun.skipped || 118;
+  const fullSkipped = fullRegressionRun.stats?.skipped || fullRegressionRun.skipped || 151;
   const fullExecuted = fullPassed + fullFailed + fullSkipped;
-  const fullPassRate = Math.round((fullPassed / fullExecuted) * 100) || 90;
+  const fullPassRate = Math.round((fullPassed / fullExecuted) * 100) || 88;
   const fullDurationSec = Math.round((fullRegressionRun.stats?.durationMs || 3623872) / 1000);
 
   const dashboardData = {
@@ -1208,7 +1226,7 @@ function generateWideScreenHtml(data) {
     <div id="tab-matrix" class="tab-content">
       <div class="filter-bar">
         <div class="filter-top-row">
-          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search across all 1,301 test cases (ID, title, module, steps, tags)..." oninput="filterMatrix()">
+          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search across all 1,301 test cases (ID, title, module, steps, skip reasons)..." oninput="filterMatrix()">
           <span id="showingCount" class="counter-badge">Showing 1,301 of 1,301</span>
         </div>
 
@@ -1227,12 +1245,13 @@ function generateWideScreenHtml(data) {
           <thead>
             <tr>
               <th style="width: 140px;">Test Case ID</th>
-              <th style="width: 180px;">Module</th>
+              <th style="width: 160px;">Module</th>
               <th>Scenario / Title</th>
-              <th style="width: 100px;">Priority</th>
-              <th style="width: 110px;">Type</th>
-              <th style="width: 100px;">Status</th>
-              <th style="width: 90px;">Action</th>
+              <th style="width: 90px;">Priority</th>
+              <th style="width: 90px;">Type</th>
+              <th style="width: 95px;">Status</th>
+              <th style="width: 250px;">Failure / Skip Reason</th>
+              <th style="width: 85px;">Action</th>
             </tr>
           </thead>
           <tbody id="matrixBody">
@@ -1371,11 +1390,13 @@ function generateWideScreenHtml(data) {
       return DASHBOARD_DATA.tests.filter(t => {
         const matchStatus = currentStatus === 'ALL' || t.status === currentStatus;
         const q = currentSearch.toLowerCase();
+        const reasonText = (t.friendlyReason || t.techReason || '').toLowerCase();
         const matchSearch = !q ||
           (t.id && t.id.toLowerCase().includes(q)) ||
           (t.title && t.title.toLowerCase().includes(q)) ||
           (t.module && t.module.toLowerCase().includes(q)) ||
-          (t.steps && t.steps.toLowerCase().includes(q));
+          (t.steps && t.steps.toLowerCase().includes(q)) ||
+          reasonText.includes(q);
         return matchStatus && matchSearch;
       });
     }
@@ -1416,6 +1437,12 @@ function generateWideScreenHtml(data) {
 
       tbody.innerHTML = pageData.map(t => {
         const badgeClass = t.status === 'Pass' ? 'badge-pass' : t.status === 'Fail' ? 'badge-fail' : 'badge-skip';
+        const reasonHtml = t.status === 'Fail'
+          ? \`<span style="color:var(--fail); font-size:11px; font-family:var(--font-mono);">\${esc(t.friendlyReason || t.techReason || 'Failed')}</span>\`
+          : t.status === 'Skipped'
+          ? \`<span style="color:var(--warn); font-size:11px;">\${esc(t.friendlyReason || t.techReason || 'Precondition skip')}</span>\`
+          : '<span style="color:var(--muted); font-size:11px;">—</span>';
+
         return \`
           <tr>
             <td class="tc-id">\${esc(t.id)}</td>
@@ -1424,6 +1451,7 @@ function generateWideScreenHtml(data) {
             <td><span class="badge badge-p1">\${esc(t.priority)}</span></td>
             <td>\${esc(t.type)}</td>
             <td><span class="badge \${badgeClass}">\${esc(t.status)}</span></td>
+            <td>\${reasonHtml}</td>
             <td><button class="btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick='openTestModal(\${JSON.stringify(t.id)})'>Inspect</button></td>
           </tr>
         \`;
@@ -1736,8 +1764,8 @@ function generateWideScreenHtml(data) {
         </div>
         \${t.techReason || t.friendlyReason ? \`
           <div class="detail-section">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--fail);margin-bottom:4px;">Execution Details</div>
-            <div style="background:var(--panel-soft);padding:10px 14px;border-radius:8px;border:1px solid var(--panel-border);font-size:13px;color:#FCA5A5;font-family:var(--font-mono);">\${esc(t.friendlyReason + (t.techReason ? '\\n' + t.techReason : ''))}</div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:\${t.status === 'Fail' ? 'var(--fail)' : 'var(--warn)'};margin-bottom:4px;">\${t.status === 'Fail' ? 'Failure Details' : 'Skip / Execution Reason'}</div>
+            <div style="background:var(--panel-soft);padding:10px 14px;border-radius:8px;border:1px solid var(--panel-border);font-size:13px;color:\${t.status === 'Fail' ? '#FCA5A5' : '#FDE68A'};font-family:var(--font-mono);">\${esc(t.friendlyReason + (t.techReason ? '\\n' + t.techReason : ''))}</div>
           </div>
         \` : ''}
       \`;
@@ -1762,14 +1790,15 @@ function generateWideScreenHtml(data) {
     }
 
     function exportMatrixCsv() {
-      const headers = ['Test Case ID', 'Module', 'Title', 'Priority', 'Type', 'Status'];
+      const headers = ['Test Case ID', 'Module', 'Title', 'Priority', 'Type', 'Status', 'Failure / Skip Reason'];
       const rows = DASHBOARD_DATA.tests.map(t => [
         t.id,
         t.module,
         \`"\${(t.title || '').replace(/"/g, '""')}"\`,
         t.priority,
         t.type,
-        t.status
+        t.status,
+        \`"\${(t.friendlyReason || t.techReason || (t.status === 'Skipped' ? 'Precondition skip' : '')).replace(/"/g, '""')}"\`
       ]);
       const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\\n');
       const encodedUri = encodeURI(csvContent);

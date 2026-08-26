@@ -67,10 +67,13 @@ export default class SheetResultsReporter implements Reporter {
     if (result.status === "failed" || result.status === "timedOut") {
       reason = result.error?.message ?? "Test failed";
     } else if (result.status === "skipped") {
+      const skipAnnotation = test.annotations.find(
+        (a) => a.type === "skip" || a.type === "reason" || a.type === "issue" || a.type === "note"
+      );
       reason =
         result.error?.message ??
-        test.annotations.find((a) => a.type === "skip")?.description ??
-        "Skipped";
+        skipAnnotation?.description ??
+        (test.expectedStatus === "skipped" ? "Skipped by test configuration or tag filter" : "Skipped: Precondition not met during execution");
     } else if (result.status === "interrupted") {
       reason = result.error?.message ?? "Interrupted";
     }

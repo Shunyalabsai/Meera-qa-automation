@@ -35,7 +35,7 @@ export const RESULT_COLUMNS = [
   "Preconditions",
   "How to test",
   "Expected result",
-  "Failure reason",
+  "Failure / Skip Reason",
   "Error detail",
   "Screenshot",
   "Duration (s)",
