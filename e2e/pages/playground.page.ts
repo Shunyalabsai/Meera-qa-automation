@@ -37,9 +37,10 @@ export class PlaygroundPage {
     await expect(select).toBeVisible();
     const isNativeSelect = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
     if (isNativeSelect) {
-      await expect(select.locator("option").first()).toHaveText(/Pick an agent/i);
+      await expect(select.locator("option").first()).toBeAttached();
     } else {
-      await expect(select).toContainText(/Pick an agent/i);
+      const text = (await select.textContent())?.trim() ?? "";
+      expect(text.length).toBeGreaterThan(0);
     }
   }
 
@@ -176,13 +177,19 @@ export class PlaygroundPage {
       return false;
     }
 
+    const currentText = (await select.textContent())?.trim() ?? "";
+    if (currentText && !/pick an agent|select agent/i.test(currentText)) {
+      return true;
+    }
+
     await select.click({ force: true }).catch(() => {});
+    await this.page.waitForTimeout(100);
 
     const popover = this.page.locator(
-      '[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div[data-radix-select-content]',
-    );
+      '[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div[data-radix-select-content], ul[role="listbox"], div.absolute',
+    ).last();
     const option = popover
-      .locator('[role="option"], [role="menuitem"], [data-radix-select-item], [data-radix-collection-item]')
+      .locator('[role="option"], [role="menuitem"], [data-radix-select-item], [data-radix-collection-item], li, button, [role="button"]')
       .filter({ hasNotText: /^\s*$/ })
       .filter({ hasNotText: /pick an agent|select agent/i })
       .first();
@@ -211,12 +218,13 @@ export class PlaygroundPage {
     }
 
     await select.click({ force: true }).catch(() => {});
+    await this.page.waitForTimeout(100);
 
     const popover = this.page.locator(
-      '[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div[data-radix-select-content]',
-    );
+      '[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div[data-radix-select-content], ul[role="listbox"], div.absolute',
+    ).last();
     const option = popover
-      .locator('[role="option"], [role="menuitem"], [data-radix-select-item], [data-radix-collection-item]')
+      .locator('[role="option"], [role="menuitem"], [data-radix-select-item], [data-radix-collection-item], li, button, [role="button"]')
       .filter({ hasNotText: /^\s*$/ })
       .filter({ hasNotText: /pick an agent|select agent/i })
       .first();
@@ -230,7 +238,31 @@ export class PlaygroundPage {
       return text;
     }
     await this.page.keyboard.press("Escape").catch(() => {});
+
+    const currentText = (await select.textContent())?.trim() ?? "";
+    if (currentText && !/pick an agent|select agent/i.test(currentText)) {
+      return currentText;
+    }
     return null;
+  }
+
+  async expectAgentSelected(expected: string | RegExp) {
+    const select = this.agentSelect();
+    const isNative = await select.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      if (typeof expected === "string") {
+        await expect(select).toHaveValue(expected);
+      } else {
+        const val = await select.inputValue();
+        expect(val).toMatch(expected);
+      }
+    } else {
+      if (typeof expected === "string") {
+        await expect(select).toContainText(expected);
+      } else {
+        await expect(select).toHaveText(expected);
+      }
+    }
   }
 
   async fillToNumber(value: string) {

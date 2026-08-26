@@ -17,7 +17,7 @@ test.describe("BUILD › Playground — Edge @journey @new-user @playground @edg
     await playground.switchToPhoneMode();
     await playground.switchToBrowserMode();
     if (agentId) {
-      await expect(playground.agentSelect()).toHaveValue(agentId);
+      await playground.expectAgentSelected(agentId);
     }
   });
 

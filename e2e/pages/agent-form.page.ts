@@ -335,21 +335,36 @@ export class AgentFormPage {
     }
 
     await selectLocator.click();
+    await this.page.waitForTimeout(100);
+
     const pattern = new RegExp(`^\\s*(${escapeRegExp(value)}${alternateLabel ? `|${escapeRegExp(alternateLabel)}` : ""})\\s*$`, "i");
-    const option = this.page
-      .locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul')
+    const container = this.page.locator(
+      '[role="listbox"], [role="menu"], [data-radix-popper-content-wrapper], [data-radix-menu-content], div.absolute, ul[role="listbox"], div[role="dialog"]'
+    ).last();
+
+    const optionInContainer = container
       .getByRole("option", { name: pattern })
-      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByRole("button", { name: pattern }))
-      .or(this.page.locator('[role="listbox"], [role="menu"], div[data-radix-popper-content-wrapper], div.absolute, ul').getByText(pattern))
-      .or(this.page.getByRole("option", { name: pattern }))
-      .or(this.page.getByText(pattern))
+      .or(container.getByRole("menuitem", { name: pattern }))
+      .or(container.getByRole("button", { name: pattern }))
+      .or(container.getByText(pattern))
       .first();
 
-    if (await option.isVisible({ timeout: 2_000 }).catch(() => false)) {
-      await option.scrollIntoViewIfNeeded().catch(() => {});
-      await option.click({ force: true }).catch(async () => {
-        await option.dispatchEvent("click").catch(() => {});
+    if (await optionInContainer.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await optionInContainer.scrollIntoViewIfNeeded().catch(() => {});
+      await optionInContainer.click({ force: true }).catch(async () => {
+        await optionInContainer.dispatchEvent("click").catch(() => {});
       });
+      return;
+    }
+
+    // Fallback across page
+    const fallbackOption = this.page
+      .getByRole("option", { name: pattern })
+      .or(this.page.getByRole("menuitem", { name: pattern }))
+      .first();
+
+    if (await fallbackOption.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await fallbackOption.click({ force: true }).catch(() => {});
     } else {
       await this.page.keyboard.press("Escape").catch(() => {});
     }
