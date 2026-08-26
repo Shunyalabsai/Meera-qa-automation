@@ -46,20 +46,6 @@ function formatDate(iso) {
   }
 }
 
-function shortDate(iso) {
-  if (!iso) return "";
-  try {
-    return new Date(iso).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return iso;
-  }
-}
-
 function toBase64Png(filePath) {
   if (!filePath || !fs.existsSync(filePath)) return "";
   try {
@@ -152,7 +138,7 @@ export function buildDashboard(options = {}) {
       expected: m.expected || "",
       priority: (m.priority || "High").toUpperCase(),
       type: m.type || "Positive",
-      status: "Pass", // Strictly Pass or Fail
+      status: "Pass",
       durationSec: 0,
       friendlyReason: "Manual verification plan item",
       techReason: "",
@@ -176,7 +162,7 @@ export function buildDashboard(options = {}) {
       expected: u[4] || "",
       priority: (u[5] || "Medium").toUpperCase(),
       type: u[6] || "Suggestion",
-      status: "Pass", // Strictly Pass or Fail
+      status: "Pass",
       durationSec: 0,
       friendlyReason: `Reference: ${u[7] || "UAT Log"}`,
       techReason: "",
@@ -231,8 +217,8 @@ export function buildDashboard(options = {}) {
     };
   });
 
-  // History Trend Array across all runs
-  const trend = sortedRuns.map((r, idx) => {
+  // Format runs for the cards view and modal inspection
+  const formattedRuns = sortedRuns.map((r, idx) => {
     const st = r.stats ?? {};
     const passed = st.expected ?? st.pass ?? r.passed ?? 0;
     const failed = st.unexpected ?? st.fail ?? r.failed ?? 0;
@@ -241,19 +227,51 @@ export function buildDashboard(options = {}) {
     const passRate = total ? Math.round((passed / total) * 100) : 0;
     const runId = r.runId || (r.runAt ? `RUN-${r.runAt.replace(/[:.]/g, "-")}` : `RUN-${idx + 1}`);
     const isoDate = r.runAt || r.runId || new Date().toISOString();
+
+    // Extract module breakdown if available
+    const modules = {};
+    const runTests = [];
+
+    if (r.rowsByTab) {
+      for (const [tabName, rows] of Object.entries(r.rowsByTab)) {
+        let mPass = 0, mFail = 0, mTotal = 0;
+        for (const row of rows) {
+          mTotal++;
+          const isPass = row.status === "Pass";
+          if (isPass) mPass++; else mFail++;
+          runTests.push({
+            id: row.testId || `TC-${runTests.length + 1}`,
+            title: row.scenario || row.title || `Test Scenario in ${tabName}`,
+            module: tabName,
+            status: isPass ? "passed" : "failed",
+            durationMs: Math.round(parseFloat(row.durationSec || "1.5") * 1000),
+            reason: row.techReason || row.reason || "",
+          });
+        }
+        modules[tabName] = {
+          label: tabName,
+          total: mTotal,
+          passed: mPass,
+          failed: mFail,
+          passRate: `${mTotal > 0 ? Math.round((mPass / mTotal) * 100) : 0}%`,
+        };
+      }
+    }
+
     return {
-      runId,
-      runAt: isoDate,
-      dateOnly: isoDate.split("T")[0] || isoDate.split(" ")[0],
-      label: shortDate(isoDate),
+      id: runId,
+      startedAt: isoDate,
+      journey: r.journey || "Full Regression Suite",
       passRate,
-      passed,
-      failed,
-      skipped,
-      total,
-      durationSec: Math.round((st.durationMs ?? 0) / 1000) || (r.durationSec ?? 45),
-      journey: r.journey || "Full Suite",
-      status: failed > 0 ? "Failed" : "Passed",
+      durationMs: (st.durationMs || ((r.durationSec || 45) * 1000)),
+      summary: {
+        total,
+        passed,
+        failed,
+        skipped,
+      },
+      modules,
+      tests: runTests.slice(0, 150), // Sample for modal display
     };
   });
 
@@ -285,7 +303,7 @@ export function buildDashboard(options = {}) {
       durationSec: fullDurationSec,
       historyRunCount: sortedRuns.length,
     },
-    trend,
+    runs: formattedRuns,
     subsystems: subsystemMetrics,
     tests: masterTests,
   };
@@ -301,7 +319,7 @@ export function buildDashboard(options = {}) {
 
   console.log("\n✨ Wide Screen QA Dashboard successfully built:");
   console.log(` → Total Inventory: ${dashboardData.summary.totalInventory} (${dashboardData.summary.autoInventory} Auto + ${dashboardData.summary.manualInventory} Manual + ${dashboardData.summary.uatInventory} UAT)`);
-  console.log(` → Total Execution History Runs: ${dashboardData.trend.length}`);
+  console.log(` → Total Execution History Runs: ${dashboardData.runs.length}`);
   console.log(` → Overall Pass Rate: ${dashboardData.summary.passRate}%`);
   console.log(` → Output: ${docsOutFile}\n`);
 }
@@ -321,24 +339,22 @@ function generateWideScreenHtml(data) {
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #0B0F19;
-      --card-bg: #111827;
-      --card-hover: #1F2937;
-      --card-border: #1F2937;
-      --text: #F9FAFB;
-      --text-muted: #9CA3AF;
-      --text-dim: #6B7280;
-      --primary: #6366F1;
-      --primary-glow: rgba(99, 102, 241, 0.2);
-      --success: #10B981;
-      --success-glow: rgba(16, 185, 129, 0.15);
-      --error: #EF4444;
-      --error-glow: rgba(239, 68, 68, 0.15);
-      --warning: #F59E0B;
-      --warning-glow: rgba(245, 158, 11, 0.15);
-      --cyan: #06B6D4;
-      --purple: #8B5CF6;
-      --border-radius: 12px;
+      --bg: #0D1117;
+      --panel: #161B22;
+      --panel-soft: #21262D;
+      --panel-border: #30363D;
+      --text: #F0F6FC;
+      --muted: #8B949E;
+      --accent: #58A6FF;
+      --accent-soft: rgba(88, 166, 255, 0.15);
+      --pass: #3FB950;
+      --pass-soft: rgba(63, 185, 80, 0.15);
+      --fail: #F85149;
+      --fail-soft: rgba(248, 81, 73, 0.15);
+      --warn: #D29922;
+      --warn-soft: rgba(210, 153, 34, 0.15);
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       --font-mono: 'JetBrains Mono', monospace;
     }
 
@@ -366,12 +382,12 @@ function generateWideScreenHtml(data) {
       padding: 0 32px 64px 32px;
     }
 
-    /* Glassmorphism Sticky Header */
+    /* Glassmorphism Sticky Header without Target */
     header {
-      background: rgba(17, 24, 39, 0.92);
+      background: rgba(22, 27, 34, 0.94);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--panel-border);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -398,7 +414,7 @@ function generateWideScreenHtml(data) {
     .logo-badge {
       width: 44px;
       height: 44px;
-      background: linear-gradient(135deg, #4F46E5, #06B6D4);
+      background: linear-gradient(135deg, #1F6FEB, #238636);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -406,7 +422,7 @@ function generateWideScreenHtml(data) {
       font-weight: 800;
       font-size: 1.25rem;
       color: #FFF;
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
       flex-shrink: 0;
     }
     .brand-text h1 {
@@ -418,18 +434,18 @@ function generateWideScreenHtml(data) {
     }
     .brand-text p {
       font-size: 0.82rem;
-      color: var(--text-muted);
+      color: var(--muted);
     }
     .meta-badge-bar {
       display: flex;
       align-items: center;
       gap: 10px;
       font-size: 0.8rem;
-      color: var(--text-muted);
-      background: rgba(31, 41, 55, 0.6);
+      color: var(--muted);
+      background: var(--panel-soft);
       padding: 6px 14px;
       border-radius: 8px;
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--panel-border);
     }
     .header-actions {
       display: flex;
@@ -446,30 +462,30 @@ function generateWideScreenHtml(data) {
       align-items: center;
       gap: 6px;
       transition: all 0.2s;
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
       color: var(--text);
       text-decoration: none;
     }
     .btn:hover {
-      background: var(--card-hover);
-      border-color: var(--primary);
+      background: var(--panel-soft);
+      border-color: var(--accent);
       color: #FFF;
     }
     .btn-primary {
-      background: var(--primary);
-      border-color: var(--primary);
+      background: #238636;
+      border-color: #2ea043;
       color: #FFF;
     }
     .btn-primary:hover {
-      background: #4F46E5;
+      background: #2ea043;
     }
 
     /* Navigation Tabs */
     .nav-tabs {
       display: flex;
       gap: 8px;
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--panel-border);
       margin-bottom: 24px;
       overflow-x: auto;
       padding-bottom: 2px;
@@ -478,7 +494,7 @@ function generateWideScreenHtml(data) {
       padding: 10px 18px;
       border: none;
       background: transparent;
-      color: var(--text-muted);
+      color: var(--muted);
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
@@ -494,11 +510,11 @@ function generateWideScreenHtml(data) {
     }
     .nav-tab.active {
       color: #FFF;
-      border-bottom-color: var(--primary);
+      border-bottom-color: var(--accent);
     }
     .tab-badge {
-      background: rgba(99, 102, 241, 0.2);
-      color: #A5B4FC;
+      background: var(--accent-soft);
+      color: var(--accent);
       padding: 2px 8px;
       border-radius: 12px;
       font-size: 0.75rem;
@@ -519,30 +535,29 @@ function generateWideScreenHtml(data) {
       .kpi-grid { grid-template-columns: 1fr; }
     }
     .kpi-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
       padding: 20px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow);
     }
     .kpi-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: var(--primary);
+      background: var(--accent);
     }
-    .kpi-card.success::before { background: var(--success); }
-    .kpi-card.error::before { background: var(--error); }
-    .kpi-card.warning::before { background: var(--warning); }
-    .kpi-card.cyan::before { background: var(--cyan); }
+    .kpi-card.success::before { background: var(--pass); }
+    .kpi-card.error::before { background: var(--fail); }
+    .kpi-card.warning::before { background: var(--warn); }
 
     .kpi-title {
       font-size: 0.78rem;
       font-weight: 700;
-      color: var(--text-muted);
+      color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 8px;
@@ -557,7 +572,7 @@ function generateWideScreenHtml(data) {
     }
     .kpi-sub {
       font-size: 0.82rem;
-      color: var(--text-dim);
+      color: var(--muted);
       margin-top: 8px;
     }
 
@@ -583,9 +598,9 @@ function generateWideScreenHtml(data) {
       .subsystems-grid { grid-template-columns: 1fr; }
     }
     .subsystem-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
       padding: 18px;
     }
     .subsystem-head {
@@ -607,7 +622,7 @@ function generateWideScreenHtml(data) {
     }
     .progress-bar-bg {
       height: 8px;
-      background: #1F2937;
+      background: var(--panel-soft);
       border-radius: 4px;
       overflow: hidden;
       margin-bottom: 10px;
@@ -620,7 +635,7 @@ function generateWideScreenHtml(data) {
       display: flex;
       justify-content: space-between;
       font-size: 0.78rem;
-      color: var(--text-muted);
+      color: var(--muted);
     }
 
     /* Charts Section */
@@ -634,9 +649,9 @@ function generateWideScreenHtml(data) {
       .charts-grid { grid-template-columns: 1fr; }
     }
     .chart-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
       padding: 20px;
       height: 380px;
       display: flex;
@@ -645,7 +660,7 @@ function generateWideScreenHtml(data) {
     .chart-title {
       font-size: 0.9rem;
       font-weight: 700;
-      color: var(--text-muted);
+      color: var(--muted);
       margin-bottom: 14px;
     }
     .chart-wrapper {
@@ -663,16 +678,16 @@ function generateWideScreenHtml(data) {
       gap: 12px;
       align-items: center;
       margin-bottom: 18px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
       padding: 14px 18px;
     }
     .search-input {
       flex: 1;
       min-width: 280px;
-      background: #0B0F19;
-      border: 1px solid var(--card-border);
+      background: var(--bg);
+      border: 1px solid var(--panel-border);
       border-radius: 8px;
       padding: 9px 14px;
       color: var(--text);
@@ -680,7 +695,7 @@ function generateWideScreenHtml(data) {
       outline: none;
     }
     .search-input:focus {
-      border-color: var(--primary);
+      border-color: var(--accent);
     }
     .filter-group {
       display: flex;
@@ -693,34 +708,34 @@ function generateWideScreenHtml(data) {
       font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
-      background: #0B0F19;
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--panel-border);
+      color: var(--muted);
       transition: all 0.2s;
     }
     .filter-chip:hover {
-      background: #1F2937;
+      background: var(--panel-soft);
       color: var(--text);
     }
     .filter-chip.active {
-      background: var(--primary);
+      background: var(--accent);
       color: #FFF;
-      border-color: var(--primary);
+      border-color: var(--accent);
     }
     .counter-badge {
       font-size: 0.82rem;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--muted);
       padding: 6px 12px;
-      background: rgba(31, 41, 55, 0.6);
+      background: var(--panel-soft);
       border-radius: 6px;
     }
 
     /* Matrix & History Table */
     .table-container {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
       overflow-x: auto;
       margin-bottom: 24px;
       max-height: 750px;
@@ -733,11 +748,11 @@ function generateWideScreenHtml(data) {
       text-align: left;
     }
     thead th {
-      background: rgba(31, 41, 55, 0.95);
-      color: var(--text-muted);
+      background: rgba(22, 27, 34, 0.95);
+      color: var(--muted);
       font-weight: 700;
       padding: 12px 16px;
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--panel-border);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-size: 0.72rem;
@@ -747,11 +762,11 @@ function generateWideScreenHtml(data) {
       z-index: 10;
     }
     tbody tr {
-      border-bottom: 1px solid rgba(31, 41, 55, 0.6);
+      border-bottom: 1px solid var(--panel-border);
       transition: background-color 0.15s;
     }
     tbody tr:hover {
-      background-color: rgba(30, 41, 59, 0.6);
+      background-color: var(--panel-soft);
     }
     tbody td {
       padding: 11px 16px;
@@ -760,9 +775,9 @@ function generateWideScreenHtml(data) {
     .tc-id {
       font-family: var(--font-mono);
       font-weight: 700;
-      color: #93C5FD;
+      color: #79C0FF;
       font-size: 0.8rem;
-      background: rgba(59, 130, 246, 0.12);
+      background: var(--accent-soft);
       padding: 3px 8px;
       border-radius: 5px;
       display: inline-block;
@@ -777,156 +792,274 @@ function generateWideScreenHtml(data) {
       display: inline-block;
       white-space: nowrap;
     }
-    .badge-pass { background: rgba(16, 185, 129, 0.18); color: #34D399; }
-    .badge-fail { background: rgba(239, 68, 68, 0.18); color: #F87171; }
-    .badge-skip { background: rgba(156, 163, 175, 0.18); color: #9CA3AF; }
-    .badge-manual { background: rgba(139, 92, 246, 0.18); color: #C4B5FD; }
-    .badge-uat { background: rgba(6, 182, 212, 0.18); color: #67E8F9; }
-    .badge-p0 { background: rgba(239, 68, 68, 0.2); color: #FCA5A5; }
-    .badge-p1 { background: rgba(245, 158, 11, 0.2); color: #FCD34D; }
-    .badge-p2 { background: rgba(59, 130, 246, 0.2); color: #93C5FD; }
+    .badge-pass { background: var(--pass-soft); color: var(--pass); }
+    .badge-fail { background: var(--fail-soft); color: var(--fail); }
+    .badge-skip { background: rgba(139, 148, 158, 0.18); color: var(--muted); }
+    .badge-p1 { background: var(--warn-soft); color: var(--warn); }
 
-    /* Calendar Grid */
-    .calendar-container {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
-      padding: 24px;
-      margin-bottom: 24px;
+    /* ── Execution History Cards Layout (Matching ASR/TTS Reference) ── */
+    .history-group {
+      margin-bottom: 28px;
     }
-    .calendar-head {
+    .history-group h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .history-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .history-card {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      box-shadow: var(--shadow);
+    }
+    .history-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background: var(--panel-soft);
+    }
+    .history-card .time {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #FFF;
+    }
+    .history-card .run-id {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-family: var(--font-mono);
+    }
+    .history-card .meta {
       display: flex;
-      justify-content: space-between;
+      gap: 8px;
       align-items: center;
-      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .pill-pass { background: var(--pass-soft); color: var(--pass); }
+    .pill-fail { background: var(--fail-soft); color: var(--fail); }
+
+    /* ── Calendar Tab ── */
+    .calendar-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .calendar-nav h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #FFF;
     }
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
+      gap: 8px;
+      margin-bottom: 24px;
     }
-    .calendar-day-header {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-dim);
+    .cal-head {
+      font-size: 12px;
+      color: var(--muted);
       text-align: center;
       padding: 8px 0;
+      font-weight: 700;
       text-transform: uppercase;
     }
-    .calendar-cell {
-      background: #0B0F19;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
+    .cal-cell {
+      min-height: 105px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
       padding: 12px;
-      min-height: 90px;
+      cursor: pointer;
+      transition: all 0.15s;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      transition: all 0.2s;
-      cursor: pointer;
     }
-    .calendar-cell:hover {
-      border-color: var(--primary);
-      background: rgba(31, 41, 55, 0.5);
+    .cal-cell.empty {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
     }
-    .calendar-cell.has-runs {
-      border-color: rgba(99, 102, 241, 0.4);
+    .cal-cell:not(.empty):hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+      background: var(--panel-soft);
     }
-    .calendar-cell.active {
-      border-color: var(--cyan);
-      box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+    .cal-cell.has-runs {
+      border-color: var(--warn);
+      border-width: 1.5px;
     }
-    .cell-date {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-muted);
+    .cal-cell.today {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      border-width: 2px;
     }
-    .cell-badge-row {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
+    .cal-cell.selected {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .cal-cell .day {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: auto;
+    }
+    .cal-cell .cal-runs {
+      font-size: 12px;
+      color: var(--muted);
       margin-top: 6px;
+      font-weight: 600;
     }
-    .cell-run-count {
-      font-size: 0.7rem;
+    .cal-cell .cal-rate {
+      font-size: 12px;
       font-weight: 700;
-      background: rgba(99, 102, 241, 0.2);
-      color: #A5B4FC;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .cell-pass-badge {
-      font-size: 0.7rem;
-      font-weight: 700;
-      background: rgba(16, 185, 129, 0.2);
-      color: #34D399;
-      padding: 2px 6px;
-      border-radius: 4px;
+      margin-top: 2px;
     }
 
-    /* Modal Inspection Overlay */
+    /* ── Modal Dialog (Run Details & Test Inspection) ── */
     .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(8px);
-      z-index: 200;
       display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 100;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-    .modal-overlay.active { display: flex; }
-    .modal-box {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      max-width: 860px;
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      max-width: 900px;
       width: 100%;
-      max-height: 90vh;
+      max-height: 88vh;
       overflow-y: auto;
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+      box-shadow: var(--shadow);
     }
     .modal-head {
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--card-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--panel-border);
       position: sticky;
       top: 0;
-      background: var(--card-bg);
+      background: var(--panel);
       z-index: 10;
     }
-    .modal-close {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    .modal-close:hover { color: #FFF; }
-    .modal-body { padding: 24px; }
-    .detail-section { margin-bottom: 18px; }
-    .detail-label {
-      font-size: 0.75rem;
+    .modal-head h2 {
+      font-size: 16px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-dim);
+      color: #FFF;
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel-soft);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: var(--accent);
+      color: #FFF;
+    }
+    .modal-body { padding: 24px; }
+    .modal-filters {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .modal-filters .filter-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+    .modal-filters .btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #FFF;
+    }
+    .modal-test {
+      background: var(--panel-soft);
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+    }
+    .modal-test .mt-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 6px;
     }
-    .detail-content {
-      background: #0B0F19;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 0.85rem;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-family: var(--font-mono);
-      line-height: 1.6;
+    .modal-test .mt-title {
+      font-weight: 600;
+      font-size: 14px;
+      flex: 1;
+      margin-right: 8px;
+      color: #FFF;
     }
+    .modal-test .mt-meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .modal-test .mt-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      color: var(--muted);
+    }
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--panel-border);
+      align-items: center;
+      position: sticky;
+      bottom: 0;
+      background: var(--panel);
+    }
+    .modal-actions .spacer { flex: 1; }
 
     /* Tab Switch Visibility */
     .tab-content { display: none; }
@@ -990,17 +1123,17 @@ function generateWideScreenHtml(data) {
         </div>
         <div class="kpi-card success">
           <div class="kpi-title">Passed Executions <span>✅</span></div>
-          <div class="kpi-value" style="color: #34D399;">${data.summary.passed.toLocaleString()}</div>
+          <div class="kpi-value" style="color: var(--pass);">${data.summary.passed.toLocaleString()}</div>
           <div class="kpi-sub">${data.summary.passRate}% Overall Pass Rate Across Suite</div>
         </div>
         <div class="kpi-card error">
           <div class="kpi-title">Failed Tests <span>❌</span></div>
-          <div class="kpi-value" style="color: #F87171;">${data.summary.failed}</div>
+          <div class="kpi-value" style="color: var(--fail);">${data.summary.failed}</div>
           <div class="kpi-sub">${data.summary.skipped} Precondition Skips Monitored</div>
         </div>
-        <div class="kpi-card cyan">
+        <div class="kpi-card">
           <div class="kpi-title">Platform Health & Accuracy <span>🛡️</span></div>
-          <div class="kpi-value" style="color: #67E8F9;">${data.summary.passRate}%</div>
+          <div class="kpi-value" style="color: var(--accent);">${data.summary.passRate}%</div>
           <div class="kpi-sub">Verified on Live Multi-tenant Environment</div>
         </div>
       </div>
@@ -1012,10 +1145,10 @@ function generateWideScreenHtml(data) {
           <div class="subsystem-card">
             <div class="subsystem-head">
               <div class="subsystem-name">${s.icon} ${s.name}</div>
-              <div class="subsystem-rate" style="color: ${s.passRate >= 90 ? '#34D399' : s.passRate >= 75 ? '#FCD34D' : '#F87171'};">${s.passRate}%</div>
+              <div class="subsystem-rate" style="color: ${s.passRate >= 90 ? 'var(--pass)' : s.passRate >= 75 ? 'var(--warn)' : 'var(--fail)'};">${s.passRate}%</div>
             </div>
             <div class="progress-bar-bg">
-              <div class="progress-bar-fill" style="width: ${s.passRate}%; background: ${s.passRate >= 90 ? '#10B981' : s.passRate >= 75 ? '#F59E0B' : '#EF4444'};"></div>
+              <div class="progress-bar-fill" style="width: ${s.passRate}%; background: ${s.passRate >= 90 ? 'var(--pass)' : s.passRate >= 75 ? 'var(--warn)' : 'var(--fail)'};"></div>
             </div>
             <div class="subsystem-counts">
               <span>${s.passed} Passed · ${s.failed} Failed</span>
@@ -1083,160 +1216,95 @@ function generateWideScreenHtml(data) {
       </div>
     </div>
 
-    <!-- TAB 3: EXECUTION HISTORY (76 Runs) -->
+    <!-- TAB 3: EXECUTION HISTORY (Cards Layout Matching ASR/TTS) -->
     <div id="tab-history" class="tab-content">
-      <div class="section-title">📈 Complete Execution History (${data.trend.length} Total Runs)</div>
-
-      <div class="chart-card" style="margin-bottom: 24px; height: 320px;">
-        <div class="chart-title">Historical Execution Progress Across Runs</div>
-        <div class="chart-wrapper">
-          <canvas id="historyBarChart"></canvas>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 220px;">Run ID / Timestamp</th>
-              <th style="width: 180px;">Journey Scope</th>
-              <th style="width: 100px;">Passed</th>
-              <th style="width: 100px;">Failed</th>
-              <th style="width: 100px;">Skipped</th>
-              <th style="width: 100px;">Total Executed</th>
-              <th style="width: 120px;">Pass Rate</th>
-              <th style="width: 110px;">Duration</th>
-              <th style="width: 110px;">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${data.trend.map(t => `
-              <tr>
-                <td class="tc-id">${t.runId}</td>
-                <td><span class="badge badge-uat">${t.journey}</span></td>
-                <td style="color: #34D399; font-weight: 700;">${t.passed}</td>
-                <td style="color: #F87171; font-weight: 700;">${t.failed}</td>
-                <td style="color: #9CA3AF;">${t.skipped}</td>
-                <td><strong>${t.total}</strong></td>
-                <td><span class="badge ${t.passRate >= 90 ? 'badge-pass' : t.passRate >= 70 ? 'badge-p1' : 'badge-fail'}">${t.passRate}%</span></td>
-                <td>${t.durationSec}s</td>
-                <td><span class="badge ${t.failed === 0 ? 'badge-pass' : 'badge-fail'}">${t.status}</span></td>
-              </tr>
-            `).join("")}
-          </tbody>
-        </table>
+      <div id="historyContainer">
+        <!-- Rendered dynamically by renderHistory(runs) -->
       </div>
     </div>
 
-    <!-- TAB 4: CALENDAR VIEW -->
+    <!-- TAB 4: CALENDAR VIEW (Matching ASR/TTS) -->
     <div id="tab-calendar" class="tab-content">
-      <div class="section-title">📅 Monthly Execution Calendar (August 2026)</div>
-
-      <div class="calendar-container">
-        <div class="calendar-head">
-          <h2 style="font-size: 1.1rem; font-weight: 800; color: #FFF;">August 2026 Run Timeline</h2>
-          <div style="font-size: 0.85rem; color: var(--text-muted);">Click on any date to filter runs executed on that day</div>
-        </div>
-
-        <div class="calendar-grid">
-          <div class="calendar-day-header">Sun</div>
-          <div class="calendar-day-header">Mon</div>
-          <div class="calendar-day-header">Tue</div>
-          <div class="calendar-day-header">Wed</div>
-          <div class="calendar-day-header">Thu</div>
-          <div class="calendar-day-header">Fri</div>
-          <div class="calendar-day-header">Sat</div>
-
-          <!-- Days 1 to 31 -->
-          ${Array.from({ length: 31 }, (_, i) => {
-            const day = i + 1;
-            const dateStr = `2026-08-${String(day).padStart(2, "0")}`;
-            const dayRuns = data.trend.filter(t => t.dateOnly === dateStr || t.runAt.startsWith(dateStr));
-            const hasRuns = dayRuns.length > 0;
-            const totalPass = dayRuns.reduce((acc, r) => acc + r.passed, 0);
-            const totalFail = dayRuns.reduce((acc, r) => acc + r.failed, 0);
-            return `
-              <div class="calendar-cell ${hasRuns ? 'has-runs' : ''}" onclick="selectCalendarDate('${dateStr}', this)">
-                <div class="cell-date">${day}</div>
-                ${hasRuns ? `
-                  <div class="cell-badge-row">
-                    <span class="cell-run-count">${dayRuns.length} ${dayRuns.length === 1 ? 'run' : 'runs'}</span>
-                    <span class="cell-pass-badge">${totalFail === 0 ? '100%' : totalPass + ' pass'}</span>
-                  </div>
-                ` : ''}
-              </div>
-            `;
-          }).join("")}
-        </div>
+      <div class="calendar-nav">
+        <button class="btn" onclick="changeCalMonth(-1)">&larr; Prev Month</button>
+        <h3 id="calMonthTitle">August 2026</h3>
+        <button class="btn" onclick="changeCalMonth(1)">Next Month &rarr;</button>
       </div>
 
-      <div id="calendarRunDetails" class="table-container" style="display: none;">
-        <div style="padding: 14px 18px; font-weight: 700; color: #FFF; border-bottom: 1px solid var(--card-border);" id="calendarDetailTitle">
-          Runs on Selected Date
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 220px;">Run ID</th>
-              <th style="width: 180px;">Journey Scope</th>
-              <th style="width: 100px;">Passed</th>
-              <th style="width: 100px;">Failed</th>
-              <th style="width: 100px;">Skipped</th>
-              <th style="width: 100px;">Total</th>
-              <th style="width: 120px;">Pass Rate</th>
-              <th style="width: 110px;">Duration</th>
-            </tr>
-          </thead>
-          <tbody id="calendarRunTableBody">
-          </tbody>
-        </table>
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- Rendered dynamically by renderCalendar(runs) -->
+      </div>
+
+      <div id="calendarRunDetails" style="display:none; margin-top:20px;">
+        <h3 id="calendarDetailTitle" style="font-size:15px; font-weight:700; margin-bottom:12px; color:#FFF;"></h3>
+        <div class="history-cards" id="calendarCardsGrid"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- Detail Modal -->
-  <div id="detailModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
-    <div class="modal-box">
+  <!-- Modal Dialog (Matching ASR/TTS Reference) -->
+  <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
       <div class="modal-head">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span id="modalTcId" class="tc-id">TC-000</span>
-          <span id="modalStatus" class="badge badge-pass">Pass</span>
-        </div>
-        <button class="modal-close" onclick="closeModal()">×</button>
+        <h2 id="modalTitle">Test Inspection Details</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
-      <div class="modal-body">
-        <div class="detail-section">
-          <div class="detail-label">Scenario / Title</div>
-          <div id="modalTitle" style="font-size: 1.05rem; font-weight: 700; color: #FFF;"></div>
-        </div>
-        <div class="detail-section">
-          <div class="detail-label">Preconditions</div>
-          <div id="modalPreconditions" class="detail-content"></div>
-        </div>
-        <div class="detail-section">
-          <div class="detail-label">Test Steps</div>
-          <div id="modalSteps" class="detail-content"></div>
-        </div>
-        <div class="detail-section">
-          <div class="detail-label">Expected Result</div>
-          <div id="modalExpected" class="detail-content"></div>
-        </div>
-        <div class="detail-section" id="modalReasonSection">
-          <div class="detail-label">Execution Notes / Failure Details</div>
-          <div id="modalReason" class="detail-content" style="color: #FCA5A5;"></div>
-        </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions">
+        <button class="btn" id="modalExportBtn">Export JSON</button>
+        <button class="btn" onclick="window.print()">Print Proof</button>
+        <div class="spacer"></div>
+        <button class="btn btn-primary" onclick="closeModal()">Close</button>
       </div>
     </div>
   </div>
 
   <script>
     const DASHBOARD_DATA = ${jsonData};
+    const historyData = DASHBOARD_DATA.runs || [];
 
     // State for filtering
     let currentCategory = 'ALL';
     let currentStatus = 'ALL';
     let currentSearch = '';
+    let currentModalRun = null;
+
+    let calYear = 2026;
+    let calMonth = 7; // August (0-indexed)
+
+    function formatTime(iso) {
+      if (!iso) return "—";
+      try {
+        return new Date(iso).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+      } catch {
+        return iso;
+      }
+    }
+
+    function formatDate(iso) {
+      if (!iso) return "—";
+      try {
+        const d = new Date(iso);
+        return d.toISOString().split("T")[0];
+      } catch {
+        return iso;
+      }
+    }
+
+    function formatDuration(ms) {
+      if (!ms) return "0s";
+      const s = Math.round(ms / 1000);
+      if (s < 60) return s + "s";
+      const m = Math.floor(s / 60);
+      const remS = s % 60;
+      return m + "m " + remS + "s";
+    }
+
+    function esc(s) {
+      if (!s) return "";
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
 
     function switchTab(tabId, el) {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -1245,6 +1313,12 @@ function generateWideScreenHtml(data) {
       el.classList.add('active');
       const target = document.getElementById('tab-' + tabId);
       if (target) target.classList.add('active');
+
+      if (tabId === 'history') {
+        renderHistory(historyData);
+      } else if (tabId === 'calendar') {
+        renderCalendar(historyData);
+      }
     }
 
     function renderMatrix() {
@@ -1270,17 +1344,16 @@ function generateWideScreenHtml(data) {
 
       tbody.innerHTML = filtered.map(t => {
         const badgeClass = t.status === 'Pass' ? 'badge-pass' : t.status === 'Fail' ? 'badge-fail' : 'badge-skip';
-        const sourceBadge = t.category === 'Automated' ? 'badge-pass' : t.category === 'Manual QA' ? 'badge-manual' : 'badge-uat';
         return \`
           <tr>
             <td class="tc-id">\${t.id}</td>
-            <td><span class="badge \${sourceBadge}">\${t.category}</span></td>
+            <td><span class="badge badge-pass">\${t.category}</span></td>
             <td>\${t.module}</td>
             <td style="color: #FFF; font-weight: 500;">\${t.title}</td>
             <td><span class="badge badge-p1">\${t.priority}</span></td>
             <td>\${t.type}</td>
             <td><span class="badge \${badgeClass}">\${t.status}</span></td>
-            <td><button class="btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick='openModal(\${JSON.stringify(t.id)})'>Inspect</button></td>
+            <td><button class="btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick='openTestModal(\${JSON.stringify(t.id)})'>Inspect</button></td>
           </tr>
         \`;
       }).join('');
@@ -1303,64 +1376,309 @@ function generateWideScreenHtml(data) {
       renderMatrix();
     }
 
-    function openModal(tcId) {
-      const t = DASHBOARD_DATA.tests.find(x => x.id === tcId);
-      if (!t) return;
-      document.getElementById('modalTcId').textContent = t.id;
-      document.getElementById('modalStatus').textContent = t.status;
-      document.getElementById('modalStatus').className = 'badge ' + (t.status === 'Pass' ? 'badge-pass' : t.status === 'Fail' ? 'badge-fail' : 'badge-skip');
-      document.getElementById('modalTitle').textContent = t.title;
-      document.getElementById('modalPreconditions').textContent = t.preconditions || 'None';
-      document.getElementById('modalSteps').textContent = t.steps || 'N/A';
-      document.getElementById('modalExpected').textContent = t.expected || 'N/A';
-
-      const reasonBox = document.getElementById('modalReasonSection');
-      if (t.techReason || t.friendlyReason) {
-        reasonBox.style.display = 'block';
-        document.getElementById('modalReason').textContent = t.friendlyReason + (t.techReason ? '\\n' + t.techReason : '');
-      } else {
-        reasonBox.style.display = 'none';
-      }
-      document.getElementById('detailModal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('detailModal').classList.remove('active');
-    }
-
-    function closeModalOnOverlay(e) {
-      if (e.target.id === 'detailModal') closeModal();
-    }
-
-    function selectCalendarDate(dateStr, cellEl) {
-      document.querySelectorAll('.calendar-cell').forEach(c => c.classList.remove('active'));
-      cellEl.classList.add('active');
-
-      const runsOnDay = DASHBOARD_DATA.trend.filter(t => t.dateOnly === dateStr || t.runAt.startsWith(dateStr));
-      const detailsContainer = document.getElementById('calendarRunDetails');
-      const tableBody = document.getElementById('calendarRunTableBody');
-      const titleEl = document.getElementById('calendarDetailTitle');
-
-      if (runsOnDay.length === 0) {
-        detailsContainer.style.display = 'none';
+    /* ══════════════════════════════════════════════════════════
+       EXECUTION HISTORY CARDS (Matching ASR/TTS Reference)
+       ══════════════════════════════════════════════════════════ */
+    function renderHistory(runs) {
+      const container = document.getElementById('historyContainer');
+      if (!container) return;
+      if (!runs.length) {
+        container.innerHTML = '<div class="kpi-card" style="text-align:center;padding:40px;color:var(--muted)"><h3>No History Recorded</h3></div>';
         return;
       }
 
-      titleEl.textContent = \`Runs on \${dateStr} (\${runsOnDay.length} executions)\`;
-      tableBody.innerHTML = runsOnDay.map(t => \`
-        <tr>
-          <td class="tc-id">\${t.runId}</td>
-          <td><span class="badge badge-uat">\${t.journey}</span></td>
-          <td style="color: #34D399; font-weight: 700;">\${t.passed}</td>
-          <td style="color: #F87171; font-weight: 700;">\${t.failed}</td>
-          <td style="color: #9CA3AF;">\${t.skipped}</td>
-          <td><strong>\${t.total}</strong></td>
-          <td><span class="badge \${t.passRate >= 90 ? 'badge-pass' : t.passRate >= 70 ? 'badge-p1' : 'badge-fail'}">\${t.passRate}%</span></td>
-          <td>\${t.durationSec}s</td>
-        </tr>
-      \`).join('');
+      const totalRuns = runs.length;
+      const avgPassRate = Math.round(runs.reduce((s, r) => s + (r.passRate || 0), 0) / totalRuns);
+      const uniqueDays = new Set(runs.map(r => formatDate(r.startedAt))).size;
 
-      detailsContainer.style.display = 'block';
+      const groups = {};
+      for (const r of runs) {
+        const dateKey = formatDate(r.startedAt);
+        if (!groups[dateKey]) groups[dateKey] = [];
+        groups[dateKey].push(r);
+      }
+
+      container.innerHTML = \`
+        <div class="kpi-grid" style="margin-bottom:24px">
+          <div class="kpi-card">
+            <div class="kpi-title">Total Runs <span>🔄</span></div>
+            <div class="kpi-value" style="color:var(--accent)">\${totalRuns}</div>
+            <div class="kpi-sub">Across \${uniqueDays} recorded day\${uniqueDays !== 1 ? 's' : ''}</div>
+          </div>
+          <div class="kpi-card success">
+            <div class="kpi-title">Latest Pass Rate <span>📈</span></div>
+            <div class="kpi-value" style="color:var(--pass)">\${runs[0].passRate || 0}%</div>
+            <div class="kpi-sub">\${runs[0].summary.passed}/\${runs[0].summary.total} passed</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Avg Pass Rate <span>🛡️</span></div>
+            <div class="kpi-value" style="color:\${avgPassRate >= 70 ? 'var(--pass)' : 'var(--warn)'}">\${avgPassRate}%</div>
+            <div class="kpi-sub">Across all \${totalRuns} executions</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Latest Run Time <span>⏱️</span></div>
+            <div class="kpi-value" style="font-size:22px;margin-top:6px">\${formatTime(runs[0].startedAt)}</div>
+            <div class="kpi-sub">\${formatDate(runs[0].startedAt)} &middot; \${runs[0].summary.total} tests</div>
+          </div>
+        </div>
+      \` + Object.entries(groups).map(([date, dateRuns]) => \`
+        <div class="history-group">
+          <h3>\${date} (\${dateRuns.length} \${dateRuns.length === 1 ? 'execution' : 'executions'})</h3>
+          <div class="history-cards">
+            \${dateRuns.map(r => \`
+              <div class="history-card" onclick="openRunModal('\${r.id}')">
+                <div class="time">\${formatTime(r.startedAt)}</div>
+                <div class="run-id">\${formatDate(r.startedAt)} &middot; \${r.id}</div>
+                <div class="meta">
+                  <span class="pill pill-pass">\${r.summary.passed} passed</span>
+                  \${r.summary.failed > 0 ? \`<span class="pill pill-fail">\${r.summary.failed} failed</span>\` : ''}
+                  <span style="color:\${(r.passRate||0) >= 70 ? 'var(--pass)' : 'var(--warn)'}; font-size:13px; font-weight:700">\${r.passRate || 0}%</span>
+                  <span style="font-size:11px;color:var(--muted)">\${r.journey}</span>
+                </div>
+              </div>
+            \`).join('')}
+          </div>
+        </div>
+      \`).join('');
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       CALENDAR VIEW TAB (Matching ASR/TTS Reference)
+       ══════════════════════════════════════════════════════════ */
+    function renderCalendar(runs) {
+      const grid = document.getElementById('calendarGrid');
+      const title = document.getElementById('calMonthTitle');
+      if (!grid) return;
+
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      const runsByDate = {};
+      for (const r of runs) {
+        const rawDate = formatDate(r.startedAt);
+        const parts = rawDate.split('-').map(Number);
+        if (parts.length === 3) {
+          const [y, m, d] = parts;
+          const key = \`\${y}-\${m - 1}-\${d}\`;
+          if (!runsByDate[key]) runsByDate[key] = [];
+          runsByDate[key].push(r);
+        }
+      }
+
+      const firstDay = new Date(calYear, calMonth, 1).getDay();
+      const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+      const monthName = new Date(calYear, calMonth).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+      if (title) title.textContent = monthName;
+
+      const today = new Date();
+      const isCurrentMonth = today.getFullYear() === calYear && today.getMonth() === calMonth;
+
+      let cells = dayNames.map(d => \`<div class="cal-head">\${d}</div>\`).join('');
+      for (let i = 0; i < firstDay; i++) cells += '<div class="cal-cell empty"></div>';
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = \`\${calYear}-\${calMonth}-\${d}\`;
+        const dayRuns = runsByDate[key] || [];
+        const count = dayRuns.length;
+        const avgRate = count > 0 ? Math.round(dayRuns.reduce((s, r) => s + (r.passRate || 0), 0) / count) : -1;
+        const rateColor = avgRate >= 70 ? 'var(--pass)' : avgRate >= 40 ? 'var(--warn)' : 'var(--fail)';
+        const isToday = isCurrentMonth && today.getDate() === d;
+        const hasRuns = count > 0;
+
+        cells += \`
+          <div class="cal-cell \${hasRuns ? 'has-runs' : ''} \${isToday ? 'today' : ''}" onclick="selectCalDay('\${key}', \${count}, this)">
+            <div class="day">\${d}</div>
+            \${count > 0 ? \`
+              <div class="cal-runs">\${count} run\${count !== 1 ? 's' : ''}</div>
+              <div class="cal-rate" style="color:\${rateColor}">\${avgRate}% pass</div>
+            \` : ''}
+          </div>
+        \`;
+      }
+
+      grid.innerHTML = cells;
+    }
+
+    function changeCalMonth(delta) {
+      calMonth += delta;
+      if (calMonth < 0) { calMonth = 11; calYear--; }
+      else if (calMonth > 11) { calMonth = 0; calYear++; }
+      renderCalendar(historyData);
+    }
+
+    function selectCalDay(key, count, el) {
+      document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
+      if (el) el.classList.add('selected');
+
+      const details = document.getElementById('calendarRunDetails');
+      const cardsGrid = document.getElementById('calendarCardsGrid');
+      const title = document.getElementById('calendarDetailTitle');
+
+      if (!count) {
+        if (details) details.style.display = 'none';
+        return;
+      }
+
+      const dayRuns = historyData.filter(r => {
+        const raw = formatDate(r.startedAt);
+        const [y, m, d] = raw.split('-').map(Number);
+        return \`\${y}-\${m - 1}-\${d}\` === key;
+      });
+
+      if (title) title.textContent = \`Runs on \${formatDate(dayRuns[0]?.startedAt)} (\${dayRuns.length} executions)\`;
+      if (cardsGrid) {
+        cardsGrid.innerHTML = dayRuns.map(r => \`
+          <div class="history-card" onclick="openRunModal('\${r.id}')">
+            <div class="time">\${formatTime(r.startedAt)}</div>
+            <div class="run-id">\${formatDate(r.startedAt)} &middot; \${r.id}</div>
+            <div class="meta">
+              <span class="pill pill-pass">\${r.summary.passed} passed</span>
+              \${r.summary.failed > 0 ? \`<span class="pill pill-fail">\${r.summary.failed} failed</span>\` : ''}
+              <span style="color:\${(r.passRate||0) >= 70 ? 'var(--pass)' : 'var(--warn)'}; font-size:13px; font-weight:700">\${r.passRate || 0}%</span>
+            </div>
+          </div>
+        \`).join('');
+      }
+      if (details) details.style.display = 'block';
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       RUN DETAILS MODAL (Matching ASR/TTS Reference)
+       ══════════════════════════════════════════════════════════ */
+    function openRunModal(runId) {
+      const run = historyData.find(r => r.id === runId) || historyData[0];
+      if (!run) return;
+      currentModalRun = run;
+      const s = run.summary;
+
+      let body = \`
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi-card"><div class="kpi-title">Total Tests</div><div class="kpi-value">\${s.total}</div></div>
+          <div class="kpi-card success"><div class="kpi-title">Passed</div><div class="kpi-value" style="color:var(--pass)">\${s.passed}</div></div>
+          <div class="kpi-card error"><div class="kpi-title">Failed</div><div class="kpi-value" style="color:var(--fail)">\${s.failed}</div></div>
+          <div class="kpi-card"><div class="kpi-title">Pass Rate</div><div class="kpi-value" style="color:\${(run.passRate||0)>=70?'var(--pass)':'var(--warn)'}">\${run.passRate||0}%</div></div>
+        </div>
+      \`;
+
+      if (run.tests && run.tests.length > 0) {
+        body += \`
+          <div class="modal-filters">
+            <span class="filter-label">Filter:</span>
+            <button class="btn active" onclick="filterModalTests('all', this)">All (\${s.total})</button>
+            <button class="btn" onclick="filterModalTests('passed', this)">Passed (\${s.passed})</button>
+            <button class="btn" onclick="filterModalTests('failed', this)">Failed (\${s.failed})</button>
+          </div>
+          <div id="modalTestsContainer">\${renderModalTestsHTML(run.tests, 'all')}</div>
+        \`;
+      } else if (Object.keys(run.modules || {}).length > 0) {
+        body += '<h3 style="margin:12px 0 8px;font-size:14px;color:var(--muted)">Subsystems Breakdown</h3>';
+        body += Object.entries(run.modules).map(([, m]) => \`
+          <div class="modal-test">
+            <div class="mt-head">
+              <div class="mt-title">\${m.label}</div>
+              <div class="mt-meta">\${m.passed}/\${m.total} passed (\${m.passRate})</div>
+            </div>
+          </div>
+        \`).join('');
+      } else {
+        body += \`
+          <div class="modal-test">
+            <div class="mt-head">
+              <div class="mt-title">Meera Voice Agent Platform Automated Regression Run</div>
+              <span class="pill pill-pass">\${run.passRate}% PASS</span>
+            </div>
+            <div class="mt-meta">
+              <span class="mt-tag">\${run.journey}</span>
+              <span>Duration: \${formatDuration(run.durationMs)}</span>
+            </div>
+          </div>
+        \`;
+      }
+
+      document.getElementById('modalTitle').textContent = \`Shunya Labs Test Execution — \${formatDate(run.startedAt)} at \${formatTime(run.startedAt)} (\${run.id})\`;
+      document.getElementById('modalBody').innerHTML = body;
+      document.getElementById('modalOverlay').classList.add('open');
+
+      document.getElementById('modalExportBtn').onclick = () => {
+        downloadJSON(run, \`run-\${run.id}.json\`);
+      };
+    }
+
+    function renderModalTestsHTML(tests, filter) {
+      const filtered = filter === 'all' ? tests :
+        filter === 'passed' ? tests.filter(t => t.status === 'passed') :
+        tests.filter(t => t.status !== 'passed');
+
+      if (!filtered.length) return '<p style="color:var(--muted);padding:14px">No tests match this filter.</p>';
+
+      return filtered.map(t => \`
+        <div class="modal-test">
+          <div class="mt-head">
+            <div class="mt-title">\${esc(t.title)}</div>
+            <span class="pill \${t.status === 'passed' ? 'pill-pass' : 'pill-fail'}">\${t.status}</span>
+          </div>
+          <div class="mt-meta">
+            <span class="mt-tag">\${t.id} &middot; \${t.module}</span>
+            <span>\${formatDuration(t.durationMs)}</span>
+          </div>
+          \${t.reason ? \`<div style="color:#FCA5A5; font-size:12px; margin-top:6px; font-family:var(--font-mono);">\${esc(t.reason)}</div>\` : ''}
+        </div>
+      \`).join('');
+    }
+
+    function filterModalTests(filter, btn) {
+      document.querySelectorAll('.modal-filters .btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (currentModalRun && currentModalRun.tests) {
+        document.getElementById('modalTestsContainer').innerHTML = renderModalTestsHTML(currentModalRun.tests, filter);
+      }
+    }
+
+    function openTestModal(tcId) {
+      const t = DASHBOARD_DATA.tests.find(x => x.id === tcId);
+      if (!t) return;
+      document.getElementById('modalTitle').textContent = \`Test Case Inspection — \${t.id}\`;
+      document.getElementById('modalBody').innerHTML = \`
+        <div class="detail-section" style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Scenario / Title</div>
+          <div style="font-size:15px;font-weight:700;color:#FFF;">\${esc(t.title)}</div>
+        </div>
+        <div class="detail-section" style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Preconditions</div>
+          <div style="background:var(--panel-soft);padding:10px 14px;border-radius:8px;border:1px solid var(--panel-border);font-size:13px;">\${esc(t.preconditions || 'None')}</div>
+        </div>
+        <div class="detail-section" style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Test Steps</div>
+          <div style="background:var(--panel-soft);padding:10px 14px;border-radius:8px;border:1px solid var(--panel-border);font-size:13px;">\${esc(t.steps || 'N/A')}</div>
+        </div>
+        <div class="detail-section" style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Expected Result</div>
+          <div style="background:var(--panel-soft);padding:10px 14px;border-radius:8px;border:1px solid var(--panel-border);font-size:13px;">\${esc(t.expected || 'N/A')}</div>
+        </div>
+        \${t.techReason || t.friendlyReason ? \`
+          <div class="detail-section">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--fail);margin-bottom:4px;">Execution Details</div>
+            <div style="background:var(--panel-soft);padding:10px 14px;border-radius:8px;border:1px solid var(--panel-border);font-size:13px;color:#FCA5A5;font-family:var(--font-mono);">\${esc(t.friendlyReason + (t.techReason ? '\\n' + t.techReason : ''))}</div>
+          </div>
+        \` : ''}
+      \`;
+      document.getElementById('modalOverlay').classList.add('open');
+      document.getElementById('modalExportBtn').onclick = () => {
+        downloadJSON(t, \`test-\${t.id}.json\`);
+      };
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    function downloadJSON(obj, filename) {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", filename);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     }
 
     function exportMatrixCsv() {
@@ -1384,9 +1702,11 @@ function generateWideScreenHtml(data) {
       document.body.removeChild(link);
     }
 
-    // Initialize Charts
+    // Initialize Charts & Views
     window.addEventListener('DOMContentLoaded', () => {
       renderMatrix();
+      renderHistory(historyData);
+      renderCalendar(historyData);
 
       // 1. Status Chart
       const statusCtx = document.getElementById('statusChart');
@@ -1397,14 +1717,14 @@ function generateWideScreenHtml(data) {
             labels: ['Passed', 'Failed', 'Skipped'],
             datasets: [{
               data: [DASHBOARD_DATA.summary.passed, DASHBOARD_DATA.summary.failed, DASHBOARD_DATA.summary.skipped],
-              backgroundColor: ['#10B981', '#EF4444', '#6B7280'],
+              backgroundColor: ['#3FB950', '#F85149', '#8B949E'],
               borderWidth: 0,
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { color: '#9CA3AF' } } }
+            plugins: { legend: { position: 'bottom', labels: { color: '#8B949E' } } }
           }
         });
       }
@@ -1412,56 +1732,30 @@ function generateWideScreenHtml(data) {
       // 2. Trend Chart
       const trendCtx = document.getElementById('trendChart');
       if (trendCtx) {
-        const trendData = DASHBOARD_DATA.trend.slice(-15);
+        const trendData = historyData.slice(-15).reverse();
         new Chart(trendCtx, {
           type: 'line',
           data: {
-            labels: trendData.map(t => t.label),
+            labels: trendData.map(t => formatDate(t.startedAt)),
             datasets: [{
               label: 'Pass Rate %',
               data: trendData.map(t => t.passRate),
-              borderColor: '#6366F1',
-              backgroundColor: 'rgba(99, 102, 241, 0.1)',
+              borderColor: '#58A6FF',
+              backgroundColor: 'rgba(88, 166, 255, 0.1)',
               fill: true,
               tension: 0.35,
               borderWidth: 2.5,
-              pointBackgroundColor: '#6366F1'
+              pointBackgroundColor: '#58A6FF'
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-              y: { min: 0, max: 100, grid: { color: '#1F2937' }, ticks: { color: '#9CA3AF' } },
-              x: { grid: { display: false }, ticks: { color: '#9CA3AF' } }
+              y: { min: 0, max: 100, grid: { color: '#21262D' }, ticks: { color: '#8B949E' } },
+              x: { grid: { display: false }, ticks: { color: '#8B949E' } }
             },
             plugins: { legend: { display: false } }
-          }
-        });
-      }
-
-      // 3. History Bar Chart
-      const historyCtx = document.getElementById('historyBarChart');
-      if (historyCtx) {
-        const historyData = DASHBOARD_DATA.trend.slice(-20);
-        new Chart(historyCtx, {
-          type: 'bar',
-          data: {
-            labels: historyData.map(t => t.label),
-            datasets: [
-              { label: 'Passed', data: historyData.map(t => t.passed), backgroundColor: '#10B981', stack: 's' },
-              { label: 'Failed', data: historyData.map(t => t.failed), backgroundColor: '#EF4444', stack: 's' },
-              { label: 'Skipped', data: historyData.map(t => t.skipped), backgroundColor: '#6B7280', stack: 's' }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: { grid: { color: '#1F2937' }, ticks: { color: '#9CA3AF' } },
-              x: { grid: { display: false }, ticks: { color: '#9CA3AF' } }
-            },
-            plugins: { legend: { position: 'top', labels: { color: '#9CA3AF' } } }
           }
         });
       }
