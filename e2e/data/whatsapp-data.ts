@@ -42,7 +42,7 @@ export const WHATSAPP_SAMPLES = {
   accessToken: "EAAJ...mock_valid_waba_access_token_secure_min_32_chars_long",
   shortToken: "token_short",
   webhookVerifyToken: "shunya_whatsapp_verify_token_secure_2026",
-  webhookCallbackUrl: "https://agents.shunyalabs.ai/api/v1/webhooks/whatsapp",
+  webhookCallbackUrl: "https://meera.shunyalabs.ai/api/v1/webhooks/whatsapp",
   invalidWebhookUrl: "http://invalid-url",
   templateName: "appointment_reminder_v1",
   templateLanguage: "en_US",
