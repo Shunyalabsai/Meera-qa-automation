@@ -46,6 +46,20 @@ function formatDate(iso) {
   }
 }
 
+function shortDate(iso) {
+  if (!iso) return "";
+  try {
+    return new Date(iso).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return iso;
+  }
+}
+
 function toBase64Png(filePath) {
   if (!filePath || !fs.existsSync(filePath)) return "";
   try {
@@ -271,7 +285,7 @@ export function buildDashboard(options = {}) {
         skipped,
       },
       modules,
-      tests: runTests.slice(0, 150), // Sample for modal display
+      tests: runTests.slice(0, 150),
     };
   });
 
@@ -674,14 +688,19 @@ function generateWideScreenHtml(data) {
     /* Search & Filter Bar */
     .filter-bar {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 12px;
-      align-items: center;
       margin-bottom: 18px;
       background: var(--panel);
       border: 1px solid var(--panel-border);
       border-radius: var(--radius);
       padding: 14px 18px;
+    }
+    .filter-top-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
     }
     .search-input {
       flex: 1;
@@ -701,11 +720,12 @@ function generateWideScreenHtml(data) {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
+      align-items: center;
     }
     .filter-chip {
-      padding: 7px 12px;
+      padding: 6px 12px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
       background: var(--bg);
@@ -729,6 +749,7 @@ function generateWideScreenHtml(data) {
       padding: 6px 12px;
       background: var(--panel-soft);
       border-radius: 6px;
+      white-space: nowrap;
     }
 
     /* Matrix & History Table */
@@ -737,7 +758,7 @@ function generateWideScreenHtml(data) {
       border: 1px solid var(--panel-border);
       border-radius: var(--radius);
       overflow-x: auto;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       max-height: 750px;
       overflow-y: auto;
     }
@@ -796,6 +817,25 @@ function generateWideScreenHtml(data) {
     .badge-fail { background: var(--fail-soft); color: var(--fail); }
     .badge-skip { background: rgba(139, 148, 158, 0.18); color: var(--muted); }
     .badge-p1 { background: var(--warn-soft); color: var(--warn); }
+
+    /* Pagination controls */
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .pagination-controls {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
 
     /* ── Execution History Cards Layout (Matching ASR/TTS Reference) ── */
     .history-group {
@@ -1179,15 +1219,23 @@ function generateWideScreenHtml(data) {
     <!-- TAB 2: TEST CASES MATRIX (1,301 Total) -->
     <div id="tab-matrix" class="tab-content">
       <div class="filter-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search across all 1,301 test cases (ID, title, module, steps, tags)..." oninput="filterMatrix()">
-        <span id="showingCount" class="counter-badge">Showing 1,301 of 1,301</span>
+        <div class="filter-top-row">
+          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search across all 1,301 test cases (ID, title, module, steps, tags)..." oninput="filterMatrix()">
+          <span id="showingCount" class="counter-badge">Showing 1,301 of 1,301</span>
+        </div>
+
+        <!-- Source Filters -->
         <div class="filter-group" id="categoryFilters">
-          <button class="filter-chip active" onclick="setFilter('category', 'ALL', this)">All Sources (${data.summary.totalInventory})</button>
+          <span style="font-size:12px; font-weight:700; color:var(--muted); margin-right:4px;">Source:</span>
+          <button class="filter-chip active" onclick="setFilter('category', 'ALL', this)">All (${data.summary.totalInventory})</button>
           <button class="filter-chip" onclick="setFilter('category', 'Automated', this)">Automated (${data.summary.autoInventory})</button>
           <button class="filter-chip" onclick="setFilter('category', 'Manual QA', this)">Manual QA (${data.summary.manualInventory})</button>
           <button class="filter-chip" onclick="setFilter('category', 'UAT', this)">UAT Cases (${data.summary.uatInventory})</button>
         </div>
+
+        <!-- Status Filters -->
         <div class="filter-group" id="statusFilters">
+          <span style="font-size:12px; font-weight:700; color:var(--muted); margin-right:4px;">Status:</span>
           <button class="filter-chip active" onclick="setFilter('status', 'ALL', this)">All Statuses</button>
           <button class="filter-chip" onclick="setFilter('status', 'Pass', this)">Passed</button>
           <button class="filter-chip" onclick="setFilter('status', 'Fail', this)">Failed</button>
@@ -1213,6 +1261,16 @@ function generateWideScreenHtml(data) {
             <!-- Full Dataset Rendered by JS -->
           </tbody>
         </table>
+      </div>
+
+      <div class="pagination-bar">
+        <div style="font-size:13px; color:var(--muted);" id="paginationInfo">Showing 1 to 50 of 1,301 tests</div>
+        <div class="pagination-controls">
+          <button class="btn" id="btnPrevPage" onclick="changePage(-1)">&larr; Previous</button>
+          <span id="pageNumberDisplay" style="font-size:13px; font-weight:700; color:#FFF; padding:0 8px;">Page 1</span>
+          <button class="btn" id="btnNextPage" onclick="changePage(1)">Next &rarr;</button>
+          <button class="btn" id="btnShowAll" onclick="toggleShowAll()">Show All</button>
+        </div>
       </div>
     </div>
 
@@ -1264,11 +1322,15 @@ function generateWideScreenHtml(data) {
     const DASHBOARD_DATA = ${jsonData};
     const historyData = DASHBOARD_DATA.runs || [];
 
-    // State for filtering
+    // State for filtering & pagination
     let currentCategory = 'ALL';
     let currentStatus = 'ALL';
     let currentSearch = '';
     let currentModalRun = null;
+
+    let currentPage = 1;
+    const pageSize = 100;
+    let showAll = false;
 
     let calYear = 2026;
     let calMonth = 7; // August (0-indexed)
@@ -1303,7 +1365,12 @@ function generateWideScreenHtml(data) {
 
     function esc(s) {
       if (!s) return "";
-      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
     function switchTab(tabId, el) {
@@ -1318,48 +1385,91 @@ function generateWideScreenHtml(data) {
         renderHistory(historyData);
       } else if (tabId === 'calendar') {
         renderCalendar(historyData);
+      } else if (tabId === 'matrix') {
+        renderMatrix();
       }
+    }
+
+    function getFilteredData() {
+      return DASHBOARD_DATA.tests.filter(t => {
+        const matchCat = currentCategory === 'ALL' || t.category === currentCategory;
+        const matchStatus = currentStatus === 'ALL' || t.status === currentStatus;
+        const q = currentSearch.toLowerCase();
+        const matchSearch = !q ||
+          (t.id && t.id.toLowerCase().includes(q)) ||
+          (t.title && t.title.toLowerCase().includes(q)) ||
+          (t.module && t.module.toLowerCase().includes(q)) ||
+          (t.steps && t.steps.toLowerCase().includes(q));
+        return matchCat && matchStatus && matchSearch;
+      });
     }
 
     function renderMatrix() {
       const tbody = document.getElementById('matrixBody');
       if (!tbody) return;
 
-      const filtered = DASHBOARD_DATA.tests.filter(t => {
-        const matchCat = currentCategory === 'ALL' || t.category === currentCategory;
-        const matchStatus = currentStatus === 'ALL' || t.status === currentStatus;
-        const q = currentSearch.toLowerCase();
-        const matchSearch = !q ||
-          t.id.toLowerCase().includes(q) ||
-          t.title.toLowerCase().includes(q) ||
-          t.module.toLowerCase().includes(q) ||
-          (t.steps && t.steps.toLowerCase().includes(q));
-        return matchCat && matchStatus && matchSearch;
-      });
-
+      const filtered = getFilteredData();
       const countEl = document.getElementById('showingCount');
       if (countEl) {
         countEl.textContent = \`Showing \${filtered.length.toLocaleString()} of \${DASHBOARD_DATA.tests.length.toLocaleString()}\`;
       }
 
-      tbody.innerHTML = filtered.map(t => {
+      const totalPages = Math.ceil(filtered.length / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIdx = showAll ? 0 : (currentPage - 1) * pageSize;
+      const endIdx = showAll ? filtered.length : Math.min(startIdx + pageSize, filtered.length);
+      const pageData = filtered.slice(startIdx, endIdx);
+
+      const pageInfo = document.getElementById('paginationInfo');
+      const pageDisplay = document.getElementById('pageNumberDisplay');
+      if (pageInfo) {
+        pageInfo.textContent = filtered.length > 0
+          ? \`Showing \${startIdx + 1} to \${endIdx} of \${filtered.length.toLocaleString()} tests\`
+          : 'No tests found';
+      }
+      if (pageDisplay) {
+        pageDisplay.textContent = showAll ? 'All Items' : \`Page \${currentPage} of \${totalPages}\`;
+      }
+
+      const prevBtn = document.getElementById('btnPrevPage');
+      const nextBtn = document.getElementById('btnNextPage');
+      if (prevBtn) prevBtn.disabled = showAll || currentPage <= 1;
+      if (nextBtn) nextBtn.disabled = showAll || currentPage >= totalPages;
+
+      tbody.innerHTML = pageData.map(t => {
         const badgeClass = t.status === 'Pass' ? 'badge-pass' : t.status === 'Fail' ? 'badge-fail' : 'badge-skip';
+        const sourceBadge = t.category === 'Automated' ? 'badge-pass' : t.category === 'Manual QA' ? 'badge-p1' : 'badge-pass';
         return \`
           <tr>
-            <td class="tc-id">\${t.id}</td>
-            <td><span class="badge badge-pass">\${t.category}</span></td>
-            <td>\${t.module}</td>
-            <td style="color: #FFF; font-weight: 500;">\${t.title}</td>
-            <td><span class="badge badge-p1">\${t.priority}</span></td>
-            <td>\${t.type}</td>
-            <td><span class="badge \${badgeClass}">\${t.status}</span></td>
+            <td class="tc-id">\${esc(t.id)}</td>
+            <td><span class="badge \${sourceBadge}">\${esc(t.category)}</span></td>
+            <td>\${esc(t.module)}</td>
+            <td style="color: #FFF; font-weight: 500;">\${esc(t.title)}</td>
+            <td><span class="badge badge-p1">\${esc(t.priority)}</span></td>
+            <td>\${esc(t.type)}</td>
+            <td><span class="badge \${badgeClass}">\${esc(t.status)}</span></td>
             <td><button class="btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick='openTestModal(\${JSON.stringify(t.id)})'>Inspect</button></td>
           </tr>
         \`;
       }).join('');
     }
 
+    function changePage(delta) {
+      currentPage += delta;
+      renderMatrix();
+    }
+
+    function toggleShowAll() {
+      showAll = !showAll;
+      const btn = document.getElementById('btnShowAll');
+      if (btn) btn.textContent = showAll ? 'Paginate' : 'Show All';
+      renderMatrix();
+    }
+
     function setFilter(type, value, btn) {
+      currentPage = 1;
       if (type === 'category') {
         currentCategory = value;
         document.querySelectorAll('#categoryFilters .filter-chip').forEach(c => c.classList.remove('active'));
@@ -1372,6 +1482,7 @@ function generateWideScreenHtml(data) {
     }
 
     function filterMatrix() {
+      currentPage = 1;
       currentSearch = document.getElementById('searchInput').value;
       renderMatrix();
     }
@@ -1617,7 +1728,7 @@ function generateWideScreenHtml(data) {
             <span class="pill \${t.status === 'passed' ? 'pill-pass' : 'pill-fail'}">\${t.status}</span>
           </div>
           <div class="mt-meta">
-            <span class="mt-tag">\${t.id} &middot; \${t.module}</span>
+            <span class="mt-tag">\${esc(t.id)} &middot; \${esc(t.module)}</span>
             <span>\${formatDuration(t.durationMs)}</span>
           </div>
           \${t.reason ? \`<div style="color:#FCA5A5; font-size:12px; margin-top:6px; font-family:var(--font-mono);">\${esc(t.reason)}</div>\` : ''}
