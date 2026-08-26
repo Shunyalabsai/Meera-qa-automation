@@ -34,19 +34,24 @@ test.describe("BUILD › Agents › Start from scratch — Gallery entry @journe
     await form.expectPromptTabContent();
 
     expect(await form.nameInput().inputValue()).toBe("");
-    await expect(form.languageSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.languageSelect(),
       START_FROM_SCRATCH.expectedLanguage,
     );
-    await expect(form.voiceToneSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.voiceToneSelect(),
       START_FROM_SCRATCH.expectedVoiceTone,
     );
-    await expect(form.accentSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.accentSelect(),
       START_FROM_SCRATCH.expectedAccent,
     );
-    await expect(form.genderSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.genderSelect(),
       START_FROM_SCRATCH.expectedGender,
     );
-    await expect(form.callDirectionSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.callDirectionSelect(),
       START_FROM_SCRATCH.defaultCallDirection,
     );
 

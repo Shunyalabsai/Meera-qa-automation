@@ -32,19 +32,24 @@ test.describe("BUILD › Agents › Order Confirmation & Reschedule — Template
     const name = await form.nameInput().inputValue();
     expect(name).toMatch(ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedName);
 
-    await expect(form.languageSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.languageSelect(),
       ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedLanguage,
     );
-    await expect(form.voiceToneSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.voiceToneSelect(),
       ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedVoiceTone,
     );
-    await expect(form.accentSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.accentSelect(),
       ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedAccent,
     );
-    await expect(form.genderSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.genderSelect(),
       ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedGender,
     );
-    await expect(form.callDirectionSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.callDirectionSelect(),
       ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.defaultCallDirection,
     );
 

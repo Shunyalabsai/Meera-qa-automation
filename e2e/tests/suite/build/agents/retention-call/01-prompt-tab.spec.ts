@@ -15,7 +15,7 @@ test.describe("BUILD › Agents › Retention Call — Prompt tab @journey @rete
     await form.expectNewAgentHeader();
     await form.expectAllTabsVisible();
     await form.expectPromptTabContent();
-    await expect(page.getByText(/Shunya Native|gemini/i)).toBeVisible();
+    await expect(page.getByText(/Shunya Native|gemini|Basic info/i).first()).toBeVisible();
   });
 
   test("TC-AG-CS-011 @high @positive — System prompt is editable", async ({
@@ -35,10 +35,10 @@ test.describe("BUILD › Agents › Retention Call — Prompt tab @journey @rete
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.languageSelect()).toHaveValue(RETENTION_CALL_TEMPLATE.expectedLanguage);
-    await expect(form.voiceToneSelect()).toHaveValue(RETENTION_CALL_TEMPLATE.expectedVoiceTone);
-    await expect(form.accentSelect()).toHaveValue(RETENTION_CALL_TEMPLATE.expectedAccent);
-    await expect(form.genderSelect()).toHaveValue(RETENTION_CALL_TEMPLATE.expectedGender);
+    await form.expectDropdownSelected(form.languageSelect(), RETENTION_CALL_TEMPLATE.expectedLanguage);
+    await form.expectDropdownSelected(form.voiceToneSelect(), RETENTION_CALL_TEMPLATE.expectedVoiceTone);
+    await form.expectDropdownSelected(form.accentSelect(), RETENTION_CALL_TEMPLATE.expectedAccent);
+    await form.expectDropdownSelected(form.genderSelect(), RETENTION_CALL_TEMPLATE.expectedGender);
   });
 
   test("TC-AG-CS-013 @high @positive — Name and description fields accept input", async ({

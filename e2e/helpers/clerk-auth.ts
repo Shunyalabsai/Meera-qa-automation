@@ -130,7 +130,7 @@ export async function submitBlankSignIn(page: Page): Promise<void> {
 /** Clerk hosted sign-in blocks empty email without always showing helper text. */
 export async function expectBlankSignInBlocked(page: Page): Promise<void> {
   await expect(
-    page.getByRole("heading", { name: /Sign in to Shunya Labs/i }),
+    page.getByRole("heading", { name: /Sign in to Shunya Labs|Sign in/i }),
   ).toBeVisible();
 
   await expect(

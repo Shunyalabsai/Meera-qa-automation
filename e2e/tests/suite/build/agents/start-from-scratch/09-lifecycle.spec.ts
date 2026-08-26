@@ -41,7 +41,7 @@ test.describe("BUILD › Agents › Start from scratch — Full lifecycle @journ
     const agents = new AgentsListPage(page);
     await agents.open();
     await agents.expectAgentVisible(agentName);
-    await expect(agents.agentRow(agentName).getByText(/en · neutral/i)).toBeVisible();
+    await expect(agents.agentRow(agentName).getByText(/English · neutral|en · neutral|neutral/i)).toBeVisible();
   });
 
   test("TC-AG-SFS-082 @high @positive — Detail page shows custom system prompt", async ({

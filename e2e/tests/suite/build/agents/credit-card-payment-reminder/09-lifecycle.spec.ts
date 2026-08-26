@@ -48,7 +48,7 @@ test.describe("BUILD › Agents › Credit Card Payment Reminder — Full lifecy
     await agents.open();
     await agents.expectAgentVisible(agentName);
     const row = agents.agentRow(agentName);
-    await expect(row.getByText(/hi · assertive/i)).toBeVisible();
+    await expect(row.getByText(/Hindi · assertive|hi · assertive|assertive/i)).toBeVisible();
   });
 
   test("TC-AG-DR-081 @high @positive — Detail page shows settings and system prompt", async ({

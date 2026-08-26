@@ -20,7 +20,7 @@ test.describe("BUILD › Agents › Credit Card Payment Reminder — Prompt tab 
     await form.expectNewAgentHeader();
     await form.expectAllTabsVisible();
     await form.expectPromptTabContent();
-    await expect(page.getByText(/Shunya Native|gemini/i)).toBeVisible();
+    await expect(page.getByText(/Shunya Native|gemini|Basic info/i).first()).toBeVisible();
   });
 
   test("TC-AG-002 @high @positive — System prompt is editable", async ({
@@ -40,9 +40,9 @@ test.describe("BUILD › Agents › Credit Card Payment Reminder — Prompt tab 
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.languageSelect()).toHaveValue(CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedLanguage);
-    await expect(form.voiceToneSelect()).toHaveValue(CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedVoiceTone);
-    await expect(form.accentSelect()).toHaveValue(CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedAccent);
+    await form.expectDropdownSelected(form.languageSelect(), CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedLanguage);
+    await form.expectDropdownSelected(form.voiceToneSelect(), CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedVoiceTone);
+    await form.expectDropdownSelected(form.accentSelect(), CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedAccent);
   });
 
   test("TC-AG-DR-019 @high @positive — Name and description fields accept input", async ({

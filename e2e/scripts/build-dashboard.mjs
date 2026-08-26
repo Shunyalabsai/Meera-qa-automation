@@ -341,6 +341,8 @@ export function buildDashboard() {
   console.log(` → Output: ${docsOutFile}\n`);
 }
 
+export const buildDashboardFile = buildDashboard;
+
 function generateWideScreenHtml(data) {
   const jsonData = JSON.stringify(data).replace(/<\/script>/g, "<\\/script>");
 

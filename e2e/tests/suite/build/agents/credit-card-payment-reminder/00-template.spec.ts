@@ -29,13 +29,16 @@ test.describe("BUILD › Agents › Credit Card Payment Reminder — Template @j
     const name = await form.nameInput().inputValue();
     expect(name).toMatch(CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedName);
 
-    await expect(form.languageSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.languageSelect(),
       CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedLanguage,
     );
-    await expect(form.voiceToneSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.voiceToneSelect(),
       CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.expectedVoiceTone,
     );
-    await expect(form.callDirectionSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.callDirectionSelect(),
       CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE.defaultCallDirection,
     );
 

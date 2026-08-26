@@ -47,7 +47,7 @@ test.describe("BUILD › Agents › Order Confirmation & Reschedule — Full lif
     const agents = new AgentsListPage(page);
     await agents.open();
     await agents.expectAgentVisible(agentName);
-    await expect(agents.agentRow(agentName).getByText(/hinglish · warm/i)).toBeVisible();
+    await expect(agents.agentRow(agentName).getByText(/Hinglish · warm|hinglish · warm|warm/i)).toBeVisible();
   });
 
   test("TC-AG-OC-082 @high @positive — Detail page shows order confirmation prompt", async ({

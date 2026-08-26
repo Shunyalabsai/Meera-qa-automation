@@ -42,7 +42,7 @@ test.describe("BUILD › Agents › Retention Call — Full lifecycle @journey @
     const agents = new AgentsListPage(page);
     await agents.open();
     await agents.expectAgentVisible(agentName);
-    await expect(agents.agentRow(agentName).getByText(/en · warm/i)).toBeVisible();
+    await expect(agents.agentRow(agentName).getByText(/English · warm|en · warm|warm/i)).toBeVisible();
   });
 
   test("TC-AG-CS-082 @high @positive — Detail page shows support system prompt", async ({

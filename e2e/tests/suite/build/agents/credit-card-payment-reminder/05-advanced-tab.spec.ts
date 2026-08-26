@@ -60,8 +60,8 @@ test.describe("BUILD › Agents › Credit Card Payment Reminder — Advanced ta
     }) => {
       const form = new AgentFormPage(page);
       await form.checkboxByLabel(/Enable pre-call enrichment/i).check();
-      await form.selectByLabel(/^HTTP method$/i).selectOption(method);
-      await expect(form.selectByLabel(/^HTTP method$/i)).toHaveValue(method);
+      await form.selectDropdownValue(form.selectByLabel(/^HTTP method$/i), method);
+      await form.expectDropdownSelected(form.selectByLabel(/^HTTP method$/i), method);
     });
   }
 });

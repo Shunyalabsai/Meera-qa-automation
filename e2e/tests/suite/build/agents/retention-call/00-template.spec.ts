@@ -32,19 +32,24 @@ test.describe("BUILD › Agents › Retention Call — Template @journey @retent
     expect(await form.nameInput().inputValue()).toMatch(
       RETENTION_CALL_TEMPLATE.expectedName,
     );
-    await expect(form.languageSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.languageSelect(),
       RETENTION_CALL_TEMPLATE.expectedLanguage,
     );
-    await expect(form.voiceToneSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.voiceToneSelect(),
       RETENTION_CALL_TEMPLATE.expectedVoiceTone,
     );
-    await expect(form.accentSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.accentSelect(),
       RETENTION_CALL_TEMPLATE.expectedAccent,
     );
-    await expect(form.genderSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.genderSelect(),
       RETENTION_CALL_TEMPLATE.expectedGender,
     );
-    await expect(form.callDirectionSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.callDirectionSelect(),
       RETENTION_CALL_TEMPLATE.defaultCallDirection,
     );
 

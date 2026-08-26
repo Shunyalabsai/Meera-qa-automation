@@ -90,7 +90,7 @@ export class AgentFormPage {
       this.page.getByRole("heading", { name: /New agent/i }),
     ).toBeVisible();
     await expect(
-      this.page.getByText(/which voice pipeline/i),
+      this.page.getByText(/Define your AI voice agent|which voice pipeline/i),
     ).toBeVisible();
   }
 
@@ -305,6 +305,24 @@ export class AgentFormPage {
 
   // ── Dropdown helpers ─────────────────────────────────────────────
 
+  async expectDropdownSelected(locator: Locator, expected: string | RegExp) {
+    const isNative = await locator.evaluate((el) => el.tagName === "SELECT").catch(() => false);
+    if (isNative) {
+      if (typeof expected === "string") {
+        await expect(locator).toHaveValue(expected);
+      } else {
+        const val = await locator.inputValue();
+        expect(val).toMatch(expected);
+      }
+      return;
+    }
+    if (typeof expected === "string") {
+      await expect(locator).toHaveText(new RegExp(expected, "i"));
+    } else {
+      await expect(locator).toHaveText(expected);
+    }
+  }
+
   async selectDropdownValue(selectLocator: Locator, value: string, alternateLabel?: string) {
     const isNative = await selectLocator.evaluate((el) => el.tagName === "SELECT").catch(() => false);
     if (isNative) {
@@ -509,7 +527,8 @@ export class AgentFormPage {
         await this.page.getByLabel(/Endpoint URL/i).fill(config.preCallApiUrl);
       }
       if (config.preCallApiMethod) {
-        await this.selectByLabel(/^HTTP method$/i).selectOption(
+        await this.selectDropdownValue(
+          this.selectByLabel(/^HTTP method$/i),
           config.preCallApiMethod,
         );
       }

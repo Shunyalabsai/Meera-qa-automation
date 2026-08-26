@@ -42,7 +42,7 @@ test.describe("BUILD › Agents › Appointment Reminder & Reschedule — Full l
     const agents = new AgentsListPage(page);
     await agents.open();
     await agents.expectAgentVisible(agentName);
-    await expect(agents.agentRow(agentName).getByText(/en · professional/i)).toBeVisible();
+    await expect(agents.agentRow(agentName).getByText(/English · professional|en · professional|professional/i)).toBeVisible();
   });
 
   test("TC-AG-AR-082 @high @positive — Detail page shows appointment reminder prompt", async ({

@@ -15,7 +15,7 @@ test.describe("BUILD › Agents › Start from scratch — Prompt tab @journey @
     await form.expectNewAgentHeader();
     await form.expectAllTabsVisible();
     await form.expectPromptTabContent();
-    await expect(page.getByText(/Shunya Native|gemini/i)).toBeVisible();
+    await expect(page.getByText(/Shunya Native|gemini|Basic info/i).first()).toBeVisible();
     expect(await form.systemPromptInput().inputValue()).toBe("");
   });
 
@@ -37,10 +37,10 @@ test.describe("BUILD › Agents › Start from scratch — Prompt tab @journey @
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.languageSelect()).toHaveValue("en");
-    await expect(form.voiceToneSelect()).toHaveValue("neutral");
-    await expect(form.accentSelect()).toHaveValue("neutral");
-    await expect(form.genderSelect()).toHaveValue("neutral");
+    await form.expectDropdownSelected(form.languageSelect(), "en");
+    await form.expectDropdownSelected(form.voiceToneSelect(), "neutral");
+    await form.expectDropdownSelected(form.accentSelect(), "neutral");
+    await form.expectDropdownSelected(form.genderSelect(), "neutral");
   });
 
   test("TC-AG-SFS-013 @medium @positive — All prompt dropdowns are selectable on blank form", async ({

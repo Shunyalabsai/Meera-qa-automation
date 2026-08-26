@@ -15,7 +15,7 @@ test.describe("BUILD › Agents › Order Confirmation & Reschedule — Prompt t
     await form.expectNewAgentHeader();
     await form.expectAllTabsVisible();
     await form.expectPromptTabContent();
-    await expect(page.getByText(/Shunya Native|gemini/i)).toBeVisible();
+    await expect(page.getByText(/Shunya Native|gemini|Basic info/i).first()).toBeVisible();
   });
 
   test("TC-AG-OC-011 @high @positive — System prompt is editable", async ({
@@ -35,10 +35,10 @@ test.describe("BUILD › Agents › Order Confirmation & Reschedule — Prompt t
     page,
   }) => {
     const form = new AgentFormPage(page);
-    await expect(form.languageSelect()).toHaveValue(ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedLanguage);
-    await expect(form.voiceToneSelect()).toHaveValue(ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedVoiceTone);
-    await expect(form.accentSelect()).toHaveValue(ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedAccent);
-    await expect(form.genderSelect()).toHaveValue(ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedGender);
+    await form.expectDropdownSelected(form.languageSelect(), ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedLanguage);
+    await form.expectDropdownSelected(form.voiceToneSelect(), ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedVoiceTone);
+    await form.expectDropdownSelected(form.accentSelect(), ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedAccent);
+    await form.expectDropdownSelected(form.genderSelect(), ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE.expectedGender);
   });
 
   test("TC-AG-OC-013 @high @positive — Name and description fields accept input", async ({

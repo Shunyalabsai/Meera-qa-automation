@@ -162,12 +162,20 @@ export async function gotoSignIn(page: Page): Promise<void> {
 
 /** Clerk hosted sign-up — new user journey entry point. */
 export async function gotoSignUp(page: Page): Promise<void> {
-  await page.goto(
-    `${CLERK_ACCOUNTS}/sign-up?redirect_url=${redirectUrl()}`,
-    { waitUntil: "domcontentloaded" },
-  );
+  const url = `${CLERK_ACCOUNTS}/sign-up?redirect_url=${redirectUrl()}`;
+  await page.goto(url, { waitUntil: "domcontentloaded" });
+
+  // Handle transient Vercel Serverless Function 500 crashes
+  const crashed = await page.getByText(/Serverless Function has crashed/i).isVisible({ timeout: 2_000 }).catch(() => false);
+  if (crashed) {
+    await page.waitForTimeout(1_000);
+    await page.goto(url, { waitUntil: "domcontentloaded" });
+  }
+
   await page
-    .getByRole("heading", { name: /Create your account/i })
+    .getByRole("heading", { name: /Create your account|Sign up/i })
+    .or(page.getByRole("textbox", { name: /email/i }))
+    .first()
     .waitFor({ timeout: 60_000 });
 }
 
@@ -175,7 +183,9 @@ export async function gotoSignUpFromSignIn(page: Page): Promise<void> {
   await gotoSignIn(page);
   await page.getByRole("link", { name: /^Sign up$/i }).click();
   await page
-    .getByRole("heading", { name: /Create your account/i })
+    .getByRole("heading", { name: /Create your account|Sign up/i })
+    .or(page.getByRole("textbox", { name: /email/i }))
+    .first()
     .waitFor({ timeout: 30_000 });
 }
 

@@ -32,19 +32,24 @@ test.describe("BUILD › Agents › Appointment Reminder & Reschedule — Templa
     expect(await form.nameInput().inputValue()).toMatch(
       APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE.expectedName,
     );
-    await expect(form.languageSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.languageSelect(),
       APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE.expectedLanguage,
     );
-    await expect(form.voiceToneSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.voiceToneSelect(),
       APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE.expectedVoiceTone,
     );
-    await expect(form.accentSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.accentSelect(),
       APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE.expectedAccent,
     );
-    await expect(form.genderSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.genderSelect(),
       APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE.expectedGender,
     );
-    await expect(form.callDirectionSelect()).toHaveValue(
+    await form.expectDropdownSelected(
+      form.callDirectionSelect(),
       APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE.defaultCallDirection,
     );
 
