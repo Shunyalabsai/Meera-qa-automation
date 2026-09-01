@@ -1144,7 +1144,7 @@ function generateWideScreenHtml(data) {
       <div class="meta-badge-bar">
         <span>📊 Total Runs: <strong style="color:#FFF;">${data.summary.historyRunCount}</strong></span>
         <span>•</span>
-        <span>⏱ Updated: <strong id="headerUpdatedTime" style="color:#FFF;">${formatDate(data.generatedAt)}</strong></span>
+        <span>⏱ Updated: <strong id="headerUpdatedTime" style="color:#FFF;">${formatDate(data.run?.runAt || data.generatedAt)}</strong></span>
       </div>
       <div class="header-actions">
         <a href="https://docs.google.com/spreadsheets/d/1QbaJTyhdn1eNIIJkOFbglgyYkpffuN4I2GYUTrhcEvc/edit" target="_blank" class="btn btn-primary">📊 Live Google Sheet</a>
@@ -1872,6 +1872,14 @@ function generateWideScreenHtml(data) {
 
     // Initialize Charts & Views
     window.addEventListener('DOMContentLoaded', () => {
+      const headerTimeEl = document.getElementById('headerUpdatedTime');
+      if (headerTimeEl) {
+        const latestTime = (DASHBOARD_DATA.run && DASHBOARD_DATA.run.runAt) || DASHBOARD_DATA.generatedAt;
+        if (latestTime) {
+          headerTimeEl.textContent = formatDateTime(latestTime);
+        }
+      }
+
       renderMatrix();
       renderHistory(historyData);
       renderCalendar(historyData);
