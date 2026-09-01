@@ -1,6 +1,80 @@
 {
   "runs": [
     {
+      "runId": "2026-09-01T08-46-39-937Z",
+      "runAt": "2026-09-01T08:46:39.937Z",
+      "finishedAt": "2026-09-01T08:49:52.766Z",
+      "environment": "https://agents.shunyalabs.ai/vap/",
+      "status": "interrupted",
+      "stats": {
+        "expected": 1,
+        "unexpected": 1,
+        "skipped": 0,
+        "flaky": 0,
+        "durationMs": 194581.96399999998
+      },
+      "executed": 2,
+      "journey": "Full Suite",
+      "rowsByTab": {
+        "QA Registry": [
+          {
+            "testId": "",
+            "title": "validate saved Google SSO session",
+            "rawTitle": "validate saved Google SSO session",
+            "priority": "",
+            "type": "",
+            "tags": "",
+            "specFile": "e2e/auth.setup.ts",
+            "line": 14,
+            "describe": "",
+            "sectionKey": "qa",
+            "module": "QA Registry › ",
+            "preconditions": "Automated E2E run (saved-auth session on the staging app)",
+            "steps": "• Open QA Registry › \n• Verify: “validate saved Google SSO session”\n• This check is automated — exact clicks and assertions are in the linked test code.",
+            "expected": "validate saved Google SSO session",
+            "friendlyReason": "",
+            "techReason": "",
+            "screenshot": "",
+            "status": "Pass",
+            "lastRunAt": "2026-09-01T08:46:39.937Z",
+            "durationSec": "5.45",
+            "reason": "",
+            "environment": "https://agents.shunyalabs.ai/vap/",
+            "runId": "2026-09-01T08-46-39-937Z",
+            "tab": "QA Registry",
+            "journey": "General"
+          },
+          {
+            "testId": "",
+            "title": "save Google SSO session",
+            "rawTitle": "save Google SSO session",
+            "priority": "",
+            "type": "",
+            "tags": "",
+            "specFile": "e2e/auth.save.setup.ts",
+            "line": 43,
+            "describe": "",
+            "sectionKey": "qa",
+            "module": "QA Registry › ",
+            "preconditions": "Automated E2E run (saved-auth session on the staging app)",
+            "steps": "• Open QA Registry › \n• Verify: “save Google SSO session”\n• This check is automated — exact clicks and assertions are in the linked test code.",
+            "expected": "save Google SSO session",
+            "friendlyReason": "page.waitForTimeout: Test ended.",
+            "techReason": "Error: page.waitForTimeout: Test ended.",
+            "screenshot": "/Users/unitedwecare/Meera_repo/e2e/data/screenshots/2026-09-01T08-46-39-937Z/1-test-failed-2.png",
+            "status": "Interrupted",
+            "lastRunAt": "2026-09-01T08:46:39.937Z",
+            "durationSec": "185.32",
+            "reason": "Error: page.waitForTimeout: Test ended.",
+            "environment": "https://agents.shunyalabs.ai/vap/",
+            "runId": "2026-09-01T08-46-39-937Z",
+            "tab": "QA Registry",
+            "journey": "General"
+          }
+        ]
+      }
+    },
+    {
       "runId": "2026-08-26T12-46-48-329Z",
       "runAt": "2026-08-26T12:46:48.329Z",
       "finishedAt": "2026-08-26T14:14:15.135Z",
@@ -285638,52 +285712,6 @@
             "runId": "2026-07-31T15-16-14-079Z",
             "tab": "SETTINGS",
             "journey": "New User"
-          }
-        ]
-      }
-    },
-    {
-      "runId": "2026-07-31T14-54-29-328Z",
-      "runAt": "2026-07-31T14:54:29.328Z",
-      "finishedAt": "2026-07-31T14:54:35.642Z",
-      "environment": "https://agents.shunyalabs.ai/vap/",
-      "status": "failed",
-      "stats": {
-        "expected": 0,
-        "unexpected": 1,
-        "skipped": 0,
-        "flaky": 0,
-        "durationMs": 6319.282
-      },
-      "executed": 1,
-      "journey": "Full Suite",
-      "rowsByTab": {
-        "QA Registry": [
-          {
-            "testId": "",
-            "title": "PROBE — forced failure to capture a screenshot",
-            "rawTitle": "PROBE — forced failure to capture a screenshot",
-            "priority": "",
-            "type": "",
-            "tags": "",
-            "specFile": "e2e/tests/suite/qa/_probe-screenshot.spec.ts",
-            "line": 3,
-            "describe": "",
-            "sectionKey": "",
-            "module": "",
-            "steps": "Automated test — opens the page and verifies: “probe — forced failure to capture a screenshot”. Exact clicks and assertions are in the linked test code.",
-            "expected": "The check above should pass — see the failure reason for what went wrong.",
-            "friendlyReason": "Expected “THIS-DOES-NOT-EXIST-9999 (heading)” to be visible on the page, but it was not found or was hidden. Check whether the page loaded and whether the UI still matches the test.",
-            "techReason": "Error: expect(locator).toBeVisible() failed Locator: getByRole('heading', { name: 'THIS-DOES-NOT-EXIST-9999' }) Expected: visible Timeout: 5000ms Error: element(s) not found Call log: - Expect \"toBeVisible\" with timeout 5000ms - waiting for getByRole('heading', { name: 'THIS-DOES-NOT-EXIST-9999' }) - waiting for\" https://accounts.shunyalabs.ai/sign-in\" navigation to finish... - navigated to \"https://accounts.shunyalabs.ai/sign-in#/?redirect_url=https%3A%2F%2Fagents.shunyalabs.ai%2Fvap%2F\"",
-            "screenshot": "/Users/unitedwecare/Meera_repo/test-results/tests-suite-qa-_probe-scre-2d462-ure-to-capture-a-screenshot-chromium/test-failed-1.png",
-            "status": "Fail",
-            "lastRunAt": "2026-07-31T14:54:29.328Z",
-            "durationSec": "5.80",
-            "reason": "Error: expect(locator).toBeVisible() failed Locator: getByRole('heading', { name: 'THIS-DOES-NOT-EXIST-9999' }) Expected: visible Timeout: 5000ms Error: element(s) not found Call log:  - Expect \"toBeVisible\" with timeout 5000ms  - waiting for getByRole('heading', { name: 'THIS-DOES-NOT-EXIST-9999' })  - waiting for\" https://accounts.shunyalabs.ai/sign-in\" navigation to finish...  - navigated to \"https://accounts.shunyalabs.ai/sign-in#/?redirect_url=https%3A%2F%2Fagents.shunyalabs.ai%2Fvap%2F\"",
-            "environment": "https://agents.shunyalabs.ai/vap/",
-            "runId": "2026-07-31T14-54-29-328Z",
-            "tab": "QA Registry",
-            "journey": "General"
           }
         ]
       }
