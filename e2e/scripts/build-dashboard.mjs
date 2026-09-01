@@ -251,16 +251,19 @@ export function buildDashboard() {
 
     if (r.rowsByTab) {
       for (const [tabName, rows] of Object.entries(r.rowsByTab)) {
-        let mPass = 0, mFail = 0, mTotal = 0;
+        let mPass = 0, mFail = 0, mSkip = 0, mTotal = 0;
         for (const row of rows) {
           mTotal++;
           const isPass = row.status === "Pass";
-          if (isPass) mPass++; else mFail++;
+          const isSkip = row.status === "Skipped" || row.status === "Did Not Run";
+          if (isPass) mPass++;
+          else if (isSkip) mSkip++;
+          else mFail++;
           runTests.push({
             id: row.testId || `TC-${runTests.length + 1}`,
             title: row.scenario || row.title || `Test Scenario in ${tabName}`,
             module: tabName,
-            status: isPass ? "passed" : "failed",
+            status: isPass ? "passed" : isSkip ? "skipped" : "failed",
             durationMs: Math.round(parseFloat(row.durationSec || "1.5") * 1000),
             reason: row.friendlyReason || row.techReason || row.reason || "",
           });
@@ -270,6 +273,7 @@ export function buildDashboard() {
           total: mTotal,
           passed: mPass,
           failed: mFail,
+          skipped: mSkip,
           passRate: `${mTotal > 0 ? Math.round((mPass / mTotal) * 100) : 0}%`,
         };
       }
@@ -905,6 +909,17 @@ function generateWideScreenHtml(data) {
     }
     .pill-pass { background: var(--pass-soft); color: var(--pass); }
     .pill-fail { background: var(--fail-soft); color: var(--fail); }
+    .pill-skip { background: var(--warn-soft); color: var(--warn); }
+
+    .modal .kpi-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    @media (max-width: 900px) {
+      .modal .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .modal .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
 
     /* ── Calendar Tab ── */
     .calendar-nav {
@@ -1129,7 +1144,7 @@ function generateWideScreenHtml(data) {
       <div class="meta-badge-bar">
         <span>📊 Total Runs: <strong style="color:#FFF;">${data.summary.historyRunCount}</strong></span>
         <span>•</span>
-        <span>⏱ Updated: <strong style="color:#FFF;">${formatDate(data.generatedAt)}</strong></span>
+        <span>⏱ Updated: <strong id="headerUpdatedTime" style="color:#FFF;">${formatDate(data.generatedAt)}</strong></span>
       </div>
       <div class="header-actions">
         <a href="https://docs.google.com/spreadsheets/d/1QbaJTyhdn1eNIIJkOFbglgyYkpffuN4I2GYUTrhcEvc/edit" target="_blank" class="btn btn-primary">📊 Live Google Sheet</a>
@@ -1330,13 +1345,22 @@ function generateWideScreenHtml(data) {
     const pageSize = 100;
     let showAll = false;
 
-    let calYear = 2026;
-    let calMonth = 7; // August (0-indexed)
+    let calYear = new Date().getFullYear();
+    let calMonth = new Date().getMonth();
 
-    function formatTime(iso) {
+    function formatDateTime(iso) {
       if (!iso) return "—";
       try {
-        return new Date(iso).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        const d = new Date(iso);
+        return d.toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        });
       } catch {
         return iso;
       }
@@ -1346,9 +1370,38 @@ function generateWideScreenHtml(data) {
       if (!iso) return "—";
       try {
         const d = new Date(iso);
-        return d.toISOString().split("T")[0];
+        return d.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
       } catch {
         return iso;
+      }
+    }
+
+    function formatTime(iso) {
+      if (!iso) return "—";
+      try {
+        const d = new Date(iso);
+        return d.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        });
+      } catch {
+        return iso;
+      }
+    }
+
+    function getLocalDateKey(iso) {
+      if (!iso) return "";
+      try {
+        const d = new Date(iso);
+        return d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+      } catch {
+        return "";
       }
     }
 
@@ -1542,6 +1595,7 @@ function generateWideScreenHtml(data) {
                 <div class="meta">
                   <span class="pill pill-pass">\${r.summary.passed} passed</span>
                   \${r.summary.failed > 0 ? \`<span class="pill pill-fail">\${r.summary.failed} failed</span>\` : ''}
+                  \${r.summary.skipped > 0 ? \`<span class="pill pill-skip">\${r.summary.skipped} skipped</span>\` : ''}
                   <span style="color:\${(r.passRate||0) >= 70 ? 'var(--pass)' : 'var(--warn)'}; font-size:13px; font-weight:700">\${r.passRate || 0}%</span>
                   <span style="font-size:11px;color:var(--muted)">\${r.journey}</span>
                 </div>
@@ -1564,11 +1618,8 @@ function generateWideScreenHtml(data) {
 
       const runsByDate = {};
       for (const r of runs) {
-        const rawDate = formatDate(r.startedAt);
-        const parts = rawDate.split('-').map(Number);
-        if (parts.length === 3) {
-          const [y, m, d] = parts;
-          const key = \`\${y}-\${m - 1}-\${d}\`;
+        const key = getLocalDateKey(r.startedAt);
+        if (key) {
           if (!runsByDate[key]) runsByDate[key] = [];
           runsByDate[key].push(r);
         }
@@ -1582,11 +1633,11 @@ function generateWideScreenHtml(data) {
       const today = new Date();
       const isCurrentMonth = today.getFullYear() === calYear && today.getMonth() === calMonth;
 
-      let cells = dayNames.map(d => \`<div class="cal-head">\${d}</div>\`).join('');
+      let cells = dayNames.map(d => '<div class="cal-head">' + d + '</div>').join('');
       for (let i = 0; i < firstDay; i++) cells += '<div class="cal-cell empty"></div>';
 
       for (let d = 1; d <= daysInMonth; d++) {
-        const key = \`\${calYear}-\${calMonth}-\${d}\`;
+        const key = calYear + '-' + calMonth + '-' + d;
         const dayRuns = runsByDate[key] || [];
         const count = dayRuns.length;
         const avgRate = count > 0 ? Math.round(dayRuns.reduce((s, r) => s + (r.passRate || 0), 0) / count) : -1;
@@ -1628,13 +1679,9 @@ function generateWideScreenHtml(data) {
         return;
       }
 
-      const dayRuns = historyData.filter(r => {
-        const raw = formatDate(r.startedAt);
-        const [y, m, d] = raw.split('-').map(Number);
-        return \`\${y}-\${m - 1}-\${d}\` === key;
-      });
+      const dayRuns = historyData.filter(r => getLocalDateKey(r.startedAt) === key);
 
-      if (title) title.textContent = \`Runs on \${formatDate(dayRuns[0]?.startedAt)} (\${dayRuns.length} executions)\`;
+      if (title) title.textContent = 'Runs on ' + formatDate(dayRuns[0]?.startedAt) + ' (' + dayRuns.length + ' executions)';
       if (cardsGrid) {
         cardsGrid.innerHTML = dayRuns.map(r => \`
           <div class="history-card" onclick="openRunModal('\${r.id}')">
@@ -1643,6 +1690,7 @@ function generateWideScreenHtml(data) {
             <div class="meta">
               <span class="pill pill-pass">\${r.summary.passed} passed</span>
               \${r.summary.failed > 0 ? \`<span class="pill pill-fail">\${r.summary.failed} failed</span>\` : ''}
+              \${r.summary.skipped > 0 ? \`<span class="pill pill-skip">\${r.summary.skipped} skipped</span>\` : ''}
               <span style="color:\${(r.passRate||0) >= 70 ? 'var(--pass)' : 'var(--warn)'}; font-size:13px; font-weight:700">\${r.passRate || 0}%</span>
             </div>
           </div>
@@ -1665,6 +1713,7 @@ function generateWideScreenHtml(data) {
           <div class="kpi-card"><div class="kpi-title">Total Tests</div><div class="kpi-value">\${s.total}</div></div>
           <div class="kpi-card success"><div class="kpi-title">Passed</div><div class="kpi-value" style="color:var(--pass)">\${s.passed}</div></div>
           <div class="kpi-card error"><div class="kpi-title">Failed</div><div class="kpi-value" style="color:var(--fail)">\${s.failed}</div></div>
+          <div class="kpi-card warning"><div class="kpi-title">Skipped</div><div class="kpi-value" style="color:var(--warn)">\${s.skipped || 0}</div></div>
           <div class="kpi-card"><div class="kpi-title">Pass Rate</div><div class="kpi-value" style="color:\${(run.passRate||0)>=70?'var(--pass)':'var(--warn)'}">\${run.passRate||0}%</div></div>
         </div>
       \`;
@@ -1676,6 +1725,7 @@ function generateWideScreenHtml(data) {
             <button class="btn active" onclick="filterModalTests('all', this)">All (\${s.total})</button>
             <button class="btn" onclick="filterModalTests('passed', this)">Passed (\${s.passed})</button>
             <button class="btn" onclick="filterModalTests('failed', this)">Failed (\${s.failed})</button>
+            <button class="btn" onclick="filterModalTests('skipped', this)">Skipped (\${s.skipped || 0})</button>
           </div>
           <div id="modalTestsContainer">\${renderModalTestsHTML(run.tests, 'all')}</div>
         \`;
@@ -1685,7 +1735,7 @@ function generateWideScreenHtml(data) {
           <div class="modal-test">
             <div class="mt-head">
               <div class="mt-title">\${m.label}</div>
-              <div class="mt-meta">\${m.passed}/\${m.total} passed (\${m.passRate})</div>
+              <div class="mt-meta">\${m.passed}/\${m.total} passed (\${m.passRate}) &middot; \${m.failed || 0} failed &middot; \${m.skipped || 0} skipped</div>
             </div>
           </div>
         \`).join('');
@@ -1716,23 +1766,31 @@ function generateWideScreenHtml(data) {
     function renderModalTestsHTML(tests, filter) {
       const filtered = filter === 'all' ? tests :
         filter === 'passed' ? tests.filter(t => t.status === 'passed') :
-        tests.filter(t => t.status !== 'passed');
+        filter === 'failed' ? tests.filter(t => t.status === 'failed') :
+        filter === 'skipped' ? tests.filter(t => t.status === 'skipped') : tests;
 
       if (!filtered.length) return '<p style="color:var(--muted);padding:14px">No tests match this filter.</p>';
 
-      return filtered.map(t => \`
-        <div class="modal-test">
-          <div class="mt-head">
-            <div class="mt-title">\${esc(t.title)}</div>
-            <span class="pill \${t.status === 'passed' ? 'pill-pass' : 'pill-fail'}">\${t.status}</span>
+      return filtered.map(t => {
+        const isPass = t.status === 'passed';
+        const isSkip = t.status === 'skipped';
+        const pillClass = isPass ? 'pill-pass' : isSkip ? 'pill-skip' : 'pill-fail';
+        const reasonColor = isSkip ? 'var(--warn)' : '#FCA5A5';
+
+        return \`
+          <div class="modal-test">
+            <div class="mt-head">
+              <div class="mt-title">\${esc(t.title)}</div>
+              <span class="pill \${pillClass}">\${t.status}</span>
+            </div>
+            <div class="mt-meta">
+              <span class="mt-tag">\${esc(t.id)} &middot; \${esc(t.module)}</span>
+              <span>\${formatDuration(t.durationMs)}</span>
+            </div>
+            \${t.reason ? \`<div style="color:\${reasonColor}; font-size:12px; margin-top:6px; font-family:var(--font-mono);">\${esc(t.reason)}</div>\` : ''}
           </div>
-          <div class="mt-meta">
-            <span class="mt-tag">\${esc(t.id)} &middot; \${esc(t.module)}</span>
-            <span>\${formatDuration(t.durationMs)}</span>
-          </div>
-          \${t.reason ? \`<div style="color:#FCA5A5; font-size:12px; margin-top:6px; font-family:var(--font-mono);">\${esc(t.reason)}</div>\` : ''}
-        </div>
-      \`).join('');
+        \`;
+      }).join('');
     }
 
     function filterModalTests(filter, btn) {
