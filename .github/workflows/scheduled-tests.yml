@@ -1,0 +1,71 @@
+name: Scheduled QA Automated Test Suite & Dashboard
+
+on:
+  schedule:
+    # 4:00 AM IST is 22:30 UTC previous day
+    - cron: '30 22 * * *'
+    # 5:00 PM IST is 11:30 UTC
+    - cron: '30 11 * * *'
+  repository_dispatch:
+    types: [scheduled_daily_run, scheduled_test_run, meera_scheduled_run]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "scheduled-qa"
+  cancel-in-progress: false
+
+jobs:
+  run-tests-and-update-dashboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Scan Test Catalog & Prepare Dashboard
+        run: |
+          node e2e/scripts/scan-test-catalog.mjs
+          node e2e/scripts/build-dashboard.mjs
+
+      - name: Run Test Suite
+        env:
+          CI: true
+        run: |
+          npm test || true
+
+      - name: Build Final QA Dashboard
+        run: |
+          node e2e/scripts/scan-test-catalog.mjs
+          node e2e/scripts/build-dashboard.mjs
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
