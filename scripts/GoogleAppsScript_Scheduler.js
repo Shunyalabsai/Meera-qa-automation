@@ -30,11 +30,19 @@ var CONFIG = {
   // Project Specific Settings
   PROJECTS: {
     MEERA: {
-      NAME: 'Meera Voice Agent Platform QA',
+      NAME: 'Meera Voice Agent Platform QA (Personal)',
       GITHUB_OWNER: 'yamini-pal-singh',
-      GITHUB_REPO: 'Meera_repo',
+      GITHUB_REPO: 'meera-automation',
       SPREADSHEET_ID: '1MgzIeVQOLdquLraUnPH33vm-MvWBcijYmIZerHMG7Ro',
-      DASHBOARD_URL: 'https://yamini-pal-singh.github.io/Meera_repo/',
+      DASHBOARD_URL: 'https://yamini-pal-singh.github.io/meera-automation/',
+      EVENT_TYPE: 'meera_scheduled_run'
+    },
+    MEERA_ORG: {
+      NAME: 'Meera Voice Agent Platform QA (Org)',
+      GITHUB_OWNER: 'Shunyalabsai',
+      GITHUB_REPO: 'Meera-qa-automation',
+      SPREADSHEET_ID: '1MgzIeVQOLdquLraUnPH33vm-MvWBcijYmIZerHMG7Ro',
+      DASHBOARD_URL: 'https://shunyalabsai.github.io/Meera-qa-automation/',
       EVENT_TYPE: 'meera_scheduled_run'
     },
     PLAYGROUND: {
