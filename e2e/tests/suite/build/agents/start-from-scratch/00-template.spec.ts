@@ -7,8 +7,8 @@ import { START_FROM_SCRATCH } from "../../../../../data/start-from-scratch-templ
 import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { AgentTemplatePage } from "../../../../../pages/agent-template.page";
 
-test.describe("BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch", () => {
-  test("TC-AG-SFS-001 @high @positive — Start from scratch opens blank form with neutral defaults", async ({
+test.describe("BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch @smoke", () => {
+  test("TC-AG-SFS-001 @smoke @high @positive — Start from scratch opens blank form with neutral defaults", async ({
     page,
   }) => {
     await gotoNewAgent(page);

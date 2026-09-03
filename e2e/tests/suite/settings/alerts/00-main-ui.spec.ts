@@ -3,8 +3,8 @@ import { AlertsPage } from "../../../../pages/alerts.page";
 import { isAlertsRulesEmpty } from "../../../../helpers/alerts.helper";
 import { ALERTS_COPY } from "../../../../data/alerts-data";
 
-test.describe("SETTINGS › Alerts — Main UI @journey @new-user @alerts", () => {
-  test("TC-AL-002 @high @ui — Rules tab empty state shows No alert rules yet", async ({
+test.describe("SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke", () => {
+  test("TC-AL-002 @smoke @high @ui — Rules tab empty state shows No alert rules yet", async ({
     page,
   }) => {
     test.skip(

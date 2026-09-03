@@ -3,7 +3,7 @@ import { gotoSignUp } from "../../../../helpers/navigate";
 import { expectSignUpForm } from "../../../../helpers/clerk-auth";
 
 test.describe("Authentication › Sign Up — Landing @unsigned @smoke", () => {
-  test("TC-AU-SU-001 @high @positive — Create your account screen loads", async ({
+  test("TC-AU-SU-001 @smoke @high @positive — Create your account screen loads", async ({
     page,
   }) => {
     await gotoSignUp(page);

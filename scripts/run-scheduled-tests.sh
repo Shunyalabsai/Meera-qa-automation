@@ -70,9 +70,9 @@ fi
 echo "[step 1/4] Scanning test catalog..."
 node e2e/scripts/scan-test-catalog.mjs || true
 
-# 2. Run Playwright Automated Tests
-echo "[step 2/4] Executing Playwright E2E suite..."
-npx playwright test || true
+# 2. Run Playwright Smoke Automated Tests across all functionalities
+echo "[step 2/4] Executing Playwright Smoke Test Suite (@smoke)..."
+npx playwright test --grep "${E2E_GREP:-@smoke}" || true
 
 # 3. Export sheet results, build dashboard & publish
 echo "[step 3/4] Updating sheets & dashboard..."

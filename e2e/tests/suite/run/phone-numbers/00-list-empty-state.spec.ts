@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { PhoneNumbersPage } from "../../../../pages/phone-numbers.page";
 import { isPhoneNumbersEmptyState } from "../../../../helpers/phone-numbers.helper";
 
-test.describe("RUN › Phone numbers — List empty state @journey @new-user @phone-numbers", () => {
+test.describe("RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isPhoneNumbersEmptyState(page)),
@@ -10,7 +10,7 @@ test.describe("RUN › Phone numbers — List empty state @journey @new-user @ph
     );
   });
 
-  test("TC-PN-001 @high @ui — Empty state shows No phone numbers registered yet", async ({
+  test("TC-PN-001 @smoke @high @ui — Empty state shows No phone numbers registered yet", async ({
     page,
   }) => {
     const phoneNumbers = new PhoneNumbersPage(page);

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { CampaignsPage } from "../../../../pages/campaigns.page";
 import { isCampaignsEmptyState } from "../../../../helpers/campaigns.helper";
 
-test.describe("RUN › Campaigns — List empty state @journey @new-user @campaigns", () => {
+test.describe("RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isCampaignsEmptyState(page)),
@@ -10,7 +10,7 @@ test.describe("RUN › Campaigns — List empty state @journey @new-user @campai
     );
   });
 
-  test("TC-CM-001 @high @ui — Empty state shows No campaigns yet", async ({
+  test("TC-CM-001 @smoke @high @ui — Empty state shows No campaigns yet", async ({
     page,
   }) => {
     const campaigns = new CampaignsPage(page);

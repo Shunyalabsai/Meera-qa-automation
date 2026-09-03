@@ -10,7 +10,7 @@ import {
 import { getPasswordSignInCredentials, hasPasswordSignInCredentials } from "../../../../helpers/credentials";
 
 test.describe("Authentication › Sign In @smoke @unsigned", () => {
-  test("TC-AU-002 @high @positive — Sign-in page shows Google, GitHub, and email", async ({
+  test("TC-AU-002 @smoke @high @positive — Sign-in page shows Google, GitHub, and email", async ({
     page,
   }) => {
     await gotoSignIn(page);

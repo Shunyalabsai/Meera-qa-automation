@@ -4,8 +4,8 @@ import { CREDIT_CARD_PAYMENT_REMINDER_TEMPLATE } from "../../../../../data/credi
 import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { AgentTemplatePage } from "../../../../../pages/agent-template.page";
 
-test.describe("BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder", () => {
-  test("TC-AG-DR-001 @high @positive — Credit Card Payment Reminder card opens pre-filled form", async ({
+test.describe("BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder @smoke", () => {
+  test("TC-AG-DR-001 @smoke @high @positive — Credit Card Payment Reminder card opens pre-filled form", async ({
     page,
   }) => {
     await gotoNewAgent(page);

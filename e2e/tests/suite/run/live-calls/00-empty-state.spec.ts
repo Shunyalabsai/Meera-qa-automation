@@ -3,7 +3,7 @@ import { LiveCallsPage } from "../../../../pages/live-calls.page";
 import { isLiveCallsEmptyState } from "../../../../helpers/live-calls.helper";
 import { LIVE_CALLS_COPY } from "../../../../data/live-calls-data";
 
-test.describe("RUN › Live Calls — Empty state @journey @new-user @live-calls", () => {
+test.describe("RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isLiveCallsEmptyState(page)),
@@ -11,7 +11,7 @@ test.describe("RUN › Live Calls — Empty state @journey @new-user @live-calls
     );
   });
 
-  test("TC-LC-001 @high @ui — Empty state shows No calls in progress right now", async ({
+  test("TC-LC-001 @smoke @high @ui — Empty state shows No calls in progress right now", async ({
     page,
   }) => {
     const liveCalls = new LiveCallsPage(page);

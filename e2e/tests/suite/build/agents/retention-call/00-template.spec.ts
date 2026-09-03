@@ -7,8 +7,8 @@ import { RETENTION_CALL_TEMPLATE } from "../../../../../data/retention-call-temp
 import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { AgentTemplatePage } from "../../../../../pages/agent-template.page";
 
-test.describe("BUILD › Agents › Retention Call — Template @journey @retention-call", () => {
-  test("TC-AG-CS-001 @high @positive — Retention Call card opens pre-filled form", async ({
+test.describe("BUILD › Agents › Retention Call — Template @journey @retention-call @smoke", () => {
+  test("TC-AG-CS-001 @smoke @high @positive — Retention Call card opens pre-filled form", async ({
     page,
   }) => {
     await gotoNewAgent(page);

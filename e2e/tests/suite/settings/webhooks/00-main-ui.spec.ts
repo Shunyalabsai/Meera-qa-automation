@@ -2,8 +2,8 @@ import { test, expect } from "@playwright/test";
 import { openWebhooks } from "../../../../helpers/webhooks.helper";
 import { WEBHOOKS_COPY, WEBHOOK_EVENTS } from "../../../../data/webhooks-data";
 
-test.describe("SETTINGS › Webhooks — Main UI @journey @new-user @webhooks", () => {
-  test("TC-WH-001 @high @ui — Webhooks heading and subtitle visible", async ({
+test.describe("SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke", () => {
+  test("TC-WH-001 @smoke @high @ui — Webhooks heading and subtitle visible", async ({
     page,
   }) => {
     const webhooks = await openWebhooks(page);

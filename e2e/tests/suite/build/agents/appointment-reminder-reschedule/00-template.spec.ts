@@ -7,8 +7,8 @@ import { APPOINTMENT_REMINDER_RESCHEDULE_TEMPLATE } from "../../../../../data/ap
 import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { AgentTemplatePage } from "../../../../../pages/agent-template.page";
 
-test.describe("BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule", () => {
-  test("TC-AG-AR-001 @high @positive — Appointment Reminder & Reschedule card opens pre-filled form", async ({
+test.describe("BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule @smoke", () => {
+  test("TC-AG-AR-001 @smoke @high @positive — Appointment Reminder & Reschedule card opens pre-filled form", async ({
     page,
   }) => {
     await gotoNewAgent(page);

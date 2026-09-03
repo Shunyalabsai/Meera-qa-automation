@@ -3,8 +3,8 @@ import { WhatsAppPage } from "../../../../pages/whatsapp.page";
 import { WHATSAPP_COPY } from "../../../../data/whatsapp-data";
 import { gotoApp } from "../../../../helpers/navigate";
 
-test.describe("SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui", () => {
-  test("TC-WA-001 @high @ui — WhatsApp settings route is accessible", async ({ page }) => {
+test.describe("SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke", () => {
+  test("TC-WA-001 @smoke @high @ui — WhatsApp settings route is accessible", async ({ page }) => {
     const wa = new WhatsAppPage(page);
     await wa.open();
     await expect(page).toHaveURL(/\/vap\//i, { timeout: 15_000 });
