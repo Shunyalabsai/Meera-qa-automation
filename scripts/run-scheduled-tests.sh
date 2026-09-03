@@ -51,6 +51,21 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
+# 0. Pre-flight Mutual Exclusion & Deduplication Check
+# If Google Apps Script or GitHub Actions already triggered or completed this slot, skip local run.
+echo "[step 0/4] Checking scheduler slot deduplication status..."
+if node e2e/scripts/check-scheduled-dedup.mjs; then
+  echo "[step 0/4] Dedup check passed. Proceeding with local scheduled run."
+else
+  DEDUP_STATUS=$?
+  if [ "$DEDUP_STATUS" -eq 2 ]; then
+    echo "[step 0/4] Cloud/Apps Script run already triggered for this slot. Skipping local run to avoid duplicate output."
+    exit 0
+  else
+    echo "[step 0/4] Warning: Dedup check exited with code $DEDUP_STATUS. Proceeding as fallback."
+  fi
+fi
+
 # 1. Scan catalog and prepare initial dashboard
 echo "[step 1/4] Scanning test catalog..."
 node e2e/scripts/scan-test-catalog.mjs || true
