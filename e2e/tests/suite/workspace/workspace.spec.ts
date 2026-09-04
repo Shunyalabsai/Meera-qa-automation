@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { gotoApp } from "../../../helpers/navigate";
 
-test.describe("Workspace & Account @smoke", () => {
+test.describe("Workspace & Account", () => {
   test("TC-WS-001 @smoke @high @ui — Account menu opens from user button", async ({ page }) => {
     await gotoApp(page, "agents");
     // The account/workspace controls live in the user menu — no org switcher in the sidebar.

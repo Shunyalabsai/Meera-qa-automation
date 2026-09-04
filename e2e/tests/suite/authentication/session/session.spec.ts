@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { gotoApp } from "../../../../helpers/navigate";
 import { waitForAppReady } from "../../../../helpers/session-wait";
 
-test.describe("Authentication › Session @smoke", () => {
+test.describe("Authentication › Session", () => {
   test("TC-AU-003 @medium @positive — Session persists across tabs", async ({
     browser,
   }) => {

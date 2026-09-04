@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { gotoApp } from "../../../../helpers/navigate";
 
-test.describe("Authentication › Logout @smoke", () => {
+test.describe("Authentication › Logout", () => {
   test("TC-AU-004 @high @positive — Logout clears session", async ({ page }) => {
     await gotoApp(page, "agents");
 

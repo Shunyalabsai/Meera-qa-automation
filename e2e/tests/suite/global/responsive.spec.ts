@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { gotoApp } from "../../../helpers/navigate";
 
-test.describe("Global UI › Responsive @smoke", () => {
+test.describe("Global UI › Responsive", () => {
   test("TC-UI-001 @high @positive — Mobile viewport (375px) on Agents", async ({
     page,
   }) => {

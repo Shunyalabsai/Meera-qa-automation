@@ -9,7 +9,7 @@ import {
 } from "../../../../helpers/clerk-auth";
 import { getPasswordSignInCredentials, hasPasswordSignInCredentials } from "../../../../helpers/credentials";
 
-test.describe("Authentication › Sign In @smoke @unsigned", () => {
+test.describe("Authentication › Sign In @unsigned", () => {
   test("TC-AU-002 @smoke @high @positive — Sign-in page shows Google, GitHub, and email", async ({
     page,
   }) => {

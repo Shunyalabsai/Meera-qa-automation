@@ -6,7 +6,7 @@ import {
   INTERNATIONAL_LANGUAGES,
 } from "../../../../data/language-switcher-data";
 
-test.describe("Global › Language switcher — Main UI @journey @new-user @language @smoke", () => {
+test.describe("Global › Language switcher — Main UI @journey @new-user @language", () => {
   test("TC-LG-001 @smoke @high @ui — Language trigger visible in sidebar with English EN", async ({
     page,
   }) => {

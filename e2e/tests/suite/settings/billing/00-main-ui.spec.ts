@@ -4,7 +4,7 @@ import { isBillingEmptyState } from "../../../../helpers/billing.helper";
 import { STAGING_EMPTY_SKIP } from "../../../../helpers/staging-profile";
 import { BILLING_COPY } from "../../../../data/billing-data";
 
-test.describe("SETTINGS › Billing — Main UI @journey @new-user @billing @smoke", () => {
+test.describe("SETTINGS › Billing — Main UI @journey @new-user @billing", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isBillingEmptyState(page)),
@@ -12,7 +12,7 @@ test.describe("SETTINGS › Billing — Main UI @journey @new-user @billing @smo
     );
   });
 
-  test("TC-BL-002 @smoke @high @ui — Empty state shows 0.0 total minutes", async ({
+  test("TC-BL-002 @high @ui — Empty state shows 0.0 total minutes", async ({
     page,
   }) => {
     const billing = new BillingPage(page);

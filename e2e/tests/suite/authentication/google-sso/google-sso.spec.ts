@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { gotoApp } from "../../../../helpers/navigate";
 import { waitForAppReady } from "../../../../helpers/session-wait";
 
-test.describe("Authentication › Google SSO @smoke", () => {
+test.describe("Authentication › Google SSO", () => {
   test("TC-AU-002b @high @positive — Saved session reaches BUILD › Agents", async ({
     page,
   }) => {

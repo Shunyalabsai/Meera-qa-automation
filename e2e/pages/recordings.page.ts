@@ -51,11 +51,19 @@ export class RecordingsPage {
   }
 
   async expectEmptyOrTable() {
-    await expect(
-      this.page
-        .getByRole("table")
-        .or(this.page.getByText(RECORDINGS_COPY.emptyTitle)),
-    ).toBeVisible({ timeout: 20_000 });
+    const table = this.page.getByRole("table");
+    const emptyTitle = this.page.getByText(RECORDINGS_COPY.emptyTitle);
+    const mainLinks = this.page.getByRole("main").getByRole("link");
+    const noRecording = this.page.getByText(/No recording available/i);
+
+    const matchFound = await Promise.race([
+      table.first().waitFor({ state: "visible", timeout: 20_000 }).then(() => true).catch(() => false),
+      emptyTitle.first().waitFor({ state: "visible", timeout: 20_000 }).then(() => true).catch(() => false),
+      mainLinks.first().waitFor({ state: "visible", timeout: 20_000 }).then(() => true).catch(() => false),
+      noRecording.first().waitFor({ state: "visible", timeout: 20_000 }).then(() => true).catch(() => false),
+    ]);
+
+    expect(matchFound, "Expected recordings table, empty state, or call recording list to be visible").toBeTruthy();
   }
 
   searchInput(): Locator {

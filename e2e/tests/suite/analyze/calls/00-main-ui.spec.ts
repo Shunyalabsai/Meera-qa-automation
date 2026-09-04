@@ -4,7 +4,7 @@ import { isCallsEmptyState } from "../../../../helpers/calls.helper";
 import { STAGING_EMPTY_SKIP } from "../../../../helpers/staging-profile";
 import { CALLS_COPY } from "../../../../data/calls-filter-data";
 
-test.describe("ANALYZE › Calls — Main UI @journey @new-user @calls @smoke", () => {
+test.describe("ANALYZE › Calls — Main UI @journey @new-user @calls", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isCallsEmptyState(page)),
@@ -12,7 +12,7 @@ test.describe("ANALYZE › Calls — Main UI @journey @new-user @calls @smoke", 
     );
   });
 
-  test("TC-CL-001 @smoke @high @ui — Empty state shows No calls found", async ({
+  test("TC-CL-001 @high @ui — Empty state shows No calls found", async ({
     page,
   }) => {
     const calls = new CallsListPage(page);

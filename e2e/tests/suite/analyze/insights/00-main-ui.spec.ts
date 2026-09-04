@@ -4,7 +4,7 @@ import { isInsightsEmptyState } from "../../../../helpers/insights.helper";
 import { STAGING_EMPTY_SKIP } from "../../../../helpers/staging-profile";
 import { INSIGHTS_COPY } from "../../../../data/insights-data";
 
-test.describe("ANALYZE › Insights — Main UI @journey @new-user @insights @smoke", () => {
+test.describe("ANALYZE › Insights — Main UI @journey @new-user @insights", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isInsightsEmptyState(page)),
@@ -12,7 +12,7 @@ test.describe("ANALYZE › Insights — Main UI @journey @new-user @insights @sm
     );
   });
 
-  test("TC-IS-001 @smoke @high @ui — Empty KPIs show zero values", async ({ page }) => {
+  test("TC-IS-001 @high @ui — Empty KPIs show zero values", async ({ page }) => {
     const insights = new InsightsPage(page);
     await insights.expectEmptyState();
   });

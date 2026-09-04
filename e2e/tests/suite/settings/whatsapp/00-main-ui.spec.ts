@@ -3,7 +3,7 @@ import { WhatsAppPage } from "../../../../pages/whatsapp.page";
 import { WHATSAPP_COPY } from "../../../../data/whatsapp-data";
 import { gotoApp } from "../../../../helpers/navigate";
 
-test.describe("SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke", () => {
+test.describe("SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui", () => {
   test("TC-WA-001 @smoke @high @ui — WhatsApp settings route is accessible", async ({ page }) => {
     const wa = new WhatsAppPage(page);
     await wa.open();

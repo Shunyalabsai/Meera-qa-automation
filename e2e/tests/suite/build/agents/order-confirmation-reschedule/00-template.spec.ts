@@ -7,7 +7,7 @@ import { ORDER_CONFIRMATION_RESCHEDULE_TEMPLATE } from "../../../../../data/orde
 import { AgentFormPage } from "../../../../../pages/agent-form.page";
 import { AgentTemplatePage } from "../../../../../pages/agent-template.page";
 
-test.describe("BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule @smoke", () => {
+test.describe("BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule", () => {
   test("TC-AG-OC-001 @smoke @high @positive — Order Confirmation & Reschedule card opens pre-filled form", async ({
     page,
   }) => {

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { PlaygroundPage } from "../../../../pages/playground.page";
 
-test.describe("BUILD › Playground @smoke", () => {
+test.describe("BUILD › Playground", () => {
   test("Playground — agent selector and Start call visible", async ({
     page,
   }) => {

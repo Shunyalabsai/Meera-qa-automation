@@ -3,7 +3,7 @@ import { LiveCallsPage } from "../../../../pages/live-calls.page";
 import { isLiveCallsEmptyState } from "../../../../helpers/live-calls.helper";
 import { LIVE_CALLS_COPY } from "../../../../data/live-calls-data";
 
-test.describe("RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke", () => {
+test.describe("RUN › Live Calls — Empty state @journey @new-user @live-calls", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isLiveCallsEmptyState(page)),

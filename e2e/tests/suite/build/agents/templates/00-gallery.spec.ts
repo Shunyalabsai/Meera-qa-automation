@@ -16,7 +16,7 @@ async function hasGallery(page: Page): Promise<boolean> {
     .catch(() => false);
 }
 
-test.describe("BUILD › Agents › Template gallery @templates @smoke", () => {
+test.describe("BUILD › Agents › Template gallery @templates", () => {
 
   test("TC-AG-TPL-001 @smoke @high @ui — Gallery shows all 5 industry cards and Start from scratch", async ({
     page,

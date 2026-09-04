@@ -1,7 +1,7 @@
 import { test } from "@playwright/test";
 import { LiveCallsPage } from "../../../../pages/live-calls.page";
 
-test.describe("RUN › Live Calls @smoke", () => {
+test.describe("RUN › Live Calls", () => {
   test("TC-AN-006 @high @positive — Live Calls dashboard loads", async ({
     page,
   }) => {

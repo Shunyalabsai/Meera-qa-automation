@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { PromptTemplatesPage } from "../../../../pages/prompt-templates.page";
 import { isPromptTemplatesEmptyState } from "../../../../helpers/prompt-templates.helper";
 
-test.describe("BUILD › Prompts — List empty state @journey @new-user @prompts @smoke", () => {
+test.describe("BUILD › Prompts — List empty state @journey @new-user @prompts", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
       !(await isPromptTemplatesEmptyState(page)),
@@ -10,7 +10,7 @@ test.describe("BUILD › Prompts — List empty state @journey @new-user @prompt
     );
   });
 
-  test("TC-PT-001 @smoke @high @ui — Empty state shows no templates message", async ({
+  test("TC-PT-001 @high @ui — Empty state shows no templates message", async ({
     page,
   }) => {
     const prompts = new PromptTemplatesPage(page);

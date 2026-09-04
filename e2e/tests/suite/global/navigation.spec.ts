@@ -25,7 +25,7 @@ const DASHBOARD_ROUTES = {
   ],
 } as const;
 
-test.describe("Global UI › Navigation @smoke", () => {
+test.describe("Global UI › Navigation", () => {
   test("TC-UI-006 @high @positive — All dashboard sidebar routes load", async ({
     page,
   }) => {

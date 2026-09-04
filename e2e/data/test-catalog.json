@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T12:18:26.404Z",
+  "generatedAt": "2026-09-04T11:35:06.692Z",
   "totalTests": 1126,
   "tabs": [
     "ANALYZE",
@@ -26,7 +26,7 @@
       "rawTitle": "TC-CL-001 @smoke @high @ui — Empty state shows No calls found",
       "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
       "line": 15,
-      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:15:TC-CL-001"
@@ -43,7 +43,7 @@
       "rawTitle": "TC-CL-002 @high @ui — Header and result counter (0 shown)",
       "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
       "line": 22,
-      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:22:TC-CL-002"
@@ -60,7 +60,7 @@
       "rawTitle": "TC-CL-003 @high @ui — All search and filter controls visible",
       "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
       "line": 30,
-      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:30:TC-CL-003"
@@ -77,7 +77,7 @@
       "rawTitle": "TC-CL-004 @medium @ui — Call ID search has Go button",
       "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
       "line": 39,
-      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:39:TC-CL-004"
@@ -94,7 +94,7 @@
       "rawTitle": "TC-CL-005 @medium @ui — Sidebar Calls nav link visible",
       "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
       "line": 50,
-      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+      "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:50:TC-CL-005"
@@ -655,7 +655,7 @@
       "rawTitle": "TC-AN-001 @high @positive — View call logs",
       "specFile": "e2e/tests/suite/analyze/calls/calls.spec.ts",
       "line": 5,
-      "describe": "ANALYZE › Calls @smoke @calls",
+      "describe": "ANALYZE › Calls @calls",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/calls/calls.spec.ts:5:TC-AN-001"
@@ -673,7 +673,7 @@
       "rawTitle": "TC-IS-001 @smoke @high @ui — Empty KPIs show zero values",
       "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
       "line": 15,
-      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:15:TC-IS-001"
@@ -690,7 +690,7 @@
       "rawTitle": "TC-IS-002 @high @ui — All five KPI cards visible",
       "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
       "line": 20,
-      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:20:TC-IS-002"
@@ -707,7 +707,7 @@
       "rawTitle": "TC-IS-003 @high @ui — Agent filter and date controls visible",
       "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
       "line": 26,
-      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:26:TC-IS-003"
@@ -724,7 +724,7 @@
       "rawTitle": "TC-IS-004 @high @ui — All chart sections visible in empty state",
       "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
       "line": 35,
-      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:35:TC-IS-004"
@@ -741,7 +741,7 @@
       "rawTitle": "TC-IS-005 @medium @ui — Hourly heatmap shows day labels",
       "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
       "line": 42,
-      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:42:TC-IS-005"
@@ -758,7 +758,7 @@
       "rawTitle": "TC-IS-006 @medium @ui — Campaign Performance empty message",
       "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
       "line": 49,
-      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:49:TC-IS-006"
@@ -775,7 +775,7 @@
       "rawTitle": "TC-IS-007 @medium @ui — Sidebar Insights nav link visible",
       "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
       "line": 57,
-      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+      "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:57:TC-IS-007"
@@ -1266,7 +1266,7 @@
       "rawTitle": "TC-AN-004 @high @positive — Insights dashboard loads",
       "specFile": "e2e/tests/suite/analyze/insights/insights.spec.ts",
       "line": 5,
-      "describe": "ANALYZE › Insights @smoke @insights",
+      "describe": "ANALYZE › Insights @insights",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/insights/insights.spec.ts:5:TC-AN-004"
@@ -1284,7 +1284,7 @@
       "rawTitle": "TC-RC-003 @smoke @high @ui — Empty state shows No recordings found",
       "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
       "line": 14,
-      "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings @smoke",
+      "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts:14:TC-RC-003"
@@ -1301,7 +1301,7 @@
       "rawTitle": "TC-RC-004 @high @ui — Search input and agent filter visible",
       "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
       "line": 21,
-      "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings @smoke",
+      "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts:21:TC-RC-004"
@@ -1318,7 +1318,7 @@
       "rawTitle": "TC-RC-005 @medium @ui — Agent filter defaults to All agents",
       "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
       "line": 33,
-      "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings @smoke",
+      "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts:33:TC-RC-005"
@@ -1335,7 +1335,7 @@
       "rawTitle": "TC-RC-006 @medium @ui — Sidebar Recordings nav link visible",
       "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
       "line": 41,
-      "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings @smoke",
+      "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts:41:TC-RC-006"
@@ -1675,7 +1675,7 @@
       "rawTitle": "TC-RC-001 @high @positive — Recordings page loads",
       "specFile": "e2e/tests/suite/analyze/recordings/recordings.spec.ts",
       "line": 5,
-      "describe": "ANALYZE › Recordings @smoke @recordings",
+      "describe": "ANALYZE › Recordings @recordings",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/recordings/recordings.spec.ts:5:TC-RC-001"
@@ -1692,7 +1692,7 @@
       "rawTitle": "TC-AU-002b @high @positive — Saved session reaches BUILD › Agents",
       "specFile": "e2e/tests/suite/authentication/google-sso/google-sso.spec.ts",
       "line": 6,
-      "describe": "Authentication › Google SSO @smoke",
+      "describe": "Authentication › Google SSO",
       "sectionKey": "authentication",
       "tab": "Authentication",
       "catalogKey": "e2e/tests/suite/authentication/google-sso/google-sso.spec.ts:6:TC-AU"
@@ -1709,7 +1709,7 @@
       "rawTitle": "TC-AU-004 @high @positive — Logout clears session",
       "specFile": "e2e/tests/suite/authentication/logout/sign-out.spec.ts",
       "line": 5,
-      "describe": "Authentication › Logout @smoke",
+      "describe": "Authentication › Logout",
       "sectionKey": "authentication",
       "tab": "Authentication",
       "catalogKey": "e2e/tests/suite/authentication/logout/sign-out.spec.ts:5:TC-AU-004"
@@ -1726,7 +1726,7 @@
       "rawTitle": "TC-AU-003 @medium @positive — Session persists across tabs",
       "specFile": "e2e/tests/suite/authentication/session/session.spec.ts",
       "line": 6,
-      "describe": "Authentication › Session @smoke",
+      "describe": "Authentication › Session",
       "sectionKey": "authentication",
       "tab": "Authentication",
       "catalogKey": "e2e/tests/suite/authentication/session/session.spec.ts:6:TC-AU-003"
@@ -1830,7 +1830,7 @@
       "rawTitle": "TC-AU-002 @smoke @high @positive — Sign-in page shows Google, GitHub, and email",
       "specFile": "e2e/tests/suite/authentication/sign-in/sign-in.positive.spec.ts",
       "line": 13,
-      "describe": "Authentication › Sign In @smoke @unsigned",
+      "describe": "Authentication › Sign In @unsigned",
       "sectionKey": "authentication",
       "tab": "Authentication",
       "catalogKey": "e2e/tests/suite/authentication/sign-in/sign-in.positive.spec.ts:13:TC-AU-002"
@@ -1847,7 +1847,7 @@
       "rawTitle": "TC-AU-001 @high @positive — Valid login with email & password",
       "specFile": "e2e/tests/suite/authentication/sign-in/sign-in.positive.spec.ts",
       "line": 25,
-      "describe": "Authentication › Sign In @smoke @unsigned",
+      "describe": "Authentication › Sign In @unsigned",
       "sectionKey": "authentication",
       "tab": "Authentication",
       "catalogKey": "e2e/tests/suite/authentication/sign-in/sign-in.positive.spec.ts:25:TC-AU-001"
@@ -1882,7 +1882,7 @@
       "rawTitle": "TC-AU-SU-001 @smoke @high @positive — Create your account screen loads",
       "specFile": "e2e/tests/suite/authentication/sign-up/sign-up.landing.spec.ts",
       "line": 6,
-      "describe": "Authentication › Sign Up — Landing @unsigned @smoke",
+      "describe": "Authentication › Sign Up — Landing @unsigned",
       "sectionKey": "authentication",
       "tab": "Authentication",
       "catalogKey": "e2e/tests/suite/authentication/sign-up/sign-up.landing.spec.ts:6:TC-AU-SU-001"
@@ -1899,7 +1899,7 @@
       "rawTitle": "TC-AU-SU-002 @high @positive — Show/hide password toggle visible",
       "specFile": "e2e/tests/suite/authentication/sign-up/sign-up.landing.spec.ts",
       "line": 16,
-      "describe": "Authentication › Sign Up — Landing @unsigned @smoke",
+      "describe": "Authentication › Sign Up — Landing @unsigned",
       "sectionKey": "authentication",
       "tab": "Authentication",
       "catalogKey": "e2e/tests/suite/authentication/sign-up/sign-up.landing.spec.ts:16:TC-AU-SU-002"
@@ -2121,7 +2121,7 @@
       "rawTitle": "TC-AG-AR-001 @smoke @high @positive — Appointment Reminder & Reschedule card opens pre-filled form",
       "specFile": "e2e/tests/suite/build/agents/appointment-reminder-reschedule/00-template.spec.ts",
       "line": 11,
-      "describe": "BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule @smoke",
+      "describe": "BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/appointment-reminder-reschedule/00-template.spec.ts:11:TC-AG-AR-001"
@@ -2138,7 +2138,7 @@
       "rawTitle": "TC-AG-AR-002 @medium @positive — Change template returns to Healthcare industry view",
       "specFile": "e2e/tests/suite/build/agents/appointment-reminder-reschedule/00-template.spec.ts",
       "line": 62,
-      "describe": "BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule @smoke",
+      "describe": "BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/appointment-reminder-reschedule/00-template.spec.ts:62:TC-AG-AR-002"
@@ -2851,7 +2851,7 @@
       "rawTitle": "TC-AG-DR-001 @smoke @high @positive — Credit Card Payment Reminder card opens pre-filled form",
       "specFile": "e2e/tests/suite/build/agents/credit-card-payment-reminder/00-template.spec.ts",
       "line": 8,
-      "describe": "BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder @smoke",
+      "describe": "BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/credit-card-payment-reminder/00-template.spec.ts:8:TC-AG-DR-001"
@@ -2868,7 +2868,7 @@
       "rawTitle": "TC-AG-DR-002 @medium @positive — Change template returns to BFSI industry view",
       "specFile": "e2e/tests/suite/build/agents/credit-card-payment-reminder/00-template.spec.ts",
       "line": 49,
-      "describe": "BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder @smoke",
+      "describe": "BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/credit-card-payment-reminder/00-template.spec.ts:49:TC-AG-DR-002"
@@ -3921,7 +3921,7 @@
       "rawTitle": "TC-AG-OC-001 @smoke @high @positive — Order Confirmation & Reschedule card opens pre-filled form",
       "specFile": "e2e/tests/suite/build/agents/order-confirmation-reschedule/00-template.spec.ts",
       "line": 11,
-      "describe": "BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule @smoke",
+      "describe": "BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/order-confirmation-reschedule/00-template.spec.ts:11:TC-AG-OC-001"
@@ -3938,7 +3938,7 @@
       "rawTitle": "TC-AG-OC-002 @medium @positive — Change template returns to Logistics industry view",
       "specFile": "e2e/tests/suite/build/agents/order-confirmation-reschedule/00-template.spec.ts",
       "line": 62,
-      "describe": "BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule @smoke",
+      "describe": "BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/order-confirmation-reschedule/00-template.spec.ts:62:TC-AG-OC-002"
@@ -4668,7 +4668,7 @@
       "rawTitle": "TC-AG-CS-001 @smoke @high @positive — Retention Call card opens pre-filled form",
       "specFile": "e2e/tests/suite/build/agents/retention-call/00-template.spec.ts",
       "line": 11,
-      "describe": "BUILD › Agents › Retention Call — Template @journey @retention-call @smoke",
+      "describe": "BUILD › Agents › Retention Call — Template @journey @retention-call",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/retention-call/00-template.spec.ts:11:TC-AG-CS-001"
@@ -4685,7 +4685,7 @@
       "rawTitle": "TC-AG-CS-002 @medium @positive — Change template returns to Telecom industry view",
       "specFile": "e2e/tests/suite/build/agents/retention-call/00-template.spec.ts",
       "line": 62,
-      "describe": "BUILD › Agents › Retention Call — Template @journey @retention-call @smoke",
+      "describe": "BUILD › Agents › Retention Call — Template @journey @retention-call",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/retention-call/00-template.spec.ts:62:TC-AG-CS-002"
@@ -5415,7 +5415,7 @@
       "rawTitle": "TC-AG-SFS-001 @smoke @high @positive — Start from scratch opens blank form with neutral defaults",
       "specFile": "e2e/tests/suite/build/agents/start-from-scratch/00-template.spec.ts",
       "line": 11,
-      "describe": "BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch @smoke",
+      "describe": "BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/start-from-scratch/00-template.spec.ts:11:TC-AG-SFS-001"
@@ -5432,7 +5432,7 @@
       "rawTitle": "TC-AG-SFS-002 @medium @positive — Change template returns to gallery",
       "specFile": "e2e/tests/suite/build/agents/start-from-scratch/00-template.spec.ts",
       "line": 62,
-      "describe": "BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch @smoke",
+      "describe": "BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/start-from-scratch/00-template.spec.ts:62:TC-AG-SFS-002"
@@ -6162,7 +6162,7 @@
       "rawTitle": "TC-AG-TPL-001 @smoke @high @ui — Gallery shows all 5 industry cards and Start from scratch",
       "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
       "line": 21,
-      "describe": "BUILD › Agents › Template gallery @templates @smoke",
+      "describe": "BUILD › Agents › Template gallery @templates",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:21:TC-AG-TPL-001"
@@ -6179,7 +6179,7 @@
       "rawTitle": "TC-AG-TPL-004 @high @ui — Gallery count line and per-industry example counts",
       "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
       "line": 38,
-      "describe": "BUILD › Agents › Template gallery @templates @smoke",
+      "describe": "BUILD › Agents › Template gallery @templates",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:38:TC-AG-TPL-004"
@@ -6196,7 +6196,7 @@
       "rawTitle": "TC-AG-TPL-005 @high @positive — Each industry reveals its exact example agent cards",
       "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
       "line": 51,
-      "describe": "BUILD › Agents › Template gallery @templates @smoke",
+      "describe": "BUILD › Agents › Template gallery @templates",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:51:TC-AG-TPL-005"
@@ -6213,7 +6213,7 @@
       "rawTitle": "TC-AG-TPL-006 @medium @positive — Back to industries returns to gallery from every industry",
       "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
       "line": 73,
-      "describe": "BUILD › Agents › Template gallery @templates @smoke",
+      "describe": "BUILD › Agents › Template gallery @templates",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:73:TC-AG-TPL-006"
@@ -6230,7 +6230,7 @@
       "rawTitle": "TC-AG-TPL-007 @medium @ui — Start from scratch card shows blank-form description",
       "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
       "line": 87,
-      "describe": "BUILD › Agents › Template gallery @templates @smoke",
+      "describe": "BUILD › Agents › Template gallery @templates",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:87:TC-AG-TPL-007"
@@ -6247,7 +6247,7 @@
       "rawTitle": "TC-AG-TPL-008 @medium @ui — Schedule a consultation CTA with help copy",
       "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
       "line": 96,
-      "describe": "BUILD › Agents › Template gallery @templates @smoke",
+      "describe": "BUILD › Agents › Template gallery @templates",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:96:TC-AG-TPL-008"
@@ -6264,7 +6264,7 @@
       "rawTitle": "TC-AG-TPL-002 @high @positive — ${t.title} card opens agent form",
       "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
       "line": 106,
-      "describe": "BUILD › Agents › Template gallery @templates @smoke",
+      "describe": "BUILD › Agents › Template gallery @templates",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:106:TC-AG-TPL-002"
@@ -6281,7 +6281,7 @@
       "rawTitle": "TC-AG-TPL-003 @medium @positive — Start from scratch opens blank form",
       "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
       "line": 120,
-      "describe": "BUILD › Agents › Template gallery @templates @smoke",
+      "describe": "BUILD › Agents › Template gallery @templates",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:120:TC-AG-TPL-003"
@@ -6815,7 +6815,7 @@
       "rawTitle": "TC-PG-001 @smoke @high @ui — Playground header and subtitle visible",
       "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
       "line": 5,
-      "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+      "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:5:TC-PG-001"
@@ -6832,7 +6832,7 @@
       "rawTitle": "TC-PG-002 @high @ui — Agent section with Pick an agent placeholder",
       "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
       "line": 12,
-      "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+      "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:12:TC-PG-002"
@@ -6849,7 +6849,7 @@
       "rawTitle": "TC-PG-003 @high @ui — Browser and Phone Call mode toggle visible",
       "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
       "line": 19,
-      "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+      "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:19:TC-PG-003"
@@ -6866,7 +6866,7 @@
       "rawTitle": "TC-PG-004 @high @ui — Log panel shows idle before any call",
       "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
       "line": 26,
-      "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+      "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:26:TC-PG-004"
@@ -6883,7 +6883,7 @@
       "rawTitle": "TC-PG-005 @medium @ui — Sidebar Playground nav link visible",
       "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
       "line": 33,
-      "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+      "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:33:TC-PG-005"
@@ -6900,7 +6900,7 @@
       "rawTitle": "TC-PG-006 @high @positive — Full new-user playground layout",
       "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
       "line": 42,
-      "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+      "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:42:TC-PG-006"
@@ -7373,7 +7373,7 @@
       "rawTitle": "Playground — agent selector and Start call visible",
       "specFile": "e2e/tests/suite/build/playground/playground.spec.ts",
       "line": 5,
-      "describe": "BUILD › Playground @smoke",
+      "describe": "BUILD › Playground",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/playground/playground.spec.ts:5:Playground"
@@ -7387,7 +7387,7 @@
       "rawTitle": "Playground — deep-link pre-selects agent_id",
       "specFile": "e2e/tests/suite/build/playground/playground.spec.ts",
       "line": 13,
-      "describe": "BUILD › Playground @smoke",
+      "describe": "BUILD › Playground",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/playground/playground.spec.ts:13:Playground"
@@ -7405,7 +7405,7 @@
       "rawTitle": "TC-PT-001 @smoke @high @ui — Empty state shows no templates message",
       "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
       "line": 13,
-      "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts @smoke",
+      "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts:13:TC-PT-001"
@@ -7422,7 +7422,7 @@
       "rawTitle": "TC-PT-002 @high @ui — Header and subtitle visible",
       "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
       "line": 20,
-      "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts @smoke",
+      "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts:20:TC-PT-002"
@@ -7439,7 +7439,7 @@
       "rawTitle": "TC-PT-003 @high @positive — New template button visible on empty list",
       "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
       "line": 29,
-      "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts @smoke",
+      "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts:29:TC-PT-003"
@@ -7456,7 +7456,7 @@
       "rawTitle": "TC-PT-004 @medium @ui — Sidebar Prompts nav is active",
       "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
       "line": 37,
-      "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts @smoke",
+      "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts:37:TC-PT-004"
@@ -7932,7 +7932,7 @@
       "rawTitle": "TC-KB-001 @high @positive — Prompt Templates page loads",
       "specFile": "e2e/tests/suite/build/prompts/prompts.spec.ts",
       "line": 5,
-      "describe": "BUILD › Prompts @smoke",
+      "describe": "BUILD › Prompts",
       "sectionKey": "build",
       "tab": "BUILD",
       "catalogKey": "e2e/tests/suite/build/prompts/prompts.spec.ts:5:TC-KB-001"
@@ -14256,7 +14256,7 @@
       "rawTitle": "TC-LG-001 @smoke @high @ui — Language trigger visible in sidebar with English EN",
       "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
       "line": 10,
-      "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+      "describe": "Global › Language switcher — Main UI @journey @new-user @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:10:TC-LG-001"
@@ -14273,7 +14273,7 @@
       "rawTitle": "TC-LG-002 @high @ui — Opening trigger shows search and listbox panel",
       "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
       "line": 17,
-      "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+      "describe": "Global › Language switcher — Main UI @journey @new-user @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:17:TC-LG-002"
@@ -14290,7 +14290,7 @@
       "rawTitle": "TC-LG-003 @high @ui — All seven group headers visible including International",
       "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
       "line": 30,
-      "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+      "describe": "Global › Language switcher — Main UI @journey @new-user @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:30:TC-LG-003"
@@ -14307,7 +14307,7 @@
       "rawTitle": "TC-LG-004 @high @ui — English shown as active with checkmark in panel",
       "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
       "line": 38,
-      "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+      "describe": "Global › Language switcher — Main UI @journey @new-user @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:38:TC-LG-004"
@@ -14324,7 +14324,7 @@
       "rawTitle": "TC-LG-005 @medium @ui — International section lists all 14 languages",
       "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
       "line": 46,
-      "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+      "describe": "Global › Language switcher — Main UI @journey @new-user @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:46:TC-LG-005"
@@ -14341,7 +14341,7 @@
       "rawTitle": "TC-LG-006 @medium @ui — Google Translate element present but hidden",
       "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
       "line": 55,
-      "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+      "describe": "Global › Language switcher — Main UI @journey @new-user @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:55:TC-LG-006"
@@ -14358,7 +14358,7 @@
       "rawTitle": "TC-LG-007 @medium @ui — Trigger shows flag icon and chevron",
       "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
       "line": 62,
-      "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+      "describe": "Global › Language switcher — Main UI @journey @new-user @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:62:TC-LG-007"
@@ -14375,7 +14375,7 @@
       "rawTitle": "TC-LG-008 @medium @ui — Language panel scrollable list container visible",
       "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
       "line": 71,
-      "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+      "describe": "Global › Language switcher — Main UI @journey @new-user @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:71:TC-LG-008"
@@ -15065,14 +15065,14 @@
       "title": "Language switcher opens and lists English",
       "tags": [
         "high",
-        "smoke"
+        "positive"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-LG-S001 @high @smoke — Language switcher opens and lists English",
+      "type": "positive",
+      "rawTitle": "TC-LG-S001 @high @positive — Language switcher opens and lists English",
       "specFile": "e2e/tests/suite/global/language/language.spec.ts",
       "line": 5,
-      "describe": "Global › Language switcher @smoke @language",
+      "describe": "Global › Language switcher @language",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/language/language.spec.ts:5:TC-LG-S001"
@@ -15089,7 +15089,7 @@
       "rawTitle": "TC-UI-006 @high @positive — All dashboard sidebar routes load",
       "specFile": "e2e/tests/suite/global/navigation.spec.ts",
       "line": 29,
-      "describe": "Global UI › Navigation @smoke",
+      "describe": "Global UI › Navigation",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/navigation.spec.ts:29:TC-UI-006"
@@ -15106,7 +15106,7 @@
       "rawTitle": "TC-UI-008 @high @positive — Delete confirmation dialog on Agents",
       "specFile": "e2e/tests/suite/global/navigation.spec.ts",
       "line": 42,
-      "describe": "Global UI › Navigation @smoke",
+      "describe": "Global UI › Navigation",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/navigation.spec.ts:42:TC-UI-008"
@@ -15123,7 +15123,7 @@
       "rawTitle": "TC-UI-001 @high @positive — Mobile viewport (375px) on Agents",
       "specFile": "e2e/tests/suite/global/responsive.spec.ts",
       "line": 5,
-      "describe": "Global UI › Responsive @smoke",
+      "describe": "Global UI › Responsive",
       "sectionKey": "global",
       "tab": "Global UI",
       "catalogKey": "e2e/tests/suite/global/responsive.spec.ts:5:TC-UI-001"
@@ -15308,7 +15308,7 @@
       "rawTitle": "TC-CM-001 @smoke @high @ui — Empty state shows No campaigns yet",
       "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
       "line": 13,
-      "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke",
+      "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts:13:TC-CM-001"
@@ -15325,7 +15325,7 @@
       "rawTitle": "TC-CM-002 @high @ui — Header and outbound bulk calling subtitle",
       "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
       "line": 20,
-      "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke",
+      "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts:20:TC-CM-002"
@@ -15342,7 +15342,7 @@
       "rawTitle": "TC-CM-003 @high @positive — New campaign button visible and enabled",
       "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
       "line": 30,
-      "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke",
+      "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts:30:TC-CM-003"
@@ -15359,7 +15359,7 @@
       "rawTitle": "TC-CM-004 @medium @ui — Sidebar Campaigns nav link visible",
       "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
       "line": 38,
-      "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke",
+      "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts:38:TC-CM-004"
@@ -15730,7 +15730,7 @@
       "rawTitle": "Campaigns page loads",
       "specFile": "e2e/tests/suite/run/campaigns/campaigns.spec.ts",
       "line": 5,
-      "describe": "RUN › Campaigns @smoke",
+      "describe": "RUN › Campaigns",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/campaigns/campaigns.spec.ts:5:Campaigns"
@@ -15748,7 +15748,7 @@
       "rawTitle": "TC-LC-001 @smoke @high @ui — Empty state shows No calls in progress right now",
       "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
       "line": 14,
-      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:14:TC-LC-001"
@@ -15765,7 +15765,7 @@
       "rawTitle": "TC-LC-002 @high @ui — Header and in-flight monitoring subtitle",
       "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
       "line": 21,
-      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:21:TC-LC-002"
@@ -15782,7 +15782,7 @@
       "rawTitle": "TC-LC-003 @medium @ui — Hint mentions Playground and /api/calls",
       "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
       "line": 31,
-      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:31:TC-LC-003"
@@ -15799,7 +15799,7 @@
       "rawTitle": "TC-LC-004 @medium @ui — Sidebar Live Calls nav link visible",
       "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
       "line": 38,
-      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:38:TC-LC-004"
@@ -15816,7 +15816,7 @@
       "rawTitle": "TC-AN-006 @high @positive — Real-time call monitoring dashboard loads",
       "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
       "line": 48,
-      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+      "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:48:TC-AN-006"
@@ -16020,7 +16020,7 @@
       "rawTitle": "TC-AN-006 @high @positive — Live Calls dashboard loads",
       "specFile": "e2e/tests/suite/run/live-calls/live-calls.spec.ts",
       "line": 5,
-      "describe": "RUN › Live Calls @smoke",
+      "describe": "RUN › Live Calls",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/live-calls/live-calls.spec.ts:5:TC-AN-006"
@@ -16038,7 +16038,7 @@
       "rawTitle": "TC-PN-001 @smoke @high @ui — Empty state shows No phone numbers registered yet",
       "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
       "line": 13,
-      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:13:TC-PN-001"
@@ -16055,7 +16055,7 @@
       "rawTitle": "TC-PN-002 @high @ui — Header and Plivo/Twilio description",
       "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
       "line": 20,
-      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:20:TC-PN-002"
@@ -16072,7 +16072,7 @@
       "rawTitle": "TC-PN-003 @high @positive — Add number button visible and enabled",
       "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
       "line": 30,
-      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:30:TC-PN-003"
@@ -16089,7 +16089,7 @@
       "rawTitle": "TC-PN-004 @medium @ui — Telephony accounts (0) with no accounts message",
       "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
       "line": 38,
-      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:38:TC-PN-004"
@@ -16106,7 +16106,7 @@
       "rawTitle": "TC-PN-005 @medium @ui — Sidebar Phone numbers nav link visible",
       "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
       "line": 45,
-      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+      "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:45:TC-PN-005"
@@ -16460,7 +16460,7 @@
       "rawTitle": "Phone numbers page loads with Add number action",
       "specFile": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts",
       "line": 5,
-      "describe": "RUN › Phone numbers @smoke",
+      "describe": "RUN › Phone numbers",
       "sectionKey": "run",
       "tab": "RUN",
       "catalogKey": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts:5:Phone"
@@ -16478,7 +16478,7 @@
       "rawTitle": "TC-AL-002 @smoke @high @ui — Rules tab empty state shows No alert rules yet",
       "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
       "line": 7,
-      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:7:TC-AL-002"
@@ -16495,7 +16495,7 @@
       "rawTitle": "TC-AL-003 @high @ui — Recent events empty state",
       "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
       "line": 18,
-      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:18:TC-AL-003"
@@ -16512,7 +16512,7 @@
       "rawTitle": "TC-AL-004 @high @ui — Header subtitle and New rule button visible",
       "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
       "line": 29,
-      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:29:TC-AL-004"
@@ -16529,7 +16529,7 @@
       "rawTitle": "TC-AL-005 @medium @ui — Rules and Channels tabs visible",
       "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
       "line": 39,
-      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:39:TC-AL-005"
@@ -16546,7 +16546,7 @@
       "rawTitle": "TC-AL-006 @medium @ui — Channels tab empty state",
       "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
       "line": 47,
-      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:47:TC-AL-006"
@@ -16563,7 +16563,7 @@
       "rawTitle": "TC-AL-007 @medium @ui — Sidebar Alerts nav link visible",
       "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
       "line": 57,
-      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+      "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:57:TC-AL-007"
@@ -17260,7 +17260,7 @@
       "rawTitle": "TC-AL-001 @high @positive — Alerts page loads",
       "specFile": "e2e/tests/suite/settings/alerts/alerts.spec.ts",
       "line": 5,
-      "describe": "SETTINGS › Alerts @smoke @alerts",
+      "describe": "SETTINGS › Alerts @alerts",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/alerts/alerts.spec.ts:5:TC-AL-001"
@@ -17278,7 +17278,7 @@
       "rawTitle": "TC-BL-002 @smoke @high @ui — Empty state shows 0.0 total minutes",
       "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
       "line": 15,
-      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:15:TC-BL-002"
@@ -17295,7 +17295,7 @@
       "rawTitle": "TC-BL-003 @high @ui — Header subtitle Usage and cost by provider",
       "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
       "line": 22,
-      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:22:TC-BL-003"
@@ -17312,7 +17312,7 @@
       "rawTitle": "TC-BL-004 @high @ui — Usage over time section with day week month tabs",
       "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
       "line": 30,
-      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:30:TC-BL-004"
@@ -17329,7 +17329,7 @@
       "rawTitle": "TC-BL-005 @medium @ui — Time range dropdown defaults to This month",
       "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
       "line": 38,
-      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:38:TC-BL-005"
@@ -17346,7 +17346,7 @@
       "rawTitle": "TC-BL-006 @medium @ui — No usage recorded empty messages visible",
       "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
       "line": 46,
-      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:46:TC-BL-006"
@@ -17363,7 +17363,7 @@
       "rawTitle": "TC-BL-007 @medium @ui — Sidebar Billing nav link visible",
       "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
       "line": 55,
-      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+      "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:55:TC-BL-007"
@@ -17754,7 +17754,7 @@
       "rawTitle": "TC-BL-001 @high @positive — Billing page loads",
       "specFile": "e2e/tests/suite/settings/billing/billing.spec.ts",
       "line": 5,
-      "describe": "SETTINGS › Billing @smoke @billing",
+      "describe": "SETTINGS › Billing @billing",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/billing/billing.spec.ts:5:TC-BL-001"
@@ -17772,7 +17772,7 @@
       "rawTitle": "TC-WH-001 @smoke @high @ui — Webhooks heading and subtitle visible",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 6,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:6:TC-WH-001"
@@ -17789,7 +17789,7 @@
       "rawTitle": "TC-WH-002 @high @ui — Sidebar Webhooks nav link visible",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 13,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:13:TC-WH-002"
@@ -17806,7 +17806,7 @@
       "rawTitle": "TC-WH-003 @high @ui — Quick apply section with URL secret and event checkboxes",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 20,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:20:TC-WH-003"
@@ -17823,7 +17823,7 @@
       "rawTitle": "TC-WH-004 @high @ui — All standard event checkboxes listed in quick apply",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 28,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:28:TC-WH-004"
@@ -17840,7 +17840,7 @@
       "rawTitle": "TC-WH-005 @high @ui — Event subscriptions section lists all events",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 37,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:37:TC-WH-005"
@@ -17857,7 +17857,7 @@
       "rawTitle": "TC-WH-006 @medium @ui — Each event row shows subscription status badge",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 44,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:44:TC-WH-006"
@@ -17874,7 +17874,7 @@
       "rawTitle": "TC-WH-007 @medium @ui — Subscribe or manage control visible on each event row",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 55,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:55:TC-WH-007"
@@ -17891,7 +17891,7 @@
       "rawTitle": "TC-WH-008 @medium @ui — Recent deliveries section visible",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 64,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:64:TC-WH-008"
@@ -17908,7 +17908,7 @@
       "rawTitle": "TC-WH-009 @medium @ui — Custom event type link visible",
       "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
       "line": 71,
-      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+      "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:71:TC-WH-009"
@@ -18741,7 +18741,7 @@
       "rawTitle": "TC-IN-001 @high @positive — Webhooks admin page loads",
       "specFile": "e2e/tests/suite/settings/webhooks/webhooks.spec.ts",
       "line": 5,
-      "describe": "SETTINGS › Webhooks @smoke @webhooks",
+      "describe": "SETTINGS › Webhooks @webhooks",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/webhooks/webhooks.spec.ts:5:TC-IN-001"
@@ -18759,7 +18759,7 @@
       "rawTitle": "TC-WA-001 @smoke @high @ui — WhatsApp settings route is accessible",
       "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
       "line": 7,
-      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:7:TC-WA-001"
@@ -18776,7 +18776,7 @@
       "rawTitle": "TC-WA-002 @high @ui — WhatsApp Business credentials form layout",
       "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
       "line": 13,
-      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:13:TC-WA-002"
@@ -18793,7 +18793,7 @@
       "rawTitle": "TC-WA-003 @medium @ui — WhatsApp webhook callback URL field and instructions",
       "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
       "line": 24,
-      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:24:TC-WA-003"
@@ -18810,7 +18810,7 @@
       "rawTitle": "TC-WA-004 @medium @ui — Test message section visible with phone and body fields",
       "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
       "line": 33,
-      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:33:TC-WA-004"
@@ -18827,7 +18827,7 @@
       "rawTitle": "TC-WA-005 @low @ui — WhatsApp navigation link or tab accessible from Settings",
       "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
       "line": 43,
-      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+      "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
       "sectionKey": "settings",
       "tab": "SETTINGS",
       "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:43:TC-WA-005"
@@ -19100,7 +19100,7 @@
       "rawTitle": "TC-WS-001 @smoke @high @ui — Account menu opens from user button",
       "specFile": "e2e/tests/suite/workspace/workspace.spec.ts",
       "line": 5,
-      "describe": "Workspace & Account @smoke",
+      "describe": "Workspace & Account",
       "sectionKey": "workspace",
       "tab": "Workspace",
       "catalogKey": "e2e/tests/suite/workspace/workspace.spec.ts:5:TC-WS-001"
@@ -19114,7 +19114,7 @@
       "rawTitle": "User profile button is present",
       "specFile": "e2e/tests/suite/workspace/workspace.spec.ts",
       "line": 15,
-      "describe": "Workspace & Account @smoke",
+      "describe": "Workspace & Account",
       "sectionKey": "workspace",
       "tab": "Workspace",
       "catalogKey": "e2e/tests/suite/workspace/workspace.spec.ts:15:User"
@@ -19135,7 +19135,7 @@
         "rawTitle": "TC-CL-001 @smoke @high @ui — Empty state shows No calls found",
         "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
         "line": 15,
-        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:15:TC-CL-001"
@@ -19152,7 +19152,7 @@
         "rawTitle": "TC-CL-002 @high @ui — Header and result counter (0 shown)",
         "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
         "line": 22,
-        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:22:TC-CL-002"
@@ -19169,7 +19169,7 @@
         "rawTitle": "TC-CL-003 @high @ui — All search and filter controls visible",
         "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
         "line": 30,
-        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:30:TC-CL-003"
@@ -19186,7 +19186,7 @@
         "rawTitle": "TC-CL-004 @medium @ui — Call ID search has Go button",
         "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
         "line": 39,
-        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:39:TC-CL-004"
@@ -19203,7 +19203,7 @@
         "rawTitle": "TC-CL-005 @medium @ui — Sidebar Calls nav link visible",
         "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
         "line": 50,
-        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls @smoke",
+        "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts:50:TC-CL-005"
@@ -19764,7 +19764,7 @@
         "rawTitle": "TC-AN-001 @high @positive — View call logs",
         "specFile": "e2e/tests/suite/analyze/calls/calls.spec.ts",
         "line": 5,
-        "describe": "ANALYZE › Calls @smoke @calls",
+        "describe": "ANALYZE › Calls @calls",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/calls/calls.spec.ts:5:TC-AN-001"
@@ -19782,7 +19782,7 @@
         "rawTitle": "TC-IS-001 @smoke @high @ui — Empty KPIs show zero values",
         "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
         "line": 15,
-        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:15:TC-IS-001"
@@ -19799,7 +19799,7 @@
         "rawTitle": "TC-IS-002 @high @ui — All five KPI cards visible",
         "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
         "line": 20,
-        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:20:TC-IS-002"
@@ -19816,7 +19816,7 @@
         "rawTitle": "TC-IS-003 @high @ui — Agent filter and date controls visible",
         "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
         "line": 26,
-        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:26:TC-IS-003"
@@ -19833,7 +19833,7 @@
         "rawTitle": "TC-IS-004 @high @ui — All chart sections visible in empty state",
         "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
         "line": 35,
-        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:35:TC-IS-004"
@@ -19850,7 +19850,7 @@
         "rawTitle": "TC-IS-005 @medium @ui — Hourly heatmap shows day labels",
         "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
         "line": 42,
-        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:42:TC-IS-005"
@@ -19867,7 +19867,7 @@
         "rawTitle": "TC-IS-006 @medium @ui — Campaign Performance empty message",
         "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
         "line": 49,
-        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:49:TC-IS-006"
@@ -19884,7 +19884,7 @@
         "rawTitle": "TC-IS-007 @medium @ui — Sidebar Insights nav link visible",
         "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
         "line": 57,
-        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights @smoke",
+        "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts:57:TC-IS-007"
@@ -20375,7 +20375,7 @@
         "rawTitle": "TC-AN-004 @high @positive — Insights dashboard loads",
         "specFile": "e2e/tests/suite/analyze/insights/insights.spec.ts",
         "line": 5,
-        "describe": "ANALYZE › Insights @smoke @insights",
+        "describe": "ANALYZE › Insights @insights",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/insights/insights.spec.ts:5:TC-AN-004"
@@ -20393,7 +20393,7 @@
         "rawTitle": "TC-RC-003 @smoke @high @ui — Empty state shows No recordings found",
         "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
         "line": 14,
-        "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings @smoke",
+        "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts:14:TC-RC-003"
@@ -20410,7 +20410,7 @@
         "rawTitle": "TC-RC-004 @high @ui — Search input and agent filter visible",
         "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
         "line": 21,
-        "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings @smoke",
+        "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts:21:TC-RC-004"
@@ -20427,7 +20427,7 @@
         "rawTitle": "TC-RC-005 @medium @ui — Agent filter defaults to All agents",
         "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
         "line": 33,
-        "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings @smoke",
+        "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts:33:TC-RC-005"
@@ -20444,7 +20444,7 @@
         "rawTitle": "TC-RC-006 @medium @ui — Sidebar Recordings nav link visible",
         "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
         "line": 41,
-        "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings @smoke",
+        "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts:41:TC-RC-006"
@@ -20784,7 +20784,7 @@
         "rawTitle": "TC-RC-001 @high @positive — Recordings page loads",
         "specFile": "e2e/tests/suite/analyze/recordings/recordings.spec.ts",
         "line": 5,
-        "describe": "ANALYZE › Recordings @smoke @recordings",
+        "describe": "ANALYZE › Recordings @recordings",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/recordings/recordings.spec.ts:5:TC-RC-001"
@@ -20803,7 +20803,7 @@
         "rawTitle": "TC-AU-002b @high @positive — Saved session reaches BUILD › Agents",
         "specFile": "e2e/tests/suite/authentication/google-sso/google-sso.spec.ts",
         "line": 6,
-        "describe": "Authentication › Google SSO @smoke",
+        "describe": "Authentication › Google SSO",
         "sectionKey": "authentication",
         "tab": "Authentication",
         "catalogKey": "e2e/tests/suite/authentication/google-sso/google-sso.spec.ts:6:TC-AU"
@@ -20820,7 +20820,7 @@
         "rawTitle": "TC-AU-004 @high @positive — Logout clears session",
         "specFile": "e2e/tests/suite/authentication/logout/sign-out.spec.ts",
         "line": 5,
-        "describe": "Authentication › Logout @smoke",
+        "describe": "Authentication › Logout",
         "sectionKey": "authentication",
         "tab": "Authentication",
         "catalogKey": "e2e/tests/suite/authentication/logout/sign-out.spec.ts:5:TC-AU-004"
@@ -20837,7 +20837,7 @@
         "rawTitle": "TC-AU-003 @medium @positive — Session persists across tabs",
         "specFile": "e2e/tests/suite/authentication/session/session.spec.ts",
         "line": 6,
-        "describe": "Authentication › Session @smoke",
+        "describe": "Authentication › Session",
         "sectionKey": "authentication",
         "tab": "Authentication",
         "catalogKey": "e2e/tests/suite/authentication/session/session.spec.ts:6:TC-AU-003"
@@ -20941,7 +20941,7 @@
         "rawTitle": "TC-AU-002 @smoke @high @positive — Sign-in page shows Google, GitHub, and email",
         "specFile": "e2e/tests/suite/authentication/sign-in/sign-in.positive.spec.ts",
         "line": 13,
-        "describe": "Authentication › Sign In @smoke @unsigned",
+        "describe": "Authentication › Sign In @unsigned",
         "sectionKey": "authentication",
         "tab": "Authentication",
         "catalogKey": "e2e/tests/suite/authentication/sign-in/sign-in.positive.spec.ts:13:TC-AU-002"
@@ -20958,7 +20958,7 @@
         "rawTitle": "TC-AU-001 @high @positive — Valid login with email & password",
         "specFile": "e2e/tests/suite/authentication/sign-in/sign-in.positive.spec.ts",
         "line": 25,
-        "describe": "Authentication › Sign In @smoke @unsigned",
+        "describe": "Authentication › Sign In @unsigned",
         "sectionKey": "authentication",
         "tab": "Authentication",
         "catalogKey": "e2e/tests/suite/authentication/sign-in/sign-in.positive.spec.ts:25:TC-AU-001"
@@ -20993,7 +20993,7 @@
         "rawTitle": "TC-AU-SU-001 @smoke @high @positive — Create your account screen loads",
         "specFile": "e2e/tests/suite/authentication/sign-up/sign-up.landing.spec.ts",
         "line": 6,
-        "describe": "Authentication › Sign Up — Landing @unsigned @smoke",
+        "describe": "Authentication › Sign Up — Landing @unsigned",
         "sectionKey": "authentication",
         "tab": "Authentication",
         "catalogKey": "e2e/tests/suite/authentication/sign-up/sign-up.landing.spec.ts:6:TC-AU-SU-001"
@@ -21010,7 +21010,7 @@
         "rawTitle": "TC-AU-SU-002 @high @positive — Show/hide password toggle visible",
         "specFile": "e2e/tests/suite/authentication/sign-up/sign-up.landing.spec.ts",
         "line": 16,
-        "describe": "Authentication › Sign Up — Landing @unsigned @smoke",
+        "describe": "Authentication › Sign Up — Landing @unsigned",
         "sectionKey": "authentication",
         "tab": "Authentication",
         "catalogKey": "e2e/tests/suite/authentication/sign-up/sign-up.landing.spec.ts:16:TC-AU-SU-002"
@@ -21234,7 +21234,7 @@
         "rawTitle": "TC-AG-AR-001 @smoke @high @positive — Appointment Reminder & Reschedule card opens pre-filled form",
         "specFile": "e2e/tests/suite/build/agents/appointment-reminder-reschedule/00-template.spec.ts",
         "line": 11,
-        "describe": "BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule @smoke",
+        "describe": "BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/appointment-reminder-reschedule/00-template.spec.ts:11:TC-AG-AR-001"
@@ -21251,7 +21251,7 @@
         "rawTitle": "TC-AG-AR-002 @medium @positive — Change template returns to Healthcare industry view",
         "specFile": "e2e/tests/suite/build/agents/appointment-reminder-reschedule/00-template.spec.ts",
         "line": 62,
-        "describe": "BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule @smoke",
+        "describe": "BUILD › Agents › Appointment Reminder & Reschedule — Template @journey @appointment-reminder-reschedule",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/appointment-reminder-reschedule/00-template.spec.ts:62:TC-AG-AR-002"
@@ -21964,7 +21964,7 @@
         "rawTitle": "TC-AG-DR-001 @smoke @high @positive — Credit Card Payment Reminder card opens pre-filled form",
         "specFile": "e2e/tests/suite/build/agents/credit-card-payment-reminder/00-template.spec.ts",
         "line": 8,
-        "describe": "BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder @smoke",
+        "describe": "BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/credit-card-payment-reminder/00-template.spec.ts:8:TC-AG-DR-001"
@@ -21981,7 +21981,7 @@
         "rawTitle": "TC-AG-DR-002 @medium @positive — Change template returns to BFSI industry view",
         "specFile": "e2e/tests/suite/build/agents/credit-card-payment-reminder/00-template.spec.ts",
         "line": 49,
-        "describe": "BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder @smoke",
+        "describe": "BUILD › Agents › Credit Card Payment Reminder — Template @journey @credit-card-payment-reminder",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/credit-card-payment-reminder/00-template.spec.ts:49:TC-AG-DR-002"
@@ -23034,7 +23034,7 @@
         "rawTitle": "TC-AG-OC-001 @smoke @high @positive — Order Confirmation & Reschedule card opens pre-filled form",
         "specFile": "e2e/tests/suite/build/agents/order-confirmation-reschedule/00-template.spec.ts",
         "line": 11,
-        "describe": "BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule @smoke",
+        "describe": "BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/order-confirmation-reschedule/00-template.spec.ts:11:TC-AG-OC-001"
@@ -23051,7 +23051,7 @@
         "rawTitle": "TC-AG-OC-002 @medium @positive — Change template returns to Logistics industry view",
         "specFile": "e2e/tests/suite/build/agents/order-confirmation-reschedule/00-template.spec.ts",
         "line": 62,
-        "describe": "BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule @smoke",
+        "describe": "BUILD › Agents › Order Confirmation & Reschedule — Template @journey @order-confirmation-reschedule",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/order-confirmation-reschedule/00-template.spec.ts:62:TC-AG-OC-002"
@@ -23781,7 +23781,7 @@
         "rawTitle": "TC-AG-CS-001 @smoke @high @positive — Retention Call card opens pre-filled form",
         "specFile": "e2e/tests/suite/build/agents/retention-call/00-template.spec.ts",
         "line": 11,
-        "describe": "BUILD › Agents › Retention Call — Template @journey @retention-call @smoke",
+        "describe": "BUILD › Agents › Retention Call — Template @journey @retention-call",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/retention-call/00-template.spec.ts:11:TC-AG-CS-001"
@@ -23798,7 +23798,7 @@
         "rawTitle": "TC-AG-CS-002 @medium @positive — Change template returns to Telecom industry view",
         "specFile": "e2e/tests/suite/build/agents/retention-call/00-template.spec.ts",
         "line": 62,
-        "describe": "BUILD › Agents › Retention Call — Template @journey @retention-call @smoke",
+        "describe": "BUILD › Agents › Retention Call — Template @journey @retention-call",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/retention-call/00-template.spec.ts:62:TC-AG-CS-002"
@@ -24528,7 +24528,7 @@
         "rawTitle": "TC-AG-SFS-001 @smoke @high @positive — Start from scratch opens blank form with neutral defaults",
         "specFile": "e2e/tests/suite/build/agents/start-from-scratch/00-template.spec.ts",
         "line": 11,
-        "describe": "BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch @smoke",
+        "describe": "BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/start-from-scratch/00-template.spec.ts:11:TC-AG-SFS-001"
@@ -24545,7 +24545,7 @@
         "rawTitle": "TC-AG-SFS-002 @medium @positive — Change template returns to gallery",
         "specFile": "e2e/tests/suite/build/agents/start-from-scratch/00-template.spec.ts",
         "line": 62,
-        "describe": "BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch @smoke",
+        "describe": "BUILD › Agents › Start from scratch — Gallery entry @journey @start-from-scratch",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/start-from-scratch/00-template.spec.ts:62:TC-AG-SFS-002"
@@ -25275,7 +25275,7 @@
         "rawTitle": "TC-AG-TPL-001 @smoke @high @ui — Gallery shows all 5 industry cards and Start from scratch",
         "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
         "line": 21,
-        "describe": "BUILD › Agents › Template gallery @templates @smoke",
+        "describe": "BUILD › Agents › Template gallery @templates",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:21:TC-AG-TPL-001"
@@ -25292,7 +25292,7 @@
         "rawTitle": "TC-AG-TPL-004 @high @ui — Gallery count line and per-industry example counts",
         "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
         "line": 38,
-        "describe": "BUILD › Agents › Template gallery @templates @smoke",
+        "describe": "BUILD › Agents › Template gallery @templates",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:38:TC-AG-TPL-004"
@@ -25309,7 +25309,7 @@
         "rawTitle": "TC-AG-TPL-005 @high @positive — Each industry reveals its exact example agent cards",
         "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
         "line": 51,
-        "describe": "BUILD › Agents › Template gallery @templates @smoke",
+        "describe": "BUILD › Agents › Template gallery @templates",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:51:TC-AG-TPL-005"
@@ -25326,7 +25326,7 @@
         "rawTitle": "TC-AG-TPL-006 @medium @positive — Back to industries returns to gallery from every industry",
         "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
         "line": 73,
-        "describe": "BUILD › Agents › Template gallery @templates @smoke",
+        "describe": "BUILD › Agents › Template gallery @templates",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:73:TC-AG-TPL-006"
@@ -25343,7 +25343,7 @@
         "rawTitle": "TC-AG-TPL-007 @medium @ui — Start from scratch card shows blank-form description",
         "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
         "line": 87,
-        "describe": "BUILD › Agents › Template gallery @templates @smoke",
+        "describe": "BUILD › Agents › Template gallery @templates",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:87:TC-AG-TPL-007"
@@ -25360,7 +25360,7 @@
         "rawTitle": "TC-AG-TPL-008 @medium @ui — Schedule a consultation CTA with help copy",
         "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
         "line": 96,
-        "describe": "BUILD › Agents › Template gallery @templates @smoke",
+        "describe": "BUILD › Agents › Template gallery @templates",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:96:TC-AG-TPL-008"
@@ -25377,7 +25377,7 @@
         "rawTitle": "TC-AG-TPL-002 @high @positive — ${t.title} card opens agent form",
         "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
         "line": 106,
-        "describe": "BUILD › Agents › Template gallery @templates @smoke",
+        "describe": "BUILD › Agents › Template gallery @templates",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:106:TC-AG-TPL-002"
@@ -25394,7 +25394,7 @@
         "rawTitle": "TC-AG-TPL-003 @medium @positive — Start from scratch opens blank form",
         "specFile": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts",
         "line": 120,
-        "describe": "BUILD › Agents › Template gallery @templates @smoke",
+        "describe": "BUILD › Agents › Template gallery @templates",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/agents/templates/00-gallery.spec.ts:120:TC-AG-TPL-003"
@@ -25928,7 +25928,7 @@
         "rawTitle": "TC-PG-001 @smoke @high @ui — Playground header and subtitle visible",
         "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
         "line": 5,
-        "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+        "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:5:TC-PG-001"
@@ -25945,7 +25945,7 @@
         "rawTitle": "TC-PG-002 @high @ui — Agent section with Pick an agent placeholder",
         "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
         "line": 12,
-        "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+        "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:12:TC-PG-002"
@@ -25962,7 +25962,7 @@
         "rawTitle": "TC-PG-003 @high @ui — Browser and Phone Call mode toggle visible",
         "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
         "line": 19,
-        "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+        "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:19:TC-PG-003"
@@ -25979,7 +25979,7 @@
         "rawTitle": "TC-PG-004 @high @ui — Log panel shows idle before any call",
         "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
         "line": 26,
-        "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+        "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:26:TC-PG-004"
@@ -25996,7 +25996,7 @@
         "rawTitle": "TC-PG-005 @medium @ui — Sidebar Playground nav link visible",
         "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
         "line": 33,
-        "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+        "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:33:TC-PG-005"
@@ -26013,7 +26013,7 @@
         "rawTitle": "TC-PG-006 @high @positive — Full new-user playground layout",
         "specFile": "e2e/tests/suite/build/playground/00-main-ui.spec.ts",
         "line": 42,
-        "describe": "BUILD › Playground — Main UI @journey @new-user @playground @smoke",
+        "describe": "BUILD › Playground — Main UI @journey @new-user @playground",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/playground/00-main-ui.spec.ts:42:TC-PG-006"
@@ -26486,7 +26486,7 @@
         "rawTitle": "Playground — agent selector and Start call visible",
         "specFile": "e2e/tests/suite/build/playground/playground.spec.ts",
         "line": 5,
-        "describe": "BUILD › Playground @smoke",
+        "describe": "BUILD › Playground",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/playground/playground.spec.ts:5:Playground"
@@ -26500,7 +26500,7 @@
         "rawTitle": "Playground — deep-link pre-selects agent_id",
         "specFile": "e2e/tests/suite/build/playground/playground.spec.ts",
         "line": 13,
-        "describe": "BUILD › Playground @smoke",
+        "describe": "BUILD › Playground",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/playground/playground.spec.ts:13:Playground"
@@ -26518,7 +26518,7 @@
         "rawTitle": "TC-PT-001 @smoke @high @ui — Empty state shows no templates message",
         "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
         "line": 13,
-        "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts @smoke",
+        "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts:13:TC-PT-001"
@@ -26535,7 +26535,7 @@
         "rawTitle": "TC-PT-002 @high @ui — Header and subtitle visible",
         "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
         "line": 20,
-        "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts @smoke",
+        "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts:20:TC-PT-002"
@@ -26552,7 +26552,7 @@
         "rawTitle": "TC-PT-003 @high @positive — New template button visible on empty list",
         "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
         "line": 29,
-        "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts @smoke",
+        "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts:29:TC-PT-003"
@@ -26569,7 +26569,7 @@
         "rawTitle": "TC-PT-004 @medium @ui — Sidebar Prompts nav is active",
         "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
         "line": 37,
-        "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts @smoke",
+        "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts:37:TC-PT-004"
@@ -27045,7 +27045,7 @@
         "rawTitle": "TC-KB-001 @high @positive — Prompt Templates page loads",
         "specFile": "e2e/tests/suite/build/prompts/prompts.spec.ts",
         "line": 5,
-        "describe": "BUILD › Prompts @smoke",
+        "describe": "BUILD › Prompts",
         "sectionKey": "build",
         "tab": "BUILD",
         "catalogKey": "e2e/tests/suite/build/prompts/prompts.spec.ts:5:TC-KB-001"
@@ -33373,7 +33373,7 @@
         "rawTitle": "TC-LG-001 @smoke @high @ui — Language trigger visible in sidebar with English EN",
         "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
         "line": 10,
-        "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+        "describe": "Global › Language switcher — Main UI @journey @new-user @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:10:TC-LG-001"
@@ -33390,7 +33390,7 @@
         "rawTitle": "TC-LG-002 @high @ui — Opening trigger shows search and listbox panel",
         "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
         "line": 17,
-        "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+        "describe": "Global › Language switcher — Main UI @journey @new-user @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:17:TC-LG-002"
@@ -33407,7 +33407,7 @@
         "rawTitle": "TC-LG-003 @high @ui — All seven group headers visible including International",
         "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
         "line": 30,
-        "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+        "describe": "Global › Language switcher — Main UI @journey @new-user @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:30:TC-LG-003"
@@ -33424,7 +33424,7 @@
         "rawTitle": "TC-LG-004 @high @ui — English shown as active with checkmark in panel",
         "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
         "line": 38,
-        "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+        "describe": "Global › Language switcher — Main UI @journey @new-user @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:38:TC-LG-004"
@@ -33441,7 +33441,7 @@
         "rawTitle": "TC-LG-005 @medium @ui — International section lists all 14 languages",
         "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
         "line": 46,
-        "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+        "describe": "Global › Language switcher — Main UI @journey @new-user @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:46:TC-LG-005"
@@ -33458,7 +33458,7 @@
         "rawTitle": "TC-LG-006 @medium @ui — Google Translate element present but hidden",
         "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
         "line": 55,
-        "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+        "describe": "Global › Language switcher — Main UI @journey @new-user @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:55:TC-LG-006"
@@ -33475,7 +33475,7 @@
         "rawTitle": "TC-LG-007 @medium @ui — Trigger shows flag icon and chevron",
         "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
         "line": 62,
-        "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+        "describe": "Global › Language switcher — Main UI @journey @new-user @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:62:TC-LG-007"
@@ -33492,7 +33492,7 @@
         "rawTitle": "TC-LG-008 @medium @ui — Language panel scrollable list container visible",
         "specFile": "e2e/tests/suite/global/language/00-main-ui.spec.ts",
         "line": 71,
-        "describe": "Global › Language switcher — Main UI @journey @new-user @language @smoke",
+        "describe": "Global › Language switcher — Main UI @journey @new-user @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/00-main-ui.spec.ts:71:TC-LG-008"
@@ -34182,14 +34182,14 @@
         "title": "Language switcher opens and lists English",
         "tags": [
           "high",
-          "smoke"
+          "positive"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-LG-S001 @high @smoke — Language switcher opens and lists English",
+        "type": "positive",
+        "rawTitle": "TC-LG-S001 @high @positive — Language switcher opens and lists English",
         "specFile": "e2e/tests/suite/global/language/language.spec.ts",
         "line": 5,
-        "describe": "Global › Language switcher @smoke @language",
+        "describe": "Global › Language switcher @language",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/language/language.spec.ts:5:TC-LG-S001"
@@ -34206,7 +34206,7 @@
         "rawTitle": "TC-UI-006 @high @positive — All dashboard sidebar routes load",
         "specFile": "e2e/tests/suite/global/navigation.spec.ts",
         "line": 29,
-        "describe": "Global UI › Navigation @smoke",
+        "describe": "Global UI › Navigation",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/navigation.spec.ts:29:TC-UI-006"
@@ -34223,7 +34223,7 @@
         "rawTitle": "TC-UI-008 @high @positive — Delete confirmation dialog on Agents",
         "specFile": "e2e/tests/suite/global/navigation.spec.ts",
         "line": 42,
-        "describe": "Global UI › Navigation @smoke",
+        "describe": "Global UI › Navigation",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/navigation.spec.ts:42:TC-UI-008"
@@ -34240,7 +34240,7 @@
         "rawTitle": "TC-UI-001 @high @positive — Mobile viewport (375px) on Agents",
         "specFile": "e2e/tests/suite/global/responsive.spec.ts",
         "line": 5,
-        "describe": "Global UI › Responsive @smoke",
+        "describe": "Global UI › Responsive",
         "sectionKey": "global",
         "tab": "Global UI",
         "catalogKey": "e2e/tests/suite/global/responsive.spec.ts:5:TC-UI-001"
@@ -34429,7 +34429,7 @@
         "rawTitle": "TC-CM-001 @smoke @high @ui — Empty state shows No campaigns yet",
         "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
         "line": 13,
-        "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke",
+        "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts:13:TC-CM-001"
@@ -34446,7 +34446,7 @@
         "rawTitle": "TC-CM-002 @high @ui — Header and outbound bulk calling subtitle",
         "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
         "line": 20,
-        "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke",
+        "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts:20:TC-CM-002"
@@ -34463,7 +34463,7 @@
         "rawTitle": "TC-CM-003 @high @positive — New campaign button visible and enabled",
         "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
         "line": 30,
-        "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke",
+        "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts:30:TC-CM-003"
@@ -34480,7 +34480,7 @@
         "rawTitle": "TC-CM-004 @medium @ui — Sidebar Campaigns nav link visible",
         "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
         "line": 38,
-        "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns @smoke",
+        "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts:38:TC-CM-004"
@@ -34851,7 +34851,7 @@
         "rawTitle": "Campaigns page loads",
         "specFile": "e2e/tests/suite/run/campaigns/campaigns.spec.ts",
         "line": 5,
-        "describe": "RUN › Campaigns @smoke",
+        "describe": "RUN › Campaigns",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/campaigns/campaigns.spec.ts:5:Campaigns"
@@ -34869,7 +34869,7 @@
         "rawTitle": "TC-LC-001 @smoke @high @ui — Empty state shows No calls in progress right now",
         "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
         "line": 14,
-        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:14:TC-LC-001"
@@ -34886,7 +34886,7 @@
         "rawTitle": "TC-LC-002 @high @ui — Header and in-flight monitoring subtitle",
         "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
         "line": 21,
-        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:21:TC-LC-002"
@@ -34903,7 +34903,7 @@
         "rawTitle": "TC-LC-003 @medium @ui — Hint mentions Playground and /api/calls",
         "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
         "line": 31,
-        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:31:TC-LC-003"
@@ -34920,7 +34920,7 @@
         "rawTitle": "TC-LC-004 @medium @ui — Sidebar Live Calls nav link visible",
         "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
         "line": 38,
-        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:38:TC-LC-004"
@@ -34937,7 +34937,7 @@
         "rawTitle": "TC-AN-006 @high @positive — Real-time call monitoring dashboard loads",
         "specFile": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts",
         "line": 48,
-        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls @smoke",
+        "describe": "RUN › Live Calls — Empty state @journey @new-user @live-calls",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/live-calls/00-empty-state.spec.ts:48:TC-AN-006"
@@ -35141,7 +35141,7 @@
         "rawTitle": "TC-AN-006 @high @positive — Live Calls dashboard loads",
         "specFile": "e2e/tests/suite/run/live-calls/live-calls.spec.ts",
         "line": 5,
-        "describe": "RUN › Live Calls @smoke",
+        "describe": "RUN › Live Calls",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/live-calls/live-calls.spec.ts:5:TC-AN-006"
@@ -35159,7 +35159,7 @@
         "rawTitle": "TC-PN-001 @smoke @high @ui — Empty state shows No phone numbers registered yet",
         "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
         "line": 13,
-        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:13:TC-PN-001"
@@ -35176,7 +35176,7 @@
         "rawTitle": "TC-PN-002 @high @ui — Header and Plivo/Twilio description",
         "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
         "line": 20,
-        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:20:TC-PN-002"
@@ -35193,7 +35193,7 @@
         "rawTitle": "TC-PN-003 @high @positive — Add number button visible and enabled",
         "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
         "line": 30,
-        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:30:TC-PN-003"
@@ -35210,7 +35210,7 @@
         "rawTitle": "TC-PN-004 @medium @ui — Telephony accounts (0) with no accounts message",
         "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
         "line": 38,
-        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:38:TC-PN-004"
@@ -35227,7 +35227,7 @@
         "rawTitle": "TC-PN-005 @medium @ui — Sidebar Phone numbers nav link visible",
         "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
         "line": 45,
-        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers @smoke",
+        "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts:45:TC-PN-005"
@@ -35581,7 +35581,7 @@
         "rawTitle": "Phone numbers page loads with Add number action",
         "specFile": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts",
         "line": 5,
-        "describe": "RUN › Phone numbers @smoke",
+        "describe": "RUN › Phone numbers",
         "sectionKey": "run",
         "tab": "RUN",
         "catalogKey": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts:5:Phone"
@@ -35601,7 +35601,7 @@
         "rawTitle": "TC-AL-002 @smoke @high @ui — Rules tab empty state shows No alert rules yet",
         "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
         "line": 7,
-        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:7:TC-AL-002"
@@ -35618,7 +35618,7 @@
         "rawTitle": "TC-AL-003 @high @ui — Recent events empty state",
         "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
         "line": 18,
-        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:18:TC-AL-003"
@@ -35635,7 +35635,7 @@
         "rawTitle": "TC-AL-004 @high @ui — Header subtitle and New rule button visible",
         "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
         "line": 29,
-        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:29:TC-AL-004"
@@ -35652,7 +35652,7 @@
         "rawTitle": "TC-AL-005 @medium @ui — Rules and Channels tabs visible",
         "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
         "line": 39,
-        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:39:TC-AL-005"
@@ -35669,7 +35669,7 @@
         "rawTitle": "TC-AL-006 @medium @ui — Channels tab empty state",
         "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
         "line": 47,
-        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:47:TC-AL-006"
@@ -35686,7 +35686,7 @@
         "rawTitle": "TC-AL-007 @medium @ui — Sidebar Alerts nav link visible",
         "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
         "line": 57,
-        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts @smoke",
+        "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts:57:TC-AL-007"
@@ -36383,7 +36383,7 @@
         "rawTitle": "TC-AL-001 @high @positive — Alerts page loads",
         "specFile": "e2e/tests/suite/settings/alerts/alerts.spec.ts",
         "line": 5,
-        "describe": "SETTINGS › Alerts @smoke @alerts",
+        "describe": "SETTINGS › Alerts @alerts",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/alerts/alerts.spec.ts:5:TC-AL-001"
@@ -36401,7 +36401,7 @@
         "rawTitle": "TC-BL-002 @smoke @high @ui — Empty state shows 0.0 total minutes",
         "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
         "line": 15,
-        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:15:TC-BL-002"
@@ -36418,7 +36418,7 @@
         "rawTitle": "TC-BL-003 @high @ui — Header subtitle Usage and cost by provider",
         "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
         "line": 22,
-        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:22:TC-BL-003"
@@ -36435,7 +36435,7 @@
         "rawTitle": "TC-BL-004 @high @ui — Usage over time section with day week month tabs",
         "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
         "line": 30,
-        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:30:TC-BL-004"
@@ -36452,7 +36452,7 @@
         "rawTitle": "TC-BL-005 @medium @ui — Time range dropdown defaults to This month",
         "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
         "line": 38,
-        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:38:TC-BL-005"
@@ -36469,7 +36469,7 @@
         "rawTitle": "TC-BL-006 @medium @ui — No usage recorded empty messages visible",
         "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
         "line": 46,
-        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:46:TC-BL-006"
@@ -36486,7 +36486,7 @@
         "rawTitle": "TC-BL-007 @medium @ui — Sidebar Billing nav link visible",
         "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
         "line": 55,
-        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing @smoke",
+        "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts:55:TC-BL-007"
@@ -36877,7 +36877,7 @@
         "rawTitle": "TC-BL-001 @high @positive — Billing page loads",
         "specFile": "e2e/tests/suite/settings/billing/billing.spec.ts",
         "line": 5,
-        "describe": "SETTINGS › Billing @smoke @billing",
+        "describe": "SETTINGS › Billing @billing",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/billing/billing.spec.ts:5:TC-BL-001"
@@ -36895,7 +36895,7 @@
         "rawTitle": "TC-WH-001 @smoke @high @ui — Webhooks heading and subtitle visible",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 6,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:6:TC-WH-001"
@@ -36912,7 +36912,7 @@
         "rawTitle": "TC-WH-002 @high @ui — Sidebar Webhooks nav link visible",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 13,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:13:TC-WH-002"
@@ -36929,7 +36929,7 @@
         "rawTitle": "TC-WH-003 @high @ui — Quick apply section with URL secret and event checkboxes",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 20,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:20:TC-WH-003"
@@ -36946,7 +36946,7 @@
         "rawTitle": "TC-WH-004 @high @ui — All standard event checkboxes listed in quick apply",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 28,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:28:TC-WH-004"
@@ -36963,7 +36963,7 @@
         "rawTitle": "TC-WH-005 @high @ui — Event subscriptions section lists all events",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 37,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:37:TC-WH-005"
@@ -36980,7 +36980,7 @@
         "rawTitle": "TC-WH-006 @medium @ui — Each event row shows subscription status badge",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 44,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:44:TC-WH-006"
@@ -36997,7 +36997,7 @@
         "rawTitle": "TC-WH-007 @medium @ui — Subscribe or manage control visible on each event row",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 55,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:55:TC-WH-007"
@@ -37014,7 +37014,7 @@
         "rawTitle": "TC-WH-008 @medium @ui — Recent deliveries section visible",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 64,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:64:TC-WH-008"
@@ -37031,7 +37031,7 @@
         "rawTitle": "TC-WH-009 @medium @ui — Custom event type link visible",
         "specFile": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts",
         "line": 71,
-        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks @smoke",
+        "describe": "SETTINGS › Webhooks — Main UI @journey @new-user @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/00-main-ui.spec.ts:71:TC-WH-009"
@@ -37864,7 +37864,7 @@
         "rawTitle": "TC-IN-001 @high @positive — Webhooks admin page loads",
         "specFile": "e2e/tests/suite/settings/webhooks/webhooks.spec.ts",
         "line": 5,
-        "describe": "SETTINGS › Webhooks @smoke @webhooks",
+        "describe": "SETTINGS › Webhooks @webhooks",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/webhooks/webhooks.spec.ts:5:TC-IN-001"
@@ -37882,7 +37882,7 @@
         "rawTitle": "TC-WA-001 @smoke @high @ui — WhatsApp settings route is accessible",
         "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
         "line": 7,
-        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:7:TC-WA-001"
@@ -37899,7 +37899,7 @@
         "rawTitle": "TC-WA-002 @high @ui — WhatsApp Business credentials form layout",
         "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
         "line": 13,
-        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:13:TC-WA-002"
@@ -37916,7 +37916,7 @@
         "rawTitle": "TC-WA-003 @medium @ui — WhatsApp webhook callback URL field and instructions",
         "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
         "line": 24,
-        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:24:TC-WA-003"
@@ -37933,7 +37933,7 @@
         "rawTitle": "TC-WA-004 @medium @ui — Test message section visible with phone and body fields",
         "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
         "line": 33,
-        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:33:TC-WA-004"
@@ -37950,7 +37950,7 @@
         "rawTitle": "TC-WA-005 @low @ui — WhatsApp navigation link or tab accessible from Settings",
         "specFile": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts",
         "line": 43,
-        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui @smoke",
+        "describe": "SETTINGS › WhatsApp — Main UI @journey @new-user @whatsapp @ui",
         "sectionKey": "settings",
         "tab": "SETTINGS",
         "catalogKey": "e2e/tests/suite/settings/whatsapp/00-main-ui.spec.ts:43:TC-WA-005"
@@ -38225,7 +38225,7 @@
         "rawTitle": "TC-WS-001 @smoke @high @ui — Account menu opens from user button",
         "specFile": "e2e/tests/suite/workspace/workspace.spec.ts",
         "line": 5,
-        "describe": "Workspace & Account @smoke",
+        "describe": "Workspace & Account",
         "sectionKey": "workspace",
         "tab": "Workspace",
         "catalogKey": "e2e/tests/suite/workspace/workspace.spec.ts:5:TC-WS-001"
@@ -38239,7 +38239,7 @@
         "rawTitle": "User profile button is present",
         "specFile": "e2e/tests/suite/workspace/workspace.spec.ts",
         "line": 15,
-        "describe": "Workspace & Account @smoke",
+        "describe": "Workspace & Account",
         "sectionKey": "workspace",
         "tab": "Workspace",
         "catalogKey": "e2e/tests/suite/workspace/workspace.spec.ts:15:User"
