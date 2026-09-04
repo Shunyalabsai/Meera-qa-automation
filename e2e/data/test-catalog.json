@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-04T11:35:06.692Z",
-  "totalTests": 1126,
+  "generatedAt": "2026-09-04T13:45:55.918Z",
+  "totalTests": 1129,
   "tabs": [
     "ANALYZE",
     "Authentication",
@@ -10,6 +10,7 @@
     "RUN",
     "SETTINGS",
     "Workspace",
+    "api",
     "existing-user"
   ],
   "tests": [
@@ -17,13 +18,12 @@
       "id": "TC-CL-001",
       "title": "Empty state shows No calls found",
       "tags": [
-        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-CL-001 @smoke @high @ui — Empty state shows No calls found",
+      "type": "ui",
+      "rawTitle": "TC-CL-001 @high @ui — Empty state shows No calls found",
       "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
       "line": 15,
       "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
@@ -205,12 +205,13 @@
       "id": "TC-CL-015",
       "title": "Select State completed keeps page stable",
       "tags": [
+        "smoke",
         "medium",
         "positive"
       ],
       "priority": "medium",
-      "type": "positive",
-      "rawTitle": "TC-CL-015 @medium @positive — Select State completed keeps page stable",
+      "type": "smoke",
+      "rawTitle": "TC-CL-015 @smoke @medium @positive — Select State completed keeps page stable",
       "specFile": "e2e/tests/suite/analyze/calls/01-filters-positive.spec.ts",
       "line": 51,
       "describe": "ANALYZE › Calls — Filter dropdowns @journey @new-user @calls @positive",
@@ -647,12 +648,13 @@
       "id": "TC-AN-001",
       "title": "View call logs",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-AN-001 @high @positive — View call logs",
+      "type": "smoke",
+      "rawTitle": "TC-AN-001 @smoke @high @positive — View call logs",
       "specFile": "e2e/tests/suite/analyze/calls/calls.spec.ts",
       "line": 5,
       "describe": "ANALYZE › Calls @calls",
@@ -664,13 +666,12 @@
       "id": "TC-IS-001",
       "title": "Empty KPIs show zero values",
       "tags": [
-        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-IS-001 @smoke @high @ui — Empty KPIs show zero values",
+      "type": "ui",
+      "rawTitle": "TC-IS-001 @high @ui — Empty KPIs show zero values",
       "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
       "line": 15,
       "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
@@ -1258,12 +1259,13 @@
       "id": "TC-AN-004",
       "title": "Insights dashboard loads",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-AN-004 @high @positive — Insights dashboard loads",
+      "type": "smoke",
+      "rawTitle": "TC-AN-004 @smoke @high @positive — Insights dashboard loads",
       "specFile": "e2e/tests/suite/analyze/insights/insights.spec.ts",
       "line": 5,
       "describe": "ANALYZE › Insights @insights",
@@ -1275,13 +1277,12 @@
       "id": "TC-RC-003",
       "title": "Empty state shows No recordings found",
       "tags": [
-        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-RC-003 @smoke @high @ui — Empty state shows No recordings found",
+      "type": "ui",
+      "rawTitle": "TC-RC-003 @high @ui — Empty state shows No recordings found",
       "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
       "line": 14,
       "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
@@ -1667,18 +1668,73 @@
       "id": "TC-RC-001",
       "title": "Recordings page loads",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-RC-001 @high @positive — Recordings page loads",
+      "type": "smoke",
+      "rawTitle": "TC-RC-001 @smoke @high @positive — Recordings page loads",
       "specFile": "e2e/tests/suite/analyze/recordings/recordings.spec.ts",
       "line": 5,
       "describe": "ANALYZE › Recordings @recordings",
       "sectionKey": "analyze",
       "tab": "ANALYZE",
       "catalogKey": "e2e/tests/suite/analyze/recordings/recordings.spec.ts:5:TC-RC-001"
+    },
+    {
+      "id": "TC-API-001",
+      "title": "VAP platform entry point responds HTTP 200",
+      "tags": [
+        "smoke",
+        "high",
+        "positive"
+      ],
+      "priority": "high",
+      "type": "smoke",
+      "rawTitle": "TC-API-001 @smoke @high @positive — VAP platform entry point responds HTTP 200",
+      "specFile": "e2e/tests/suite/api/health.spec.ts",
+      "line": 4,
+      "describe": "API & Service Health @smoke @api @positive",
+      "sectionKey": "api",
+      "tab": "api",
+      "catalogKey": "e2e/tests/suite/api/health.spec.ts:4:TC-API-001"
+    },
+    {
+      "id": "TC-API-002",
+      "title": "Static JavaScript application bundle responds HTTP 200",
+      "tags": [
+        "smoke",
+        "high",
+        "positive"
+      ],
+      "priority": "high",
+      "type": "smoke",
+      "rawTitle": "TC-API-002 @smoke @high @positive — Static JavaScript application bundle responds HTTP 200",
+      "specFile": "e2e/tests/suite/api/health.spec.ts",
+      "line": 12,
+      "describe": "API & Service Health @smoke @api @positive",
+      "sectionKey": "api",
+      "tab": "api",
+      "catalogKey": "e2e/tests/suite/api/health.spec.ts:12:TC-API-002"
+    },
+    {
+      "id": "TC-API-003",
+      "title": "External Webhook receiver endpoint is reachable",
+      "tags": [
+        "smoke",
+        "high",
+        "positive"
+      ],
+      "priority": "high",
+      "type": "smoke",
+      "rawTitle": "TC-API-003 @smoke @high @positive — External Webhook receiver endpoint is reachable",
+      "specFile": "e2e/tests/suite/api/health.spec.ts",
+      "line": 26,
+      "describe": "API & Service Health @smoke @api @positive",
+      "sectionKey": "api",
+      "tab": "api",
+      "catalogKey": "e2e/tests/suite/api/health.spec.ts:26:TC-API-003"
     },
     {
       "id": "TC-AU",
@@ -5932,12 +5988,13 @@
       "id": "TC-AG-SFS-060",
       "title": "Blank form fully configured → agent created",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-AG-SFS-060 @high @positive — Blank form fully configured → agent created",
+      "type": "smoke",
+      "rawTitle": "TC-AG-SFS-060 @smoke @high @positive — Blank form fully configured → agent created",
       "specFile": "e2e/tests/suite/build/agents/start-from-scratch/07-full-journey.spec.ts",
       "line": 10,
       "describe": "BUILD › Agents › Start from scratch — Full journey @journey @start-from-scratch",
@@ -7396,13 +7453,12 @@
       "id": "TC-PT-001",
       "title": "Empty state shows no templates message",
       "tags": [
-        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-PT-001 @smoke @high @ui — Empty state shows no templates message",
+      "type": "ui",
+      "rawTitle": "TC-PT-001 @high @ui — Empty state shows no templates message",
       "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
       "line": 13,
       "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
@@ -7635,12 +7691,13 @@
       "id": "TC-PT-030",
       "title": "Create template with name, category, and base prompt",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-PT-030 @high @positive — Create template with name, category, and base prompt",
+      "type": "smoke",
+      "rawTitle": "TC-PT-030 @smoke @high @positive — Create template with name, category, and base prompt",
       "specFile": "e2e/tests/suite/build/prompts/03-create-positive.spec.ts",
       "line": 10,
       "describe": "BUILD › Prompts — Create positive @journey @new-user @prompts",
@@ -7924,12 +7981,13 @@
       "id": "TC-KB-001",
       "title": "Prompt Templates page loads",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-KB-001 @high @positive — Prompt Templates page loads",
+      "type": "smoke",
+      "rawTitle": "TC-KB-001 @smoke @high @positive — Prompt Templates page loads",
       "specFile": "e2e/tests/suite/build/prompts/prompts.spec.ts",
       "line": 5,
       "describe": "BUILD › Prompts",
@@ -14554,12 +14612,13 @@
       "id": "TC-LG-020",
       "title": "Selecting Hindi updates trigger and localStorage hi",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-LG-020 @high @positive — Selecting Hindi updates trigger and localStorage hi",
+      "type": "smoke",
+      "rawTitle": "TC-LG-020 @smoke @high @positive — Selecting Hindi updates trigger and localStorage hi",
       "specFile": "e2e/tests/suite/global/language/01-languages-positive.spec.ts",
       "line": 157,
       "describe": "Global › Language switcher — Regional India @language @positive",
@@ -15299,13 +15358,12 @@
       "id": "TC-CM-001",
       "title": "Empty state shows No campaigns yet",
       "tags": [
-        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-CM-001 @smoke @high @ui — Empty state shows No campaigns yet",
+      "type": "ui",
+      "rawTitle": "TC-CM-001 @high @ui — Empty state shows No campaigns yet",
       "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
       "line": 13,
       "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
@@ -15368,12 +15426,13 @@
       "id": "TC-CM-010",
       "title": "Create form shows Agent and Name required fields",
       "tags": [
+        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "ui",
-      "rawTitle": "TC-CM-010 @high @ui — Create form shows Agent and Name required fields",
+      "type": "smoke",
+      "rawTitle": "TC-CM-010 @smoke @high @ui — Create form shows Agent and Name required fields",
       "specFile": "e2e/tests/suite/run/campaigns/01-create-form-ui.spec.ts",
       "line": 11,
       "describe": "RUN › Campaigns — Create form UI @journey @new-user @campaigns @positive",
@@ -15722,18 +15781,22 @@
       "catalogKey": "e2e/tests/suite/run/campaigns/05-cta-functional.spec.ts:30:CTA-CM-003"
     },
     {
-      "id": "Campaigns",
+      "id": "TC-CM-001",
       "title": "Campaigns page loads",
-      "tags": [],
-      "priority": "",
-      "type": "",
-      "rawTitle": "Campaigns page loads",
+      "tags": [
+        "smoke",
+        "high",
+        "positive"
+      ],
+      "priority": "high",
+      "type": "smoke",
+      "rawTitle": "TC-CM-001 @smoke @high @positive — Campaigns page loads",
       "specFile": "e2e/tests/suite/run/campaigns/campaigns.spec.ts",
       "line": 5,
       "describe": "RUN › Campaigns",
       "sectionKey": "run",
       "tab": "RUN",
-      "catalogKey": "e2e/tests/suite/run/campaigns/campaigns.spec.ts:5:Campaigns"
+      "catalogKey": "e2e/tests/suite/run/campaigns/campaigns.spec.ts:5:TC-CM-001"
     },
     {
       "id": "TC-LC-001",
@@ -16029,13 +16092,12 @@
       "id": "TC-PN-001",
       "title": "Empty state shows No phone numbers registered yet",
       "tags": [
-        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-PN-001 @smoke @high @ui — Empty state shows No phone numbers registered yet",
+      "type": "ui",
+      "rawTitle": "TC-PN-001 @high @ui — Empty state shows No phone numbers registered yet",
       "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
       "line": 13,
       "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
@@ -16115,12 +16177,13 @@
       "id": "TC-PN-010",
       "title": "Add phone number modal opens with Account and Number sections",
       "tags": [
+        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "ui",
-      "rawTitle": "TC-PN-010 @high @ui — Add phone number modal opens with Account and Number sections",
+      "type": "smoke",
+      "rawTitle": "TC-PN-010 @smoke @high @ui — Add phone number modal opens with Account and Number sections",
       "specFile": "e2e/tests/suite/run/phone-numbers/01-add-number-modal.spec.ts",
       "line": 12,
       "describe": "RUN › Phone numbers — Add modal UI @journey @new-user @phone-numbers @positive",
@@ -16452,30 +16515,33 @@
       "catalogKey": "e2e/tests/suite/run/phone-numbers/04-cta-functional.spec.ts:28:CTA-PN-004"
     },
     {
-      "id": "Phone",
+      "id": "TC-PN-001",
       "title": "Phone numbers page loads with Add number action",
-      "tags": [],
-      "priority": "",
-      "type": "",
-      "rawTitle": "Phone numbers page loads with Add number action",
+      "tags": [
+        "smoke",
+        "high",
+        "positive"
+      ],
+      "priority": "high",
+      "type": "smoke",
+      "rawTitle": "TC-PN-001 @smoke @high @positive — Phone numbers page loads with Add number action",
       "specFile": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts",
       "line": 5,
       "describe": "RUN › Phone numbers",
       "sectionKey": "run",
       "tab": "RUN",
-      "catalogKey": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts:5:Phone"
+      "catalogKey": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts:5:TC-PN-001"
     },
     {
       "id": "TC-AL-002",
       "title": "Rules tab empty state shows No alert rules yet",
       "tags": [
-        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-AL-002 @smoke @high @ui — Rules tab empty state shows No alert rules yet",
+      "type": "ui",
+      "rawTitle": "TC-AL-002 @high @ui — Rules tab empty state shows No alert rules yet",
       "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
       "line": 7,
       "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
@@ -17252,12 +17318,13 @@
       "id": "TC-AL-001",
       "title": "Alerts page loads",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-AL-001 @high @positive — Alerts page loads",
+      "type": "smoke",
+      "rawTitle": "TC-AL-001 @smoke @high @positive — Alerts page loads",
       "specFile": "e2e/tests/suite/settings/alerts/alerts.spec.ts",
       "line": 5,
       "describe": "SETTINGS › Alerts @alerts",
@@ -17269,13 +17336,12 @@
       "id": "TC-BL-002",
       "title": "Empty state shows 0.0 total minutes",
       "tags": [
-        "smoke",
         "high",
         "ui"
       ],
       "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-BL-002 @smoke @high @ui — Empty state shows 0.0 total minutes",
+      "type": "ui",
+      "rawTitle": "TC-BL-002 @high @ui — Empty state shows 0.0 total minutes",
       "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
       "line": 15,
       "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
@@ -17746,12 +17812,13 @@
       "id": "TC-BL-001",
       "title": "Billing page loads",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-BL-001 @high @positive — Billing page loads",
+      "type": "smoke",
+      "rawTitle": "TC-BL-001 @smoke @high @positive — Billing page loads",
       "specFile": "e2e/tests/suite/settings/billing/billing.spec.ts",
       "line": 5,
       "describe": "SETTINGS › Billing @billing",
@@ -17934,12 +18001,13 @@
       "id": "TC-WH-010",
       "title": "Quick apply URL accepts HTTPS URL",
       "tags": [
+        "smoke",
         "high",
         "positive"
       ],
       "priority": "high",
-      "type": "positive",
-      "rawTitle": "TC-WH-010 @high @positive — Quick apply URL accepts HTTPS URL",
+      "type": "smoke",
+      "rawTitle": "TC-WH-010 @smoke @high @positive — Quick apply URL accepts HTTPS URL",
       "specFile": "e2e/tests/suite/settings/webhooks/01-quick-apply-positive.spec.ts",
       "line": 17,
       "describe": "SETTINGS › Webhooks — Quick apply @journey @new-user @webhooks @positive",
@@ -19126,13 +19194,12 @@
         "id": "TC-CL-001",
         "title": "Empty state shows No calls found",
         "tags": [
-          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-CL-001 @smoke @high @ui — Empty state shows No calls found",
+        "type": "ui",
+        "rawTitle": "TC-CL-001 @high @ui — Empty state shows No calls found",
         "specFile": "e2e/tests/suite/analyze/calls/00-main-ui.spec.ts",
         "line": 15,
         "describe": "ANALYZE › Calls — Main UI @journey @new-user @calls",
@@ -19314,12 +19381,13 @@
         "id": "TC-CL-015",
         "title": "Select State completed keeps page stable",
         "tags": [
+          "smoke",
           "medium",
           "positive"
         ],
         "priority": "medium",
-        "type": "positive",
-        "rawTitle": "TC-CL-015 @medium @positive — Select State completed keeps page stable",
+        "type": "smoke",
+        "rawTitle": "TC-CL-015 @smoke @medium @positive — Select State completed keeps page stable",
         "specFile": "e2e/tests/suite/analyze/calls/01-filters-positive.spec.ts",
         "line": 51,
         "describe": "ANALYZE › Calls — Filter dropdowns @journey @new-user @calls @positive",
@@ -19756,12 +19824,13 @@
         "id": "TC-AN-001",
         "title": "View call logs",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-AN-001 @high @positive — View call logs",
+        "type": "smoke",
+        "rawTitle": "TC-AN-001 @smoke @high @positive — View call logs",
         "specFile": "e2e/tests/suite/analyze/calls/calls.spec.ts",
         "line": 5,
         "describe": "ANALYZE › Calls @calls",
@@ -19773,13 +19842,12 @@
         "id": "TC-IS-001",
         "title": "Empty KPIs show zero values",
         "tags": [
-          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-IS-001 @smoke @high @ui — Empty KPIs show zero values",
+        "type": "ui",
+        "rawTitle": "TC-IS-001 @high @ui — Empty KPIs show zero values",
         "specFile": "e2e/tests/suite/analyze/insights/00-main-ui.spec.ts",
         "line": 15,
         "describe": "ANALYZE › Insights — Main UI @journey @new-user @insights",
@@ -20367,12 +20435,13 @@
         "id": "TC-AN-004",
         "title": "Insights dashboard loads",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-AN-004 @high @positive — Insights dashboard loads",
+        "type": "smoke",
+        "rawTitle": "TC-AN-004 @smoke @high @positive — Insights dashboard loads",
         "specFile": "e2e/tests/suite/analyze/insights/insights.spec.ts",
         "line": 5,
         "describe": "ANALYZE › Insights @insights",
@@ -20384,13 +20453,12 @@
         "id": "TC-RC-003",
         "title": "Empty state shows No recordings found",
         "tags": [
-          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-RC-003 @smoke @high @ui — Empty state shows No recordings found",
+        "type": "ui",
+        "rawTitle": "TC-RC-003 @high @ui — Empty state shows No recordings found",
         "specFile": "e2e/tests/suite/analyze/recordings/00-main-ui.spec.ts",
         "line": 14,
         "describe": "ANALYZE › Recordings — Main UI @journey @new-user @recordings",
@@ -20776,18 +20844,75 @@
         "id": "TC-RC-001",
         "title": "Recordings page loads",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-RC-001 @high @positive — Recordings page loads",
+        "type": "smoke",
+        "rawTitle": "TC-RC-001 @smoke @high @positive — Recordings page loads",
         "specFile": "e2e/tests/suite/analyze/recordings/recordings.spec.ts",
         "line": 5,
         "describe": "ANALYZE › Recordings @recordings",
         "sectionKey": "analyze",
         "tab": "ANALYZE",
         "catalogKey": "e2e/tests/suite/analyze/recordings/recordings.spec.ts:5:TC-RC-001"
+      }
+    ],
+    "api": [
+      {
+        "id": "TC-API-001",
+        "title": "VAP platform entry point responds HTTP 200",
+        "tags": [
+          "smoke",
+          "high",
+          "positive"
+        ],
+        "priority": "high",
+        "type": "smoke",
+        "rawTitle": "TC-API-001 @smoke @high @positive — VAP platform entry point responds HTTP 200",
+        "specFile": "e2e/tests/suite/api/health.spec.ts",
+        "line": 4,
+        "describe": "API & Service Health @smoke @api @positive",
+        "sectionKey": "api",
+        "tab": "api",
+        "catalogKey": "e2e/tests/suite/api/health.spec.ts:4:TC-API-001"
+      },
+      {
+        "id": "TC-API-002",
+        "title": "Static JavaScript application bundle responds HTTP 200",
+        "tags": [
+          "smoke",
+          "high",
+          "positive"
+        ],
+        "priority": "high",
+        "type": "smoke",
+        "rawTitle": "TC-API-002 @smoke @high @positive — Static JavaScript application bundle responds HTTP 200",
+        "specFile": "e2e/tests/suite/api/health.spec.ts",
+        "line": 12,
+        "describe": "API & Service Health @smoke @api @positive",
+        "sectionKey": "api",
+        "tab": "api",
+        "catalogKey": "e2e/tests/suite/api/health.spec.ts:12:TC-API-002"
+      },
+      {
+        "id": "TC-API-003",
+        "title": "External Webhook receiver endpoint is reachable",
+        "tags": [
+          "smoke",
+          "high",
+          "positive"
+        ],
+        "priority": "high",
+        "type": "smoke",
+        "rawTitle": "TC-API-003 @smoke @high @positive — External Webhook receiver endpoint is reachable",
+        "specFile": "e2e/tests/suite/api/health.spec.ts",
+        "line": 26,
+        "describe": "API & Service Health @smoke @api @positive",
+        "sectionKey": "api",
+        "tab": "api",
+        "catalogKey": "e2e/tests/suite/api/health.spec.ts:26:TC-API-003"
       }
     ],
     "Authentication": [
@@ -25045,12 +25170,13 @@
         "id": "TC-AG-SFS-060",
         "title": "Blank form fully configured → agent created",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-AG-SFS-060 @high @positive — Blank form fully configured → agent created",
+        "type": "smoke",
+        "rawTitle": "TC-AG-SFS-060 @smoke @high @positive — Blank form fully configured → agent created",
         "specFile": "e2e/tests/suite/build/agents/start-from-scratch/07-full-journey.spec.ts",
         "line": 10,
         "describe": "BUILD › Agents › Start from scratch — Full journey @journey @start-from-scratch",
@@ -26509,13 +26635,12 @@
         "id": "TC-PT-001",
         "title": "Empty state shows no templates message",
         "tags": [
-          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-PT-001 @smoke @high @ui — Empty state shows no templates message",
+        "type": "ui",
+        "rawTitle": "TC-PT-001 @high @ui — Empty state shows no templates message",
         "specFile": "e2e/tests/suite/build/prompts/00-list-empty-state.spec.ts",
         "line": 13,
         "describe": "BUILD › Prompts — List empty state @journey @new-user @prompts",
@@ -26748,12 +26873,13 @@
         "id": "TC-PT-030",
         "title": "Create template with name, category, and base prompt",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-PT-030 @high @positive — Create template with name, category, and base prompt",
+        "type": "smoke",
+        "rawTitle": "TC-PT-030 @smoke @high @positive — Create template with name, category, and base prompt",
         "specFile": "e2e/tests/suite/build/prompts/03-create-positive.spec.ts",
         "line": 10,
         "describe": "BUILD › Prompts — Create positive @journey @new-user @prompts",
@@ -27037,12 +27163,13 @@
         "id": "TC-KB-001",
         "title": "Prompt Templates page loads",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-KB-001 @high @positive — Prompt Templates page loads",
+        "type": "smoke",
+        "rawTitle": "TC-KB-001 @smoke @high @positive — Prompt Templates page loads",
         "specFile": "e2e/tests/suite/build/prompts/prompts.spec.ts",
         "line": 5,
         "describe": "BUILD › Prompts",
@@ -33671,12 +33798,13 @@
         "id": "TC-LG-020",
         "title": "Selecting Hindi updates trigger and localStorage hi",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-LG-020 @high @positive — Selecting Hindi updates trigger and localStorage hi",
+        "type": "smoke",
+        "rawTitle": "TC-LG-020 @smoke @high @positive — Selecting Hindi updates trigger and localStorage hi",
         "specFile": "e2e/tests/suite/global/language/01-languages-positive.spec.ts",
         "line": 157,
         "describe": "Global › Language switcher — Regional India @language @positive",
@@ -34420,13 +34548,12 @@
         "id": "TC-CM-001",
         "title": "Empty state shows No campaigns yet",
         "tags": [
-          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-CM-001 @smoke @high @ui — Empty state shows No campaigns yet",
+        "type": "ui",
+        "rawTitle": "TC-CM-001 @high @ui — Empty state shows No campaigns yet",
         "specFile": "e2e/tests/suite/run/campaigns/00-list-empty-state.spec.ts",
         "line": 13,
         "describe": "RUN › Campaigns — List empty state @journey @new-user @campaigns",
@@ -34489,12 +34616,13 @@
         "id": "TC-CM-010",
         "title": "Create form shows Agent and Name required fields",
         "tags": [
+          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "ui",
-        "rawTitle": "TC-CM-010 @high @ui — Create form shows Agent and Name required fields",
+        "type": "smoke",
+        "rawTitle": "TC-CM-010 @smoke @high @ui — Create form shows Agent and Name required fields",
         "specFile": "e2e/tests/suite/run/campaigns/01-create-form-ui.spec.ts",
         "line": 11,
         "describe": "RUN › Campaigns — Create form UI @journey @new-user @campaigns @positive",
@@ -34843,18 +34971,22 @@
         "catalogKey": "e2e/tests/suite/run/campaigns/05-cta-functional.spec.ts:30:CTA-CM-003"
       },
       {
-        "id": "Campaigns",
+        "id": "TC-CM-001",
         "title": "Campaigns page loads",
-        "tags": [],
-        "priority": "",
-        "type": "",
-        "rawTitle": "Campaigns page loads",
+        "tags": [
+          "smoke",
+          "high",
+          "positive"
+        ],
+        "priority": "high",
+        "type": "smoke",
+        "rawTitle": "TC-CM-001 @smoke @high @positive — Campaigns page loads",
         "specFile": "e2e/tests/suite/run/campaigns/campaigns.spec.ts",
         "line": 5,
         "describe": "RUN › Campaigns",
         "sectionKey": "run",
         "tab": "RUN",
-        "catalogKey": "e2e/tests/suite/run/campaigns/campaigns.spec.ts:5:Campaigns"
+        "catalogKey": "e2e/tests/suite/run/campaigns/campaigns.spec.ts:5:TC-CM-001"
       },
       {
         "id": "TC-LC-001",
@@ -35150,13 +35282,12 @@
         "id": "TC-PN-001",
         "title": "Empty state shows No phone numbers registered yet",
         "tags": [
-          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-PN-001 @smoke @high @ui — Empty state shows No phone numbers registered yet",
+        "type": "ui",
+        "rawTitle": "TC-PN-001 @high @ui — Empty state shows No phone numbers registered yet",
         "specFile": "e2e/tests/suite/run/phone-numbers/00-list-empty-state.spec.ts",
         "line": 13,
         "describe": "RUN › Phone numbers — List empty state @journey @new-user @phone-numbers",
@@ -35236,12 +35367,13 @@
         "id": "TC-PN-010",
         "title": "Add phone number modal opens with Account and Number sections",
         "tags": [
+          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "ui",
-        "rawTitle": "TC-PN-010 @high @ui — Add phone number modal opens with Account and Number sections",
+        "type": "smoke",
+        "rawTitle": "TC-PN-010 @smoke @high @ui — Add phone number modal opens with Account and Number sections",
         "specFile": "e2e/tests/suite/run/phone-numbers/01-add-number-modal.spec.ts",
         "line": 12,
         "describe": "RUN › Phone numbers — Add modal UI @journey @new-user @phone-numbers @positive",
@@ -35573,18 +35705,22 @@
         "catalogKey": "e2e/tests/suite/run/phone-numbers/04-cta-functional.spec.ts:28:CTA-PN-004"
       },
       {
-        "id": "Phone",
+        "id": "TC-PN-001",
         "title": "Phone numbers page loads with Add number action",
-        "tags": [],
-        "priority": "",
-        "type": "",
-        "rawTitle": "Phone numbers page loads with Add number action",
+        "tags": [
+          "smoke",
+          "high",
+          "positive"
+        ],
+        "priority": "high",
+        "type": "smoke",
+        "rawTitle": "TC-PN-001 @smoke @high @positive — Phone numbers page loads with Add number action",
         "specFile": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts",
         "line": 5,
         "describe": "RUN › Phone numbers",
         "sectionKey": "run",
         "tab": "RUN",
-        "catalogKey": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts:5:Phone"
+        "catalogKey": "e2e/tests/suite/run/phone-numbers/phone-numbers.spec.ts:5:TC-PN-001"
       }
     ],
     "SETTINGS": [
@@ -35592,13 +35728,12 @@
         "id": "TC-AL-002",
         "title": "Rules tab empty state shows No alert rules yet",
         "tags": [
-          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-AL-002 @smoke @high @ui — Rules tab empty state shows No alert rules yet",
+        "type": "ui",
+        "rawTitle": "TC-AL-002 @high @ui — Rules tab empty state shows No alert rules yet",
         "specFile": "e2e/tests/suite/settings/alerts/00-main-ui.spec.ts",
         "line": 7,
         "describe": "SETTINGS › Alerts — Main UI @journey @new-user @alerts",
@@ -36375,12 +36510,13 @@
         "id": "TC-AL-001",
         "title": "Alerts page loads",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-AL-001 @high @positive — Alerts page loads",
+        "type": "smoke",
+        "rawTitle": "TC-AL-001 @smoke @high @positive — Alerts page loads",
         "specFile": "e2e/tests/suite/settings/alerts/alerts.spec.ts",
         "line": 5,
         "describe": "SETTINGS › Alerts @alerts",
@@ -36392,13 +36528,12 @@
         "id": "TC-BL-002",
         "title": "Empty state shows 0.0 total minutes",
         "tags": [
-          "smoke",
           "high",
           "ui"
         ],
         "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-BL-002 @smoke @high @ui — Empty state shows 0.0 total minutes",
+        "type": "ui",
+        "rawTitle": "TC-BL-002 @high @ui — Empty state shows 0.0 total minutes",
         "specFile": "e2e/tests/suite/settings/billing/00-main-ui.spec.ts",
         "line": 15,
         "describe": "SETTINGS › Billing — Main UI @journey @new-user @billing",
@@ -36869,12 +37004,13 @@
         "id": "TC-BL-001",
         "title": "Billing page loads",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-BL-001 @high @positive — Billing page loads",
+        "type": "smoke",
+        "rawTitle": "TC-BL-001 @smoke @high @positive — Billing page loads",
         "specFile": "e2e/tests/suite/settings/billing/billing.spec.ts",
         "line": 5,
         "describe": "SETTINGS › Billing @billing",
@@ -37057,12 +37193,13 @@
         "id": "TC-WH-010",
         "title": "Quick apply URL accepts HTTPS URL",
         "tags": [
+          "smoke",
           "high",
           "positive"
         ],
         "priority": "high",
-        "type": "positive",
-        "rawTitle": "TC-WH-010 @high @positive — Quick apply URL accepts HTTPS URL",
+        "type": "smoke",
+        "rawTitle": "TC-WH-010 @smoke @high @positive — Quick apply URL accepts HTTPS URL",
         "specFile": "e2e/tests/suite/settings/webhooks/01-quick-apply-positive.spec.ts",
         "line": 17,
         "describe": "SETTINGS › Webhooks — Quick apply @journey @new-user @webhooks @positive",
