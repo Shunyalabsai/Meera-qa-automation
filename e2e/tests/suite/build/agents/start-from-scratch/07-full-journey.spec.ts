@@ -7,7 +7,7 @@ import { START_FROM_SCRATCH } from "../../../../../data/start-from-scratch-templ
 import { uniqueName } from "../../../../../utils/test-data";
 
 test.describe("BUILD › Agents › Start from scratch — Full journey @journey @start-from-scratch", () => {
-  test("TC-AG-SFS-060 @high @positive — Blank form fully configured → agent created", async ({
+  test("TC-AG-SFS-060 @smoke @high @positive — Blank form fully configured → agent created", async ({
     page,
   }) => {
     const agentName = uniqueName("ScratchAgent");

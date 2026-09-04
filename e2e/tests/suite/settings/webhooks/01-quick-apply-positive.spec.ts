@@ -14,7 +14,7 @@ test.describe("SETTINGS › Webhooks — Quick apply @journey @new-user @webhook
     await expect(page).toHaveURL(/\/webhooks/);
   });
 
-  test("TC-WH-010 @high @positive — Quick apply URL accepts HTTPS URL", async ({
+  test("TC-WH-010 @smoke @high @positive — Quick apply URL accepts HTTPS URL", async ({
     page,
   }) => {
     const webhooks = await openWebhooks(page);

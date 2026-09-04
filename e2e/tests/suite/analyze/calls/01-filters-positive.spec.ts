@@ -48,7 +48,7 @@ test.describe("ANALYZE › Calls — Filter dropdowns @journey @new-user @calls 
     await calls.expectFilterOptions("Language", CALL_LANGUAGE_OPTIONS);
   });
 
-  test("TC-CL-015 @medium @positive — Select State completed keeps page stable", async ({
+  test("TC-CL-015 @smoke @medium @positive — Select State completed keeps page stable", async ({
     page,
   }) => {
     const calls = await openCallsList(page);

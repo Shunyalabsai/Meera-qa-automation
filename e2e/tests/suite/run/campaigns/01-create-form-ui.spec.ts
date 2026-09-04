@@ -8,7 +8,7 @@ test.describe("RUN › Campaigns — Create form UI @journey @new-user @campaign
     await openCampaignCreateForm(page);
   });
 
-  test("TC-CM-010 @high @ui — Create form shows Agent and Name required fields", async ({
+  test("TC-CM-010 @smoke @high @ui — Create form shows Agent and Name required fields", async ({
     page,
   }) => {
     const campaigns = new CampaignsPage(page);

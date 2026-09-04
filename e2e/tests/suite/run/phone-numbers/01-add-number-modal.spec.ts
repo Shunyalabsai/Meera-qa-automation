@@ -9,7 +9,7 @@ test.describe("RUN › Phone numbers — Add modal UI @journey @new-user @phone-
     await openAddNumberModal(page);
   });
 
-  test("TC-PN-010 @high @ui — Add phone number modal opens with Account and Number sections", async ({
+  test("TC-PN-010 @smoke @high @ui — Add phone number modal opens with Account and Number sections", async ({
     page,
   }) => {
     const phoneNumbers = new PhoneNumbersPage(page);

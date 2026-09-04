@@ -7,7 +7,7 @@ import { PROMPT_TEMPLATE_SAMPLES } from "../../../../data/prompt-template-data";
 import { uniqueName } from "../../../../utils/test-data";
 
 test.describe("BUILD › Prompts — Create positive @journey @new-user @prompts", () => {
-  test("TC-PT-030 @high @positive — Create template with name, category, and base prompt", async ({
+  test("TC-PT-030 @smoke @high @positive — Create template with name, category, and base prompt", async ({
     page,
   }) => {
     const name = uniqueName("welcome-flow");

@@ -154,7 +154,7 @@ test.describe("Global › Language switcher — Regional India @language @positi
     });
   }
 
-  test("TC-LG-020 @high @positive — Selecting Hindi updates trigger and localStorage hi", async ({
+  test("TC-LG-020 @smoke @high @positive — Selecting Hindi updates trigger and localStorage hi", async ({
     page,
   }) => {
     const hindi = HINDI_BELT_LANGUAGES[0];
