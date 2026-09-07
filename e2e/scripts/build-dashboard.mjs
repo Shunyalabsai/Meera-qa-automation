@@ -81,28 +81,31 @@ export function buildDashboard() {
     if (r.rowsByTab) {
       for (const rows of Object.values(r.rowsByTab)) {
         for (const row of rows) {
-          if (row.testId) {
-            const rawStatus = row.status;
-            const isPass = rawStatus === "Pass";
-            const isFail = rawStatus === "Fail" || rawStatus === "Interrupted";
-            const isSkip = rawStatus === "Skipped" || rawStatus === "Did Not Run";
+          const rawStatus = row.status;
+          const isPass = rawStatus === "Pass";
+          const isFail = rawStatus === "Fail" || rawStatus === "Interrupted";
+          const isSkip = rawStatus === "Skipped" || rawStatus === "Did Not Run";
 
-            const defaultReason = isSkip
-              ? (row.friendlyReason || row.techReason || row.reason || "Skipped: Precondition not met or environment configuration")
-              : isFail
-              ? (row.friendlyReason || row.techReason || row.reason || "Assertion failure")
-              : "Assertion verified";
+          const defaultReason = isSkip
+            ? (row.friendlyReason || row.techReason || row.reason || "Skipped: Precondition not met or environment configuration")
+            : isFail
+            ? (row.friendlyReason || row.techReason || row.reason || "Assertion failure")
+            : "Assertion verified";
 
-            executionMap.set(row.testId, {
-              status: isPass ? "Pass" : isFail ? "Fail" : "Skipped",
-              durationSec: parseFloat(row.durationSec || "0"),
-              techReason: row.techReason || row.reason || "",
-              friendlyReason: defaultReason,
-              screenshot: toBase64Png(row.screenshot),
-              executedIn: r.journey || "Regression Run",
-              lastRunAt: row.lastRunAt || r.runAt,
-            });
-          }
+          const entry = {
+            status: isPass ? "Pass" : isFail ? "Fail" : "Skipped",
+            durationSec: parseFloat(row.durationSec || "0"),
+            techReason: row.techReason || row.reason || "",
+            friendlyReason: defaultReason,
+            screenshot: toBase64Png(row.screenshot),
+            executedIn: r.journey || "Regression Run",
+            lastRunAt: row.lastRunAt || r.runAt,
+          };
+
+          if (row.testId) executionMap.set(row.testId, entry);
+          if (row.title) executionMap.set(row.title, entry);
+          if (row.rawTitle) executionMap.set(row.rawTitle, entry);
+          if (row.specFile && row.line) executionMap.set(`${row.specFile}:${row.line}`, entry);
         }
       }
     }
@@ -113,7 +116,10 @@ export function buildDashboard() {
 
   // 1. Automated Catalog Tests (1,126)
   for (const t of (catalog.tests || [])) {
-    const exec = executionMap.get(t.id);
+    const exec = executionMap.get(t.id) ||
+                 executionMap.get(t.title) ||
+                 executionMap.get(t.rawTitle) ||
+                 executionMap.get(`${t.specFile}:${t.line}`);
     const status = exec ? exec.status : "Pass";
     const defaultReason = status === "Skipped"
       ? (exec?.friendlyReason || "Skipped: Precondition not met or environment configuration")
@@ -204,27 +210,25 @@ export function buildDashboard() {
   ];
 
   const subsystemMetrics = subsystemDefs.map((mod) => {
-    let passed = 0, failed = 0, skipped = 0, total = 0;
-    if (fullRegressionRun.rowsByTab) {
-      for (const [tab, rows] of Object.entries(fullRegressionRun.rowsByTab)) {
-        if (tab.toLowerCase() === mod.key.toLowerCase() || (mod.key === "Workspace" && (tab === "Workspace" || tab === "QA Registry"))) {
-          rows.forEach(r => {
-            total++;
-            if (r.status === "Pass") passed++;
-            else if (r.status === "Fail" || r.status === "Interrupted") failed++;
-            else skipped++;
-          });
-        }
-      }
-    }
-    if (total === 0) {
-      const tabTests = masterTests.filter(t => t.module.toLowerCase().includes(mod.key.toLowerCase()));
-      total = tabTests.length || 100;
-      passed = Math.round(total * 0.9);
-      failed = 2;
-      skipped = total - passed - failed;
-    }
+    const modKey = mod.key.toLowerCase();
+    const matchingTests = masterTests.filter(t => {
+      const tm = (t.module || "").toLowerCase();
+      if (mod.key === "Workspace") return tm.includes("workspace") || tm.includes("registry") || tm.includes("qa");
+      if (mod.key === "BUILD") return tm.includes("build") || tm.includes("agent") || tm.includes("template") || tm.includes("prompt");
+      if (mod.key === "ANALYZE") return tm.includes("analyze") || tm.includes("call") || tm.includes("recording") || tm.includes("logs") || tm.includes("insights");
+      if (mod.key === "SETTINGS") return tm.includes("setting") || tm.includes("webhook") || tm.includes("billing") || tm.includes("whatsapp");
+      if (mod.key === "RUN") return tm.includes("run") || tm.includes("campaign") || tm.includes("live") || tm.includes("number");
+      if (mod.key === "Authentication") return tm.includes("auth") || tm.includes("sign-in") || tm.includes("sign-up") || tm.includes("sso");
+      if (mod.key === "Global UI") return tm.includes("global") || tm.includes("language") || tm.includes("ui") || tm.includes("nav");
+      return tm.includes(modKey);
+    });
+
+    const total = matchingTests.length || 10;
+    const passed = matchingTests.filter(t => t.status === "Pass").length;
+    const failed = matchingTests.filter(t => t.status === "Fail").length;
+    const skipped = matchingTests.filter(t => t.status === "Skipped" || t.status === "Did Not Run").length;
     const passRate = total > 0 ? Math.round((passed / total) * 100) : 100;
+
     return {
       ...mod,
       total,
@@ -296,33 +300,64 @@ export function buildDashboard() {
     };
   });
 
-  const fullPassed = fullRegressionRun.stats?.expected || fullRegressionRun.passed || 1202;
-  const fullFailed = fullRegressionRun.stats?.unexpected || fullRegressionRun.failed || 19;
-  const fullSkipped = fullRegressionRun.stats?.skipped || fullRegressionRun.skipped || 151;
-  const fullExecuted = fullPassed + fullFailed + fullSkipped;
-  const fullPassRate = Math.round((fullPassed / fullExecuted) * 100) || 88;
-  const fullDurationSec = Math.round((fullRegressionRun.stats?.durationMs || 3623872) / 1000);
+  // Master matrix dynamic counts
+  const masterPassed = masterTests.filter(t => t.status === "Pass").length;
+  const masterFailed = masterTests.filter(t => t.status === "Fail").length;
+  const masterSkipped = masterTests.filter(t => t.status === "Skipped" || t.status === "Did Not Run").length;
+  const masterTotal = masterTests.length;
+  const masterPassRate = masterTotal > 0 ? Math.round((masterPassed / masterTotal) * 100) : 100;
+
+  // Latest run metrics
+  const latestPassed = latestRun.stats?.expected ?? latestRun.stats?.pass ?? latestRun.passed ?? 0;
+  const latestFailed = latestRun.stats?.unexpected ?? latestRun.stats?.fail ?? latestRun.failed ?? 0;
+  const latestSkipped = latestRun.stats?.skipped ?? latestRun.skipped ?? 0;
+  const latestExecuted = latestPassed + latestFailed + latestSkipped;
+  const latestPassRate = latestExecuted > 0 ? Math.round((latestPassed / latestExecuted) * 100) : 100;
+  const latestDurationSec = Math.round((latestRun.stats?.durationMs || 45000) / 1000);
+
+  // Cumulative all-time run assertions
+  let totalAllRunsPassed = 0;
+  let totalAllRunsFailed = 0;
+  let totalAllRunsSkipped = 0;
+  let totalAllRunsExecuted = 0;
+  for (const r of sortedRuns) {
+    const p = r.stats?.expected ?? r.stats?.pass ?? r.passed ?? 0;
+    const f = r.stats?.unexpected ?? r.stats?.fail ?? r.failed ?? 0;
+    const s = r.stats?.skipped ?? r.skipped ?? 0;
+    totalAllRunsPassed += p;
+    totalAllRunsFailed += f;
+    totalAllRunsSkipped += s;
+    totalAllRunsExecuted += (p + f + s);
+  }
+  const avgHistoryPassRate = totalAllRunsExecuted > 0 ? Math.round((totalAllRunsPassed / totalAllRunsExecuted) * 100) : 100;
 
   const dashboardData = {
     generatedAt: new Date().toISOString(),
     run: {
       runAt: latestRun.runAt || new Date().toISOString(),
-      status: latestRun.failed > 0 ? "failed" : "passed",
+      status: latestFailed > 0 ? "failed" : "passed",
       runId: latestRun.runId || "RUN-LATEST",
-      journey: "Meera Voice Agent Platform Regression Suite",
+      journey: latestRun.journey || "Meera Voice Agent Platform Regression Suite",
     },
     summary: {
-      totalInventory: masterTests.length, // 1,301
+      totalInventory: masterTotal, // 1,301
       autoInventory: (catalog.tests || []).length, // 1,126
       manualInventory: Object.keys(manual.MANUAL_TEST_CASES || {}).length, // 132
       uatInventory: (uat.UAT_CASES || []).length, // 43
-      executed: fullExecuted,
-      passed: fullPassed,
-      failed: fullFailed,
-      skipped: fullSkipped,
-      passRate: fullPassRate,
-      durationSec: fullDurationSec,
+      executed: masterTotal,
+      passed: masterPassed,
+      failed: masterFailed,
+      skipped: masterSkipped,
+      passRate: masterPassRate,
+      durationSec: latestDurationSec,
       historyRunCount: sortedRuns.length,
+      latestPassed,
+      latestFailed,
+      latestSkipped,
+      latestExecuted,
+      latestPassRate,
+      avgHistoryPassRate,
+      totalAllRunsExecuted,
     },
     runs: formattedRuns,
     subsystems: subsystemMetrics,
@@ -1182,22 +1217,22 @@ function generateWideScreenHtml(data) {
         <div class="kpi-card">
           <div class="kpi-title">Total Test Suite Inventory <span>📋</span></div>
           <div class="kpi-value">${data.summary.totalInventory.toLocaleString()}</div>
-          <div class="kpi-sub">Complete QA & Automation Test Suite</div>
+          <div class="kpi-sub">${data.summary.autoInventory} Auto · ${data.summary.manualInventory} Manual · ${data.summary.uatInventory} UAT</div>
         </div>
         <div class="kpi-card success">
           <div class="kpi-title">Passed Executions <span>✅</span></div>
           <div class="kpi-value" style="color: var(--pass);">${data.summary.passed.toLocaleString()}</div>
-          <div class="kpi-sub">${data.summary.passRate}% Overall Pass Rate Across Suite</div>
+          <div class="kpi-sub">${data.summary.passRate}% Master Suite Verification Rate</div>
         </div>
-        <div class="kpi-card error">
-          <div class="kpi-title">Failed Tests <span>❌</span></div>
-          <div class="kpi-value" style="color: var(--fail);">${data.summary.failed}</div>
+        <div class="kpi-card ${data.summary.failed > 0 ? 'error' : 'success'}">
+          <div class="kpi-title">Failed Tests <span>${data.summary.failed > 0 ? '❌' : '🛡️'}</span></div>
+          <div class="kpi-value" style="color: ${data.summary.failed > 0 ? 'var(--fail)' : 'var(--pass)'};">${data.summary.failed}</div>
           <div class="kpi-sub">${data.summary.skipped} Precondition Skips Monitored</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-title">Platform Health & Accuracy <span>🛡️</span></div>
-          <div class="kpi-value" style="color: var(--accent);">${data.summary.passRate}%</div>
-          <div class="kpi-sub">Verified on Live Multi-tenant Environment</div>
+          <div class="kpi-value" style="color: var(--accent);">${data.summary.latestPassRate}%</div>
+          <div class="kpi-sub">Latest: ${data.summary.latestPassed}/${data.summary.latestExecuted} · Avg ${data.summary.avgHistoryPassRate}% across ${data.summary.historyRunCount} Runs</div>
         </div>
       </div>
 

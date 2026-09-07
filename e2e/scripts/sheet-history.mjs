@@ -20,7 +20,7 @@ export const sheetRunHistoryFile = path.join(
 );
 
 export const MAX_RUN_HISTORY = Number(
-  process.env.SHEET_MAX_RUN_HISTORY ?? "100",
+  process.env.SHEET_MAX_RUN_HISTORY ?? "500",
 );
 
 export const SUMMARY_COLUMNS = [
