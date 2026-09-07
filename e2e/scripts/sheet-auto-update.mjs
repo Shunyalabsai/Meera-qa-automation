@@ -32,17 +32,24 @@ function syncGitDashboard() {
     });
 
     try {
+      execSync("git push origin main", { cwd: root, stdio: "inherit" });
+      console.log("[dashboard-sync] ✓ Pushed to origin remote (main)");
+    } catch (e) {
+      // Ignored if origin doesn't exist locally
+    }
+
+    try {
       execSync("git push personal main", { cwd: root, stdio: "inherit" });
       console.log("[dashboard-sync] ✓ Pushed to personal remote (meera-automation)");
     } catch (e) {
-      console.warn("[dashboard-sync] Warning: git push to personal failed:", e.message);
+      // Ignored if personal doesn't exist in CI
     }
 
     try {
       execSync("git push org main", { cwd: root, stdio: "inherit" });
       console.log("[dashboard-sync] ✓ Pushed to org remote (Meera-qa-automation)");
     } catch (e) {
-      console.warn("[dashboard-sync] Warning: git push to org failed:", e.message);
+      // Ignored if org doesn't exist in CI
     }
   } catch (err) {
     console.warn("[dashboard-sync] Auto-commit/push skipped or encountered error:", err.message);
