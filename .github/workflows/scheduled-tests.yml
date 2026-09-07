@@ -42,15 +42,23 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Configure Git Credentials
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Restore Auth Session & Service Account Credentials
+        env:
+          AUTH_JSON: ${{ secrets.E2E_USER_AUTH_JSON }}
+          SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: |
           mkdir -p .auth
-          if [ -n "${{ secrets.E2E_USER_AUTH_JSON }}" ]; then
-            echo '${{ secrets.E2E_USER_AUTH_JSON }}' > .auth/user.json
+          if [ -n "$AUTH_JSON" ]; then
+            printf '%s\n' "$AUTH_JSON" > .auth/user.json
             echo "✓ Restored .auth/user.json from GitHub Secret"
           fi
-          if [ -n "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" ]; then
-            echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}' > meera-500407-7ed504955ec2.json
+          if [ -n "$SERVICE_ACCOUNT_JSON" ]; then
+            printf '%s\n' "$SERVICE_ACCOUNT_JSON" > meera-500407-7ed504955ec2.json
             echo "✓ Restored service account credentials from GitHub Secret"
           fi
 
