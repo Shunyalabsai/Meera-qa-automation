@@ -33,7 +33,7 @@ var CONFIG = {
       NAME: 'Meera Voice Agent Platform QA',
       GITHUB_OWNER: 'Shunyalabsai',
       GITHUB_REPO: 'Meera-qa-automation',
-      SPREADSHEET_ID: '1MgzIeVQOLdquLraUnPH33vm-MvWBcijYmIZerHMG7Ro',
+      SPREADSHEET_ID: '1QbaJTyhdn1eNIIJkOFbglgyYkpffuN4I2GYUTrhcEvc',
       DASHBOARD_URL: 'https://shunyalabsai.github.io/Meera-qa-automation/',
       EVENT_TYPE: 'meera_scheduled_run'
     },
@@ -41,7 +41,7 @@ var CONFIG = {
       NAME: 'Meera Voice Agent Platform QA (Personal Fork)',
       GITHUB_OWNER: 'yamini-pal-singh',
       GITHUB_REPO: 'meera-automation',
-      SPREADSHEET_ID: '1MgzIeVQOLdquLraUnPH33vm-MvWBcijYmIZerHMG7Ro',
+      SPREADSHEET_ID: '1QbaJTyhdn1eNIIJkOFbglgyYkpffuN4I2GYUTrhcEvc',
       DASHBOARD_URL: 'https://yamini-pal-singh.github.io/meera-automation/',
       EVENT_TYPE: 'meera_scheduled_run'
     },
