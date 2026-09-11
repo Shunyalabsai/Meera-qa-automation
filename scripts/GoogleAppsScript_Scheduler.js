@@ -80,6 +80,39 @@ function run5MinApiHealthCheck() {
   var timestamp = Utilities.formatDate(now, CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss');
   var failures = [];
 
+  // Probe 0: Core Backend API Health Endpoint (/api/health)
+  try {
+    var apiRes = UrlFetchApp.fetch('https://agents.shunyalabs.ai/api/health', {
+      muteHttpExceptions: true
+    });
+    var apiCode = apiRes.getResponseCode();
+    if (apiCode !== 200) {
+      failures.push({
+        probe: 'Backend API Health (/api/health)',
+        url: 'https://agents.shunyalabs.ai/api/health',
+        status: 'HTTP ' + apiCode,
+        error: 'Expected HTTP 200, received ' + apiCode
+      });
+    } else {
+      var apiJson = JSON.parse(apiRes.getContentText());
+      if (apiJson.status !== 'ok') {
+        failures.push({
+          probe: 'Backend API Health (/api/health)',
+          url: 'https://agents.shunyalabs.ai/api/health',
+          status: 'UNHEALTHY_PAYLOAD',
+          error: 'Expected status "ok", received: ' + apiRes.getContentText()
+        });
+      }
+    }
+  } catch (e0) {
+    failures.push({
+      probe: 'Backend API Health (/api/health)',
+      url: 'https://agents.shunyalabs.ai/api/health',
+      status: 'CONNECTION_ERROR',
+      error: e0.toString()
+    });
+  }
+
   // Probe 1: Platform Entry Point
   try {
     var entryRes = UrlFetchApp.fetch('https://agents.shunyalabs.ai/vap/', {

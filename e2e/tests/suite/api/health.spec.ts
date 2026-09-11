@@ -1,6 +1,15 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("API & Service Health @smoke @api @positive", () => {
+  test("TC-API-000 @smoke @high @positive — Backend API Health endpoint responds HTTP 200 with status ok", async ({
+    request,
+  }) => {
+    const response = await request.get("https://agents.shunyalabs.ai/api/health");
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.status).toBe("ok");
+  });
+
   test("TC-API-001 @smoke @high @positive — VAP platform entry point responds HTTP 200", async ({
     request,
   }) => {
