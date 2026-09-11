@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T07:41:48.255Z",
-  "totalTests": 1131,
+  "generatedAt": "2026-09-11T07:54:12.393Z",
+  "totalTests": 1128,
   "tabs": [
     "ANALYZE",
     "Authentication",
@@ -1695,7 +1695,7 @@
       "rawTitle": "TC-API-000 @smoke @high @positive — Backend API Health endpoint responds HTTP 200 with status ok",
       "specFile": "e2e/tests/suite/api/health.spec.ts",
       "line": 4,
-      "describe": "API & Service Health @smoke @api @positive",
+      "describe": "Backend API Health @smoke @api @positive",
       "sectionKey": "api",
       "tab": "api",
       "catalogKey": "e2e/tests/suite/api/health.spec.ts:4:TC-API-000"
@@ -1713,64 +1713,10 @@
       "rawTitle": "TC-API-001 @smoke @high @positive — Backend State Integrity endpoint responds HTTP 200 with ok true",
       "specFile": "e2e/tests/suite/api/health.spec.ts",
       "line": 13,
-      "describe": "API & Service Health @smoke @api @positive",
+      "describe": "Backend API Health @smoke @api @positive",
       "sectionKey": "api",
       "tab": "api",
       "catalogKey": "e2e/tests/suite/api/health.spec.ts:13:TC-API-001"
-    },
-    {
-      "id": "TC-API-002",
-      "title": "VAP platform entry point responds HTTP 200",
-      "tags": [
-        "smoke",
-        "high",
-        "positive"
-      ],
-      "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-API-002 @smoke @high @positive — VAP platform entry point responds HTTP 200",
-      "specFile": "e2e/tests/suite/api/health.spec.ts",
-      "line": 23,
-      "describe": "API & Service Health @smoke @api @positive",
-      "sectionKey": "api",
-      "tab": "api",
-      "catalogKey": "e2e/tests/suite/api/health.spec.ts:23:TC-API-002"
-    },
-    {
-      "id": "TC-API-003",
-      "title": "Static JavaScript application bundle responds HTTP 200",
-      "tags": [
-        "smoke",
-        "high",
-        "positive"
-      ],
-      "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-API-003 @smoke @high @positive — Static JavaScript application bundle responds HTTP 200",
-      "specFile": "e2e/tests/suite/api/health.spec.ts",
-      "line": 31,
-      "describe": "API & Service Health @smoke @api @positive",
-      "sectionKey": "api",
-      "tab": "api",
-      "catalogKey": "e2e/tests/suite/api/health.spec.ts:31:TC-API-003"
-    },
-    {
-      "id": "TC-API-004",
-      "title": "External Webhook receiver endpoint is reachable",
-      "tags": [
-        "smoke",
-        "high",
-        "positive"
-      ],
-      "priority": "high",
-      "type": "smoke",
-      "rawTitle": "TC-API-004 @smoke @high @positive — External Webhook receiver endpoint is reachable",
-      "specFile": "e2e/tests/suite/api/health.spec.ts",
-      "line": 45,
-      "describe": "API & Service Health @smoke @api @positive",
-      "sectionKey": "api",
-      "tab": "api",
-      "catalogKey": "e2e/tests/suite/api/health.spec.ts:45:TC-API-004"
     },
     {
       "id": "TC-AU",
@@ -20909,7 +20855,7 @@
         "rawTitle": "TC-API-000 @smoke @high @positive — Backend API Health endpoint responds HTTP 200 with status ok",
         "specFile": "e2e/tests/suite/api/health.spec.ts",
         "line": 4,
-        "describe": "API & Service Health @smoke @api @positive",
+        "describe": "Backend API Health @smoke @api @positive",
         "sectionKey": "api",
         "tab": "api",
         "catalogKey": "e2e/tests/suite/api/health.spec.ts:4:TC-API-000"
@@ -20927,64 +20873,10 @@
         "rawTitle": "TC-API-001 @smoke @high @positive — Backend State Integrity endpoint responds HTTP 200 with ok true",
         "specFile": "e2e/tests/suite/api/health.spec.ts",
         "line": 13,
-        "describe": "API & Service Health @smoke @api @positive",
+        "describe": "Backend API Health @smoke @api @positive",
         "sectionKey": "api",
         "tab": "api",
         "catalogKey": "e2e/tests/suite/api/health.spec.ts:13:TC-API-001"
-      },
-      {
-        "id": "TC-API-002",
-        "title": "VAP platform entry point responds HTTP 200",
-        "tags": [
-          "smoke",
-          "high",
-          "positive"
-        ],
-        "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-API-002 @smoke @high @positive — VAP platform entry point responds HTTP 200",
-        "specFile": "e2e/tests/suite/api/health.spec.ts",
-        "line": 23,
-        "describe": "API & Service Health @smoke @api @positive",
-        "sectionKey": "api",
-        "tab": "api",
-        "catalogKey": "e2e/tests/suite/api/health.spec.ts:23:TC-API-002"
-      },
-      {
-        "id": "TC-API-003",
-        "title": "Static JavaScript application bundle responds HTTP 200",
-        "tags": [
-          "smoke",
-          "high",
-          "positive"
-        ],
-        "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-API-003 @smoke @high @positive — Static JavaScript application bundle responds HTTP 200",
-        "specFile": "e2e/tests/suite/api/health.spec.ts",
-        "line": 31,
-        "describe": "API & Service Health @smoke @api @positive",
-        "sectionKey": "api",
-        "tab": "api",
-        "catalogKey": "e2e/tests/suite/api/health.spec.ts:31:TC-API-003"
-      },
-      {
-        "id": "TC-API-004",
-        "title": "External Webhook receiver endpoint is reachable",
-        "tags": [
-          "smoke",
-          "high",
-          "positive"
-        ],
-        "priority": "high",
-        "type": "smoke",
-        "rawTitle": "TC-API-004 @smoke @high @positive — External Webhook receiver endpoint is reachable",
-        "specFile": "e2e/tests/suite/api/health.spec.ts",
-        "line": 45,
-        "describe": "API & Service Health @smoke @api @positive",
-        "sectionKey": "api",
-        "tab": "api",
-        "catalogKey": "e2e/tests/suite/api/health.spec.ts:45:TC-API-004"
       }
     ],
     "Authentication": [

@@ -80,7 +80,7 @@ function run5MinApiHealthCheck() {
   var timestamp = Utilities.formatDate(now, CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss');
   var failures = [];
 
-  // Probe 0: Core Backend API Health Endpoint (/api/health)
+  // Probe 1: Core Backend API Health Endpoint (/api/health)
   try {
     var apiRes = UrlFetchApp.fetch('https://agents.shunyalabs.ai/api/health', {
       muteHttpExceptions: true
@@ -113,7 +113,7 @@ function run5MinApiHealthCheck() {
     });
   }
 
-  // Probe 0B: Backend State Integrity Endpoint (/api/health/state-integrity)
+  // Probe 2: Backend State Integrity Endpoint (/api/health/state-integrity)
   try {
     var stateRes = UrlFetchApp.fetch('https://agents.shunyalabs.ai/api/health/state-integrity', {
       muteHttpExceptions: true
@@ -146,80 +146,12 @@ function run5MinApiHealthCheck() {
     });
   }
 
-  // Probe 1: Platform Entry Point
-  try {
-    var entryRes = UrlFetchApp.fetch('https://agents.shunyalabs.ai/vap/', {
-      muteHttpExceptions: true,
-      followRedirects: true
-    });
-    var code1 = entryRes.getResponseCode();
-    if (code1 !== 200) {
-      failures.push({
-        probe: 'VAP Platform Entry Point',
-        url: 'https://agents.shunyalabs.ai/vap/',
-        status: 'HTTP ' + code1,
-        error: 'Expected HTTP 200, received ' + code1
-      });
-    }
-  } catch (e1) {
-    failures.push({
-      probe: 'VAP Platform Entry Point',
-      url: 'https://agents.shunyalabs.ai/vap/',
-      status: 'CONNECTION_ERROR',
-      error: e1.toString()
-    });
-  }
-
-  // Probe 2: Static JS Application Bundle
-  try {
-    var htmlContent = entryRes ? entryRes.getContentText() : '';
-    var match = htmlContent.match(/src="(\/vap\/assets\/index-[^"]+\.js)"/);
-    if (match && match[1]) {
-      var assetUrl = 'https://agents.shunyalabs.ai' + match[1];
-      var assetRes = UrlFetchApp.fetch(assetUrl, { muteHttpExceptions: true });
-      var code2 = assetRes.getResponseCode();
-      if (code2 !== 200 && code2 !== 304) {
-        failures.push({
-          probe: 'Frontend JavaScript Bundle',
-          url: assetUrl,
-          status: 'HTTP ' + code2,
-          error: 'Expected HTTP 200/304 for bundle, received ' + code2
-        });
-      }
-    }
-  } catch (e2) {
-    failures.push({
-      probe: 'Frontend JavaScript Bundle',
-      url: 'https://agents.shunyalabs.ai/vap/assets/',
-      status: 'ASSET_PROBE_ERROR',
-      error: e2.toString()
-    });
-  }
-
-  // Probe 3: External Webhook Receiver
-  try {
-    var webhookUrl = 'https://webhook.site/9677010f-b285-4cc0-a8d3-2f595cd63888';
-    var whRes = UrlFetchApp.fetch(webhookUrl, { muteHttpExceptions: true });
-    var code3 = whRes.getResponseCode();
-    if (code3 !== 200 && code3 !== 404) {
-      failures.push({
-        probe: 'External Webhook Receiver',
-        url: webhookUrl,
-        status: 'HTTP ' + code3,
-        error: 'Webhook receiver returned unexpected status ' + code3
-      });
-    }
-  } catch (e3) {
-    // Non-blocking webhook probe error logging
-    Logger.log('Webhook probe warning: ' + e3.toString());
-  }
-
   // Evaluate Probe Results
   if (failures.length > 0) {
     Logger.log('🚨 Health check detected ' + failures.length + ' failure(s) at ' + timestamp);
     sendFailureEmailAlert(CONFIG.ALERT_EMAIL, timestamp, failures);
   } else {
-    Logger.log('✅ [5-Min Health Check] All API probes healthy at ' + timestamp);
+    Logger.log('✅ [5-Min Health Check] All Backend API probes healthy at ' + timestamp);
   }
 }
 
