@@ -1,14 +1,14 @@
 /**
  * ============================================================================
- * Google Apps Script (GAS) Automation & Scheduler Engine
+ * Google Apps Script (GAS) Automation & Health Monitoring Engine
  * Meera Voice Agent Platform (Shunyalabsai/Meera-qa-automation)
  * ============================================================================
  *
  * Capabilities:
- * 1. Time-Driven Triggers: Executes daily at 4:00 AM and 5:00 PM IST automatically in Google Cloud.
- * 2. GitHub Actions Dispatch: Triggers automated Playwright smoke test workflows via repository_dispatch.
- * 3. Master Dashboard & Sheet Logging: Updates execution status, pass rates, and history in Google Sheets.
- * 4. Zero Local Dependency: Runs entirely in Google Cloud without requiring Mac/local terminal to be open.
+ * 1. 5-Minute API Health Probes: Probes entry point, JS bundle, and webhooks every 5 minutes.
+ * 2. Instant Failure Alerting: Automatically emails yamini@shunyalabs.in if any API check fails.
+ * 3. Daily Scheduled Smoke Suite (4:00 AM & 5:00 PM IST): Dispatches full smoke test runs.
+ * 4. Master Dashboard Logging: Records execution history in Google Sheets.
  * ============================================================================
  */
 
@@ -24,15 +24,196 @@ var CONFIG = {
   DASHBOARD_URL: 'https://shunyalabsai.github.io/Meera-qa-automation/',
   TIMEZONE: 'Asia/Kolkata',
   SPREADSHEET_ID: '1QbaJTyhdn1eNIIJkOFbglgyYkpffuN4I2GYUTrhcEvc',
-  EVENT_TYPE: 'meera_scheduled_run'
+  SMOKE_EVENT_TYPE: 'meera_scheduled_run',
+  HEALTH_EVENT_TYPE: 'vap_health_check',
+  ALERT_EMAIL: 'yamini@shunyalabs.in'
 };
 
 /**
- * 1. Setup Time-Driven Triggers (4:00 AM & 5:00 PM IST Daily)
- * Run this function once from the Apps Script editor to register triggers.
+ * ============================================================================
+ * 1. 5-MINUTE API HEALTH CHECK & INSTANT EMAIL ALERTING
+ * ============================================================================
  */
+
+/**
+ * Register 5-Minute Continuous Health Check Trigger
+ * Run this function once from the Apps Script editor to start 5-minute health checks.
+ */
+function setup5MinHealthCheckTrigger() {
+  // Clear any existing health check triggers to prevent duplicates
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i].getHandlerFunction() === 'run5MinApiHealthCheck') {
+      ScriptApp.deleteTrigger(triggers[i]);
+    }
+  }
+
+  ScriptApp.newTrigger('run5MinApiHealthCheck')
+    .timeBased()
+    .everyMinutes(5)
+    .create();
+
+  Logger.log('✅ 5-Minute API Health Check Trigger successfully registered in Google Cloud (Target: ' + CONFIG.ALERT_EMAIL + ')');
+}
+
+/**
+ * Stop/Disable 5-Minute Health Check Trigger
+ */
+function disable5MinHealthCheckTrigger() {
+  var triggers = ScriptApp.getProjectTriggers();
+  var count = 0;
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i].getHandlerFunction() === 'run5MinApiHealthCheck') {
+      ScriptApp.deleteTrigger(triggers[i]);
+      count++;
+    }
+  }
+  Logger.log('🛑 Disabled ' + count + ' 5-minute health check trigger(s).');
+}
+
+/**
+ * 5-Minute API Health Probe Handler
+ * Probes the live endpoints and triggers an instant email alert if any probe fails.
+ */
+function run5MinApiHealthCheck() {
+  var now = new Date();
+  var timestamp = Utilities.formatDate(now, CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss');
+  var failures = [];
+
+  // Probe 1: Platform Entry Point
+  try {
+    var entryRes = UrlFetchApp.fetch('https://agents.shunyalabs.ai/vap/', {
+      muteHttpExceptions: true,
+      followRedirects: true
+    });
+    var code1 = entryRes.getResponseCode();
+    if (code1 !== 200) {
+      failures.push({
+        probe: 'VAP Platform Entry Point',
+        url: 'https://agents.shunyalabs.ai/vap/',
+        status: 'HTTP ' + code1,
+        error: 'Expected HTTP 200, received ' + code1
+      });
+    }
+  } catch (e1) {
+    failures.push({
+      probe: 'VAP Platform Entry Point',
+      url: 'https://agents.shunyalabs.ai/vap/',
+      status: 'CONNECTION_ERROR',
+      error: e1.toString()
+    });
+  }
+
+  // Probe 2: Static JS Application Bundle
+  try {
+    var htmlContent = entryRes ? entryRes.getContentText() : '';
+    var match = htmlContent.match(/src="(\/vap\/assets\/index-[^"]+\.js)"/);
+    if (match && match[1]) {
+      var assetUrl = 'https://agents.shunyalabs.ai' + match[1];
+      var assetRes = UrlFetchApp.fetch(assetUrl, { muteHttpExceptions: true });
+      var code2 = assetRes.getResponseCode();
+      if (code2 !== 200 && code2 !== 304) {
+        failures.push({
+          probe: 'Frontend JavaScript Bundle',
+          url: assetUrl,
+          status: 'HTTP ' + code2,
+          error: 'Expected HTTP 200/304 for bundle, received ' + code2
+        });
+      }
+    }
+  } catch (e2) {
+    failures.push({
+      probe: 'Frontend JavaScript Bundle',
+      url: 'https://agents.shunyalabs.ai/vap/assets/',
+      status: 'ASSET_PROBE_ERROR',
+      error: e2.toString()
+    });
+  }
+
+  // Probe 3: External Webhook Receiver
+  try {
+    var webhookUrl = 'https://webhook.site/9677010f-b285-4cc0-a8d3-2f595cd63888';
+    var whRes = UrlFetchApp.fetch(webhookUrl, { muteHttpExceptions: true });
+    var code3 = whRes.getResponseCode();
+    if (code3 !== 200 && code3 !== 404) {
+      failures.push({
+        probe: 'External Webhook Receiver',
+        url: webhookUrl,
+        status: 'HTTP ' + code3,
+        error: 'Webhook receiver returned unexpected status ' + code3
+      });
+    }
+  } catch (e3) {
+    // Non-blocking webhook probe error logging
+    Logger.log('Webhook probe warning: ' + e3.toString());
+  }
+
+  // Evaluate Probe Results
+  if (failures.length > 0) {
+    Logger.log('🚨 Health check detected ' + failures.length + ' failure(s) at ' + timestamp);
+    sendFailureEmailAlert(CONFIG.ALERT_EMAIL, timestamp, failures);
+  } else {
+    Logger.log('✅ [5-Min Health Check] All API probes healthy at ' + timestamp);
+  }
+}
+
+/**
+ * Send Instant Email Alert to Recipient via Google MailApp
+ */
+function sendFailureEmailAlert(recipient, timestamp, failures) {
+  var subject = '🚨 [CRITICAL ALERT] Meera VAP API Health Check FAILED (' + timestamp + ' IST)';
+
+  var failureRowsHtml = failures.map(function(f, i) {
+    return '<tr>' +
+      '<td style="padding:10px;border:1px solid #cbd5e1;font-weight:bold;">' + (i + 1) + '. ' + f.probe + '</td>' +
+      '<td style="padding:10px;border:1px solid #cbd5e1;color:#b91c1c;font-weight:bold;">' + f.status + '</td>' +
+      '<td style="padding:10px;border:1px solid #cbd5e1;font-family:monospace;font-size:12px;">' + f.error + '</td>' +
+      '</tr>';
+  }).join('');
+
+  var htmlBody = '<div style="font-family:Arial,sans-serif;max-width:700px;margin:0 auto;color:#0f172a;line-height:1.6;">' +
+    '<div style="background:#b91c1c;color:#ffffff;padding:18px 24px;border-radius:8px 8px 0 0;">' +
+    '<h2 style="margin:0;font-size:18px;">🚨 Meera VAP — 5-Minute API Health Check Failure Alert</h2>' +
+    '</div>' +
+    '<div style="border:1px solid #cbd5e1;border-top:none;padding:24px;border-radius:0 0 8px 8px;background:#ffffff;">' +
+    '<p><strong>Timestamp:</strong> ' + timestamp + ' IST</p>' +
+    '<p><strong>Environment:</strong> <a href="https://agents.shunyalabs.ai/vap/">https://agents.shunyalabs.ai/vap/</a></p>' +
+    '<p><strong>Failed Probes:</strong> <span style="color:#b91c1c;font-weight:bold;">' + failures.length + '</span></p>' +
+    '<table style="width:100%;border-collapse:collapse;margin:16px 0;">' +
+    '<thead><tr style="background:#f1f5f9;">' +
+    '<th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;">Probe</th>' +
+    '<th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;">Status</th>' +
+    '<th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;">Error Details</th>' +
+    '</tr></thead>' +
+    '<tbody>' + failureRowsHtml + '</tbody>' +
+    '</table>' +
+    '<p style="margin-top:20px;">' +
+    '<a href="' + CONFIG.DASHBOARD_URL + '" style="background:#0f172a;color:#ffffff;padding:10px 18px;text-decoration:none;border-radius:6px;font-weight:bold;display:inline-block;">Open QA Dashboard</a> ' +
+    '<a href="https://docs.google.com/spreadsheets/d/' + CONFIG.SPREADSHEET_ID + '/edit" style="background:#15803d;color:#ffffff;padding:10px 18px;text-decoration:none;border-radius:6px;font-weight:bold;display:inline-block;margin-left:8px;">Open Google Sheet</a>' +
+    '</p>' +
+    '</div>' +
+    '</div>';
+
+  try {
+    MailApp.sendEmail({
+      to: recipient,
+      subject: subject,
+      htmlBody: htmlBody
+    });
+    Logger.log('📧 Successfully sent failure alert email to ' + recipient);
+  } catch (err) {
+    Logger.log('❌ Failed to send email via MailApp: ' + err.toString());
+  }
+}
+
+/**
+ * ============================================================================
+ * 2. DAILY SCHEDULED SMOKE TEST SUITE (4:00 AM & 5:00 PM IST)
+ * (Completely Separate from 5-Minute Health Checks)
+ * ============================================================================
+ */
+
 function setupDailyTriggers() {
-  // Clear any existing triggers created by this script to prevent duplicates
   var triggers = ScriptApp.getProjectTriggers();
   for (var i = 0; i < triggers.length; i++) {
     if (triggers[i].getHandlerFunction() === 'executeScheduledRun') {
@@ -58,34 +239,26 @@ function setupDailyTriggers() {
     .inTimezone(CONFIG.TIMEZONE)
     .create();
 
-  Logger.log('✅ Daily triggers configured: 4:00 AM and 5:00 PM (' + CONFIG.TIMEZONE + ')');
+  Logger.log('✅ Daily Smoke Suite triggers configured: 4:00 AM and 5:00 PM (' + CONFIG.TIMEZONE + ')');
 }
 
-/**
- * 2. Scheduled Run Handler (Dispatches GitHub Action & Logs Status)
- */
 function executeScheduledRun() {
   var now = new Date();
   var timestampStr = Utilities.formatDate(now, CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss');
   var slot = (now.getHours() < 12) ? 'Morning Run (4:00 AM)' : 'Evening Run (5:00 PM)';
 
-  Logger.log('🚀 Executing Scheduled Meera Test Trigger for ' + slot + ' at ' + timestampStr);
+  Logger.log('🚀 Executing Scheduled Meera Smoke Suite Trigger for ' + slot + ' at ' + timestampStr);
 
-  // Trigger Cloud GitHub Actions Workflow
-  var triggered = triggerGitHubWorkflow(CONFIG.EVENT_TYPE, {
+  var triggered = triggerGitHubWorkflow(CONFIG.SMOKE_EVENT_TYPE, {
     trigger_slot: slot,
     triggered_at: timestampStr,
     environment: 'production',
     source: 'Google Apps Script Cloud Scheduler'
   });
 
-  // Log trigger status to Sheet
   updateMasterDashboardStatus(timestampStr, slot, triggered ? 'TRIGGERED' : 'FAILED_TO_DISPATCH');
 }
 
-/**
- * 3. Trigger GitHub Actions Workflow via REST API (repository_dispatch)
- */
 function triggerGitHubWorkflow(eventType, clientPayload) {
   var token = CONFIG.GITHUB_TOKEN;
   if (!token) {
@@ -95,7 +268,7 @@ function triggerGitHubWorkflow(eventType, clientPayload) {
 
   var url = 'https://api.github.com/repos/' + CONFIG.GITHUB_OWNER + '/' + CONFIG.GITHUB_REPO + '/dispatches';
   var payload = {
-    event_type: eventType || 'meera_scheduled_run',
+    event_type: eventType || CONFIG.SMOKE_EVENT_TYPE,
     client_payload: clientPayload || {}
   };
 
@@ -127,9 +300,6 @@ function triggerGitHubWorkflow(eventType, clientPayload) {
   }
 }
 
-/**
- * 4. Master Dashboard & Execution History Sheet Logging
- */
 function updateMasterDashboardStatus(timestamp, slot, status, details) {
   var ss;
   try {
@@ -137,10 +307,7 @@ function updateMasterDashboardStatus(timestamp, slot, status, details) {
   } catch (e) {
     ss = SpreadsheetApp.getActiveSpreadsheet();
   }
-  if (!ss) {
-    Logger.log('⚠️ Could not open spreadsheet: ' + CONFIG.SPREADSHEET_ID);
-    return;
-  }
+  if (!ss) return;
 
   var sheetName = 'Execution History';
   var sheet = ss.getSheetByName(sheetName);
@@ -148,7 +315,6 @@ function updateMasterDashboardStatus(timestamp, slot, status, details) {
     sheet = ss.insertSheet(sheetName);
   }
 
-  // Initialize Header if empty
   if (sheet.getLastRow() === 0) {
     var headers = [
       'Timestamp (IST)',
@@ -173,7 +339,6 @@ function updateMasterDashboardStatus(timestamp, slot, status, details) {
   var counts = (details && details.passed !== undefined) ? (details.passed + ' / ' + details.total) : '--';
   var notes = (details && details.notes) ? details.notes : 'Auto-triggered by Cloud Apps Script';
 
-  // Insert latest execution record at Row 2 (top)
   sheet.insertRowBefore(2);
   var rowData = [
     timestamp,
@@ -187,7 +352,6 @@ function updateMasterDashboardStatus(timestamp, slot, status, details) {
   ];
   sheet.getRange(2, 1, 1, 8).setValues([rowData]);
 
-  // Apply Status Colors
   var statusCell = sheet.getRange(2, 4);
   if (status === 'TRIGGERED' || status === 'SUCCESS') {
     statusCell.setBackground('#dcfce7').setFontColor('#15803d').setFontWeight('bold');
@@ -199,30 +363,33 @@ function updateMasterDashboardStatus(timestamp, slot, status, details) {
 }
 
 /**
- * 5. Manual Test Function
- * Run this function from Apps Script editor to immediately test GitHub dispatch.
- */
-function testManualTrigger() {
-  Logger.log('🧪 Testing manual trigger to GitHub Actions...');
-  executeScheduledRun();
-}
-
-/**
- * 6. Webhook Endpoint: Handles incoming POST requests from Test Runners/Playwright
+ * ============================================================================
+ * 3. WEBHOOK RECEIVER (Supports incoming alerts from CI / Playwright)
+ * ============================================================================
  */
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
     var now = new Date();
     var timestampStr = Utilities.formatDate(now, CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss');
-    var slot = (now.getHours() < 12) ? 'Morning Run (4:00 AM)' : 'Evening Run (5:00 PM)';
+
+    if (data.type === 'API_HEALTH_FAILED') {
+      sendFailureEmailAlert(
+        data.recipient || CONFIG.ALERT_EMAIL,
+        data.timestamp || timestampStr,
+        data.failures || []
+      );
+      return ContentService.createTextOutput(JSON.stringify({ status: 'ok', message: 'Failure alert email sent' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
 
     if (data.type === 'TEST_COMPLETED') {
+      var slot = (now.getHours() < 12) ? 'Morning Run (4:00 AM)' : 'Evening Run (5:00 PM)';
       updateMasterDashboardStatus(timestampStr, slot, data.status || 'COMPLETED', {
         passRate: data.passRate,
         passed: data.passed,
         total: data.total,
-        notes: data.notes || 'Playwright smoke run completed'
+        notes: data.notes || 'Playwright run completed'
       });
       return ContentService.createTextOutput(JSON.stringify({ status: 'ok', message: 'Dashboard updated' }))
         .setMimeType(ContentService.MimeType.JSON);

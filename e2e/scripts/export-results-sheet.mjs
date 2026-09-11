@@ -428,7 +428,7 @@ export function exportSheetResults(options = {}) {
         ]),
       ),
     });
-    metaHistory.runs = metaHistory.runs.slice(0, 50);
+    metaHistory.runs = metaHistory.runs.slice(0, MAX_RUN_HISTORY);
     fs.writeFileSync(historyFile, JSON.stringify(metaHistory, null, 2));
   }
 

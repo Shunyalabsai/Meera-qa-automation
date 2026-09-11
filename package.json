@@ -5,6 +5,7 @@
   "description": "Playwright E2E tests for Meera Voice Agent Platform",
   "scripts": {
     "test": "playwright test",
+    "test:health": "playwright test e2e/tests/suite/api/health.spec.ts",
     "test:smoke": "playwright test --grep @smoke",
     "test:auth": "playwright test e2e/tests/suite/authentication",
     "test:sign-in": "playwright test e2e/tests/suite/authentication/sign-in",
