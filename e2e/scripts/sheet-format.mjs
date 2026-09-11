@@ -48,12 +48,18 @@ export function detectRunJourney(runRows) {
   const override = process.env.E2E_SHEET_RUN_JOURNEY?.trim();
   if (override) return override;
 
+  const total = runRows.length || 1;
+  const isApiOnly = runRows.every((r) => r.tab === "api" || r.specFile?.includes("/api/"));
+  if (isApiOnly || total <= 5) return "API Health Check";
+
+  const isSmoke = total <= 50 && (runRows.some((r) => r.tags?.includes("smoke") || r.rawTitle?.includes("@smoke")));
+  if (isSmoke) return "Smoke Test Run";
+
   const counts = { "New User": 0, "Existing User": 0, General: 0 };
   for (const row of runRows) {
     const j = row.journey ?? detectTestJourney(row);
     counts[j] = (counts[j] ?? 0) + 1;
   }
-  const total = runRows.length || 1;
   if (counts["New User"] / total >= 0.6) return "New User";
   if (counts["Existing User"] / total >= 0.6) return "Existing User";
   if (counts["New User"] > counts["Existing User"] && counts["New User"] > 0) {
@@ -62,7 +68,8 @@ export function detectRunJourney(runRows) {
   if (counts["Existing User"] > counts["New User"] && counts["Existing User"] > 0) {
     return "Existing User (partial)";
   }
-  return "Full Suite";
+  if (total >= 500) return "Full Regression Suite";
+  return "Regression Run";
 }
 
 export function githubSpecUrl(specFile, line) {

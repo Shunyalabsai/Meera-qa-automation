@@ -14,7 +14,7 @@
         "durationMs": 652.5829999999999
       },
       "executed": 2,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "api": [
           {
@@ -88,7 +88,7 @@
         "durationMs": 958.4769999999999
       },
       "executed": 2,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "api": [
           {
@@ -162,7 +162,7 @@
         "durationMs": 6032.813
       },
       "executed": 3,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -265,7 +265,7 @@
         "durationMs": 7224.465
       },
       "executed": 6,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -449,7 +449,7 @@
         "durationMs": 7174.682
       },
       "executed": 6,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -633,7 +633,7 @@
         "durationMs": 7237.965999999999
       },
       "executed": 5,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -790,7 +790,7 @@
         "durationMs": 7757.441000000001
       },
       "executed": 4,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -920,7 +920,7 @@
         "durationMs": 7196.122
       },
       "executed": 4,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -6612,7 +6612,7 @@
         "durationMs": 11310546.581
       },
       "executed": 3,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -9496,7 +9496,7 @@
         "durationMs": 7150.119
       },
       "executed": 4,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -9626,7 +9626,7 @@
         "durationMs": 7839.376
       },
       "executed": 4,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -9832,7 +9832,7 @@
         "durationMs": 7498.885
       },
       "executed": 2,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -10163,7 +10163,7 @@
         "durationMs": 9657.066
       },
       "executed": 2,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -10894,7 +10894,7 @@
         "durationMs": 8242.937
       },
       "executed": 2,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -10970,7 +10970,7 @@
         "durationMs": 8032.523000000001
       },
       "executed": 2,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -23488,7 +23488,7 @@
         "durationMs": 703840.925
       },
       "executed": 18,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -23996,7 +23996,7 @@
         "durationMs": 118221.015
       },
       "executed": 25,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -100593,7 +100593,7 @@
         "durationMs": 84671.15
       },
       "executed": 25,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -139246,7 +139246,7 @@
         "durationMs": 194581.96399999998
       },
       "executed": 2,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -217367,7 +217367,7 @@
         "durationMs": 112920.092
       },
       "executed": 46,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -218631,7 +218631,7 @@
         "durationMs": 111040.74900000001
       },
       "executed": 46,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -219895,7 +219895,7 @@
         "durationMs": 104631
       },
       "executed": 46,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -221159,7 +221159,7 @@
         "durationMs": 96525.217
       },
       "executed": 43,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -222342,7 +222342,7 @@
         "durationMs": 96920.782
       },
       "executed": 43,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -223525,7 +223525,7 @@
         "durationMs": 26957.691000000003
       },
       "executed": 11,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -223844,7 +223844,7 @@
         "durationMs": 101349.023
       },
       "executed": 45,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -225081,7 +225081,7 @@
         "durationMs": 10263.344
       },
       "executed": 3,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -225184,7 +225184,7 @@
         "durationMs": 25471.038
       },
       "executed": 3,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -225287,7 +225287,7 @@
         "durationMs": 31843.857
       },
       "executed": 16,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "Authentication": [
           {
@@ -225739,7 +225739,7 @@
         "durationMs": 6854.6
       },
       "executed": 3,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "Authentication": [
           {
@@ -225840,7 +225840,7 @@
         "durationMs": 95965.349
       },
       "executed": 16,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "Authentication": [
           {
@@ -226292,7 +226292,7 @@
         "durationMs": 152080.77099999998
       },
       "executed": 16,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "Authentication": [
           {
@@ -246548,7 +246548,7 @@
         "durationMs": 19499.916
       },
       "executed": 3,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -246651,7 +246651,7 @@
         "durationMs": 19116.494
       },
       "executed": 3,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -246754,7 +246754,7 @@
         "durationMs": 18725.954999999998
       },
       "executed": 3,
-      "journey": "Full Suite",
+      "journey": "API Health Check",
       "rowsByTab": {
         "QA Registry": [
           {
@@ -320516,7 +320516,7 @@
         "durationMs": 20224.760000000002
       },
       "executed": 6,
-      "journey": "Full Suite",
+      "journey": "Smoke Test Run",
       "rowsByTab": {
         "QA Registry": [
           {
