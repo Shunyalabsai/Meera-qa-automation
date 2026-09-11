@@ -582,6 +582,140 @@ function generateWideScreenHtml(data) {
       font-weight: 700;
     }
 
+    /* Latest Run Hero Banner */
+    .latest-run-banner {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .latest-run-banner.passed {
+      border-left: 5px solid var(--pass);
+    }
+    .latest-run-banner.failed {
+      border-left: 5px solid var(--fail);
+    }
+    .banner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .banner-title-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .banner-badge {
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-passed {
+      background: rgba(35, 134, 54, 0.2);
+      color: #3fb950;
+      border: 1px solid rgba(63, 185, 80, 0.4);
+    }
+    .badge-failed {
+      background: rgba(248, 81, 73, 0.2);
+      color: #f85149;
+      border: 1px solid rgba(248, 81, 73, 0.4);
+    }
+    .banner-title h2 {
+      margin: 0 0 4px 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #FFF;
+    }
+    .banner-meta {
+      margin: 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .banner-meta code {
+      background: var(--panel-soft);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+      font-size: 0.78rem;
+    }
+    .banner-kpis {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .banner-kpi {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .banner-kpi-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .banner-kpi-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #FFF;
+    }
+    .latest-tests-section {
+      margin-top: 10px;
+    }
+    .latest-tests-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .latest-tests-table-wrapper {
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .latest-tests-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+    .latest-tests-table th {
+      background: var(--panel-soft);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .latest-tests-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .latest-tests-table tr:last-child td {
+      border-bottom: none;
+    }
+
     /* Top KPI Cards */
     .kpi-grid {
       display: grid;
@@ -1212,7 +1346,74 @@ function generateWideScreenHtml(data) {
     <!-- TAB 1: CURRENT RUN OVERVIEW -->
     <div id="tab-overview" class="tab-content active">
 
-      <!-- Top KPI Summary Cards -->
+      <!-- LATEST RUN HERO BANNER -->
+      <div class="latest-run-banner ${data.summary.latestFailed > 0 ? 'failed' : 'passed'}">
+        <div class="banner-header">
+          <div class="banner-title-area">
+            <div class="banner-badge ${data.summary.latestFailed > 0 ? 'badge-failed' : 'badge-passed'}">
+              ${data.summary.latestFailed > 0 ? '❌ FAILED' : '✅ PASSED'}
+            </div>
+            <div class="banner-title">
+              <h2>Latest Execution: ${data.run.journey}</h2>
+              <p class="banner-meta">Executed on <strong>${formatDate(data.run.runAt)}</strong> · Run ID: <code>${data.run.runId}</code></p>
+            </div>
+          </div>
+          <div class="banner-kpis">
+            <div class="banner-kpi">
+              <span class="banner-kpi-label">Tests Run</span>
+              <span class="banner-kpi-val">${data.summary.latestExecuted}</span>
+            </div>
+            <div class="banner-kpi">
+              <span class="banner-kpi-label">Passed</span>
+              <span class="banner-kpi-val" style="color: var(--pass);">${data.summary.latestPassed}</span>
+            </div>
+            <div class="banner-kpi">
+              <span class="banner-kpi-label">Failed</span>
+              <span class="banner-kpi-val" style="color: ${data.summary.latestFailed > 0 ? 'var(--fail)' : 'var(--text)'};">${data.summary.latestFailed}</span>
+            </div>
+            <div class="banner-kpi">
+              <span class="banner-kpi-label">Pass Rate</span>
+              <span class="banner-kpi-val" style="color: ${data.summary.latestPassRate >= 90 ? 'var(--pass)' : 'var(--fail)'};">${data.summary.latestPassRate}%</span>
+            </div>
+            <div class="banner-kpi">
+              <span class="banner-kpi-label">Duration</span>
+              <span class="banner-kpi-val">${data.summary.durationSec}s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tests Executed in this Run Table -->
+        <div class="latest-tests-section">
+          <div class="latest-tests-title">⚡ Tests Executed in this Run (${data.runs[0]?.tests?.length || 0})</div>
+          <div class="latest-tests-table-wrapper">
+            <table class="latest-tests-table">
+              <thead>
+                <tr>
+                  <th style="width: 140px;">Test ID</th>
+                  <th style="width: 160px;">Module</th>
+                  <th>Test Name / Assertion</th>
+                  <th style="width: 100px;">Status</th>
+                  <th style="width: 100px;">Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${(data.runs[0]?.tests || []).map(t => `
+                  <tr>
+                    <td><span class="test-id-pill">${t.id}</span></td>
+                    <td><span class="tag">${t.module}</span></td>
+                    <td style="font-weight: 600; color: #FFF;">${t.title}</td>
+                    <td><span class="status-pill status-${t.status.toLowerCase()}">${t.status.toUpperCase()}</span></td>
+                    <td style="color: var(--muted);">${(t.durationMs / 1000).toFixed(2)}s</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cumulative All-Time Inventory KPI Grid -->
+      <div class="section-title">📊 Total Master Suite Inventory & All-Time Verification (1,303 Tests)</div>
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-title">Total Test Suite Inventory <span>📋</span></div>
@@ -1231,8 +1432,8 @@ function generateWideScreenHtml(data) {
         </div>
         <div class="kpi-card">
           <div class="kpi-title">Platform Health & Accuracy <span>🛡️</span></div>
-          <div class="kpi-value" style="color: var(--accent);">${data.summary.latestPassRate}%</div>
-          <div class="kpi-sub">Latest: ${data.summary.latestPassed}/${data.summary.latestExecuted} · Avg ${data.summary.avgHistoryPassRate}% across ${data.summary.historyRunCount} Runs</div>
+          <div class="kpi-value" style="color: var(--accent);">${data.summary.avgHistoryPassRate}%</div>
+          <div class="kpi-sub">Cumulative across all ${data.summary.historyRunCount} Runs</div>
         </div>
       </div>
 
