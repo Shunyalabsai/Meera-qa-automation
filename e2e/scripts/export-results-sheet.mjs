@@ -111,8 +111,8 @@ function catalogIndex(catalog) {
 function findCatalogEntry(result, index) {
   const file = result.file.replace(/\\/g, "/");
   return (
-    index.byFileLine.get(`${file}:${result.line}`) ??
     index.byTitle.get(`${file}::${result.title}`) ??
+    index.byFileLine.get(`${file}:${result.line}`) ??
     null
   );
 }
@@ -279,14 +279,19 @@ export function exportSheetResults(options = {}) {
     const specFile = result.file.replace(/\\/g, "/");
     const rawReason = result.reason ?? "";
 
+    const idFromTitle = result.title.match(/^(TC-[A-Z0-9-]+)/i)?.[1] ?? "";
+    const cleanTitle = (result.title.replace(/^TC-[A-Z0-9-]+.*?—\s*/i, "").trim()) || result.title;
+
     const testId =
+      (catalogEntry?.rawTitle === result.title ? catalogEntry?.id : null) ??
+      idFromTitle ??
       catalogEntry?.id ??
-      result.title.match(/^(TC-[A-Z0-9-]+)/)?.[1] ??
       "";
     const title =
+      (catalogEntry?.rawTitle === result.title ? catalogEntry?.title : null) ??
+      (cleanTitle !== result.title ? cleanTitle : null) ??
       catalogEntry?.title ??
-      (result.title.replace(/^TC-[A-Z0-9-]+.*?—\s*/i, "").trim() ||
-        result.title);
+      result.title;
     const describe = catalogEntry?.describe ?? "";
     // Fall back to the spec's section when the catalog has no entry (e.g. dynamic tests).
     const sectionKey =

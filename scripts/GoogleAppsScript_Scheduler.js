@@ -113,6 +113,39 @@ function run5MinApiHealthCheck() {
     });
   }
 
+  // Probe 0B: Backend State Integrity Endpoint (/api/health/state-integrity)
+  try {
+    var stateRes = UrlFetchApp.fetch('https://agents.shunyalabs.ai/api/health/state-integrity', {
+      muteHttpExceptions: true
+    });
+    var stateCode = stateRes.getResponseCode();
+    if (stateCode !== 200) {
+      failures.push({
+        probe: 'Backend State Integrity (/api/health/state-integrity)',
+        url: 'https://agents.shunyalabs.ai/api/health/state-integrity',
+        status: 'HTTP ' + stateCode,
+        error: 'Expected HTTP 200, received ' + stateCode
+      });
+    } else {
+      var stateJson = JSON.parse(stateRes.getContentText());
+      if (stateJson.ok !== true || (stateJson.errors && stateJson.errors.length > 0)) {
+        failures.push({
+          probe: 'Backend State Integrity (/api/health/state-integrity)',
+          url: 'https://agents.shunyalabs.ai/api/health/state-integrity',
+          status: 'INTEGRITY_ANOMALY',
+          error: 'State integrity check failed: ' + stateRes.getContentText()
+        });
+      }
+    }
+  } catch (e0b) {
+    failures.push({
+      probe: 'Backend State Integrity (/api/health/state-integrity)',
+      url: 'https://agents.shunyalabs.ai/api/health/state-integrity',
+      status: 'CONNECTION_ERROR',
+      error: e0b.toString()
+    });
+  }
+
   // Probe 1: Platform Entry Point
   try {
     var entryRes = UrlFetchApp.fetch('https://agents.shunyalabs.ai/vap/', {

@@ -10,7 +10,17 @@ test.describe("API & Service Health @smoke @api @positive", () => {
     expect(body.status).toBe("ok");
   });
 
-  test("TC-API-001 @smoke @high @positive — VAP platform entry point responds HTTP 200", async ({
+  test("TC-API-001 @smoke @high @positive — Backend State Integrity endpoint responds HTTP 200 with ok true", async ({
+    request,
+  }) => {
+    const response = await request.get("https://agents.shunyalabs.ai/api/health/state-integrity");
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.ok).toBe(true);
+    expect(body.errors).toEqual([]);
+  });
+
+  test("TC-API-002 @smoke @high @positive — VAP platform entry point responds HTTP 200", async ({
     request,
   }) => {
     const response = await request.get("https://agents.shunyalabs.ai/vap/");
@@ -18,7 +28,7 @@ test.describe("API & Service Health @smoke @api @positive", () => {
     expect(response.headers()["content-type"]).toContain("text/html");
   });
 
-  test("TC-API-002 @smoke @high @positive — Static JavaScript application bundle responds HTTP 200", async ({
+  test("TC-API-003 @smoke @high @positive — Static JavaScript application bundle responds HTTP 200", async ({
     request,
   }) => {
     const htmlRes = await request.get("https://agents.shunyalabs.ai/vap/");
@@ -32,7 +42,7 @@ test.describe("API & Service Health @smoke @api @positive", () => {
     }
   });
 
-  test("TC-API-003 @smoke @high @positive — External Webhook receiver endpoint is reachable", async ({
+  test("TC-API-004 @smoke @high @positive — External Webhook receiver endpoint is reachable", async ({
     request,
   }) => {
     const webhookUrl = process.env.Webhook_url || "https://webhook.site/9677010f-b285-4cc0-a8d3-2f595cd63888";
@@ -42,3 +52,4 @@ test.describe("API & Service Health @smoke @api @positive", () => {
     }
   });
 });
+
