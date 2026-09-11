@@ -26,7 +26,7 @@ var CONFIG = {
   SPREADSHEET_ID: '1QbaJTyhdn1eNIIJkOFbglgyYkpffuN4I2GYUTrhcEvc',
   SMOKE_EVENT_TYPE: 'meera_scheduled_run',
   HEALTH_EVENT_TYPE: 'vap_health_check',
-  ALERT_EMAIL: 'yamini@shunyalabs.in'
+  ALERT_EMAIL: PropertiesService.getScriptProperties().getProperty('ALERT_EMAIL') || 'yamini@shunyalabs.in'
 };
 
 /**
