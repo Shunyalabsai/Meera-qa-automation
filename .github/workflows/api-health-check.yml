@@ -36,25 +36,14 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Restore Auth Session
-        env:
-          AUTH_JSON: ${{ secrets.E2E_USER_AUTH_JSON }}
-        run: |
-          mkdir -p .auth
-          if [ -n "$AUTH_JSON" ]; then
-            printf '%s\n' "$AUTH_JSON" > .auth/user.json
-            echo "✓ Restored .auth/user.json from GitHub Secret"
-          fi
-
       - name: Run 5-Minute API Health Probes
         id: api_probe
         env:
           CI: true
-          E2E_USE_SAVED_AUTH: "true"
           PLAYWRIGHT_BASE_URL: ${{ vars.PLAYWRIGHT_BASE_URL || 'https://agents.shunyalabs.ai/vap/' }}
           E2E_SHEET_AUTO_PUBLISH: "false"
         run: |
-          npx playwright test e2e/tests/suite/api/health.spec.ts
+          npx playwright test e2e/tests/suite/api/health.spec.ts --project=api
 
       - name: Send Failure Alert to yamini@shunyalabs.in (On Probe Failure)
         if: failure()

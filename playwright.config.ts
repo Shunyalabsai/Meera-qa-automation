@@ -59,11 +59,19 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], storageState: { cookies: [], origins: [] } },
     },
     {
+      name: "api",
+      testMatch: /tests\/suite\/api\/.*\.spec\.ts/,
+      use: {
+        baseURL,
+      },
+    },
+    {
       name: "chromium",
       testMatch: /tests\/suite\/.*\.spec\.ts/,
       testIgnore: [
         /authentication\/(sign-in|sign-up)\//,
         /authentication\/logout\//,
+        /tests\/suite\/api\//,
         /catalog\.spec\.ts/,
       ],
       dependencies: useSavedAuth ? ["setup"] : [],
