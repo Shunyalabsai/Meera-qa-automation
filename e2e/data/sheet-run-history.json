@@ -1,6 +1,80 @@
 {
   "runs": [
     {
+      "runId": "2026-09-11T08-03-02-004Z",
+      "runAt": "2026-09-11T08:03:02.004Z",
+      "finishedAt": "2026-09-11T08:03:02.928Z",
+      "environment": "https://agents.shunyalabs.ai/vap/",
+      "status": "passed",
+      "stats": {
+        "expected": 2,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "durationMs": 958.4769999999999
+      },
+      "executed": 2,
+      "journey": "Full Suite",
+      "rowsByTab": {
+        "api": [
+          {
+            "testId": "TC-API-000",
+            "title": "Backend API Health endpoint responds HTTP 200 with status ok",
+            "rawTitle": "TC-API-000 @smoke @high @positive — Backend API Health endpoint responds HTTP 200 with status ok",
+            "priority": "high",
+            "type": "smoke",
+            "tags": "smoke, high, positive",
+            "specFile": "e2e/tests/suite/api/health.spec.ts",
+            "line": 4,
+            "describe": "Backend API Health @smoke @api @positive",
+            "sectionKey": "api",
+            "module": "api › Backend API Health",
+            "preconditions": "Automated E2E run (saved-auth session on the staging app)",
+            "steps": "• Open api › Backend API Health\n• Verify: “Backend API Health endpoint responds HTTP 200 with status ok”\n• This check is automated — exact clicks and assertions are in the linked test code.",
+            "expected": "Backend API Health endpoint responds HTTP 200 with status ok",
+            "friendlyReason": "",
+            "techReason": "",
+            "screenshot": "",
+            "status": "Pass",
+            "lastRunAt": "2026-09-11T08:03:02.004Z",
+            "durationSec": "0.49",
+            "reason": "",
+            "environment": "https://agents.shunyalabs.ai/vap/",
+            "runId": "2026-09-11T08-03-02-004Z",
+            "tab": "api",
+            "journey": "General"
+          },
+          {
+            "testId": "TC-API-001",
+            "title": "Backend State Integrity endpoint responds HTTP 200 with ok true",
+            "rawTitle": "TC-API-001 @smoke @high @positive — Backend State Integrity endpoint responds HTTP 200 with ok true",
+            "priority": "high",
+            "type": "smoke",
+            "tags": "smoke, high, positive",
+            "specFile": "e2e/tests/suite/api/health.spec.ts",
+            "line": 13,
+            "describe": "Backend API Health @smoke @api @positive",
+            "sectionKey": "api",
+            "module": "api › Backend API Health",
+            "preconditions": "Automated E2E run (saved-auth session on the staging app)",
+            "steps": "• Open api › Backend API Health\n• Verify: “Backend State Integrity endpoint responds HTTP 200 with ok true”\n• This check is automated — exact clicks and assertions are in the linked test code.",
+            "expected": "Backend State Integrity endpoint responds HTTP 200 with ok true",
+            "friendlyReason": "",
+            "techReason": "",
+            "screenshot": "",
+            "status": "Pass",
+            "lastRunAt": "2026-09-11T08:03:02.004Z",
+            "durationSec": "0.05",
+            "reason": "",
+            "environment": "https://agents.shunyalabs.ai/vap/",
+            "runId": "2026-09-11T08-03-02-004Z",
+            "tab": "api",
+            "journey": "General"
+          }
+        ]
+      }
+    },
+    {
       "runId": "2026-09-11T07-53-29-071Z",
       "runAt": "2026-09-11T07:53:29.071Z",
       "finishedAt": "2026-09-11T07:53:35.023Z",
