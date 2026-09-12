@@ -206,8 +206,8 @@ function sendFailureEmailAlert(recipient, timestamp, failures) {
 
 /**
  * ============================================================================
- * 2. DAILY SCHEDULED SMOKE TEST SUITE (4:00 AM & 5:00 PM IST)
- * (Completely Separate from 5-Minute Health Checks)
+ * 2. DAILY SCHEDULED SMOKE TEST SUITE (4:30 AM & 5:30 PM IST)
+ * (Runs the 33-Test Automated Smoke Suite via GitHub Actions)
  * ============================================================================
  */
 
@@ -219,31 +219,31 @@ function setupDailyTriggers() {
     }
   }
 
-  // 1. Morning Trigger: 4:00 AM IST
+  // 1. Morning Trigger: 4:30 AM IST
   ScriptApp.newTrigger('executeScheduledRun')
     .timeBased()
     .atHour(4)
-    .nearMinute(0)
+    .nearMinute(30)
     .everyDays(1)
     .inTimezone(CONFIG.TIMEZONE)
     .create();
 
-  // 2. Evening Trigger: 5:00 PM (17:00) IST
+  // 2. Evening Trigger: 5:30 PM (17:30) IST
   ScriptApp.newTrigger('executeScheduledRun')
     .timeBased()
     .atHour(17)
-    .nearMinute(0)
+    .nearMinute(30)
     .everyDays(1)
     .inTimezone(CONFIG.TIMEZONE)
     .create();
 
-  Logger.log('✅ Daily Smoke Suite triggers configured: 4:00 AM and 5:00 PM (' + CONFIG.TIMEZONE + ')');
+  Logger.log('✅ Daily Smoke Suite triggers configured: 4:30 AM and 5:30 PM (' + CONFIG.TIMEZONE + ')');
 }
 
 function executeScheduledRun() {
   var now = new Date();
   var timestampStr = Utilities.formatDate(now, CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss');
-  var slot = (now.getHours() < 12) ? 'Morning Run (4:00 AM)' : 'Evening Run (5:00 PM)';
+  var slot = (now.getHours() < 12) ? 'Morning Run (4:30 AM)' : 'Evening Run (5:30 PM)';
 
   Logger.log('🚀 Executing Scheduled Meera Smoke Suite Trigger for ' + slot + ' at ' + timestampStr);
 
