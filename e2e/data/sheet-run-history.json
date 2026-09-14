@@ -1,6 +1,53 @@
 {
   "runs": [
     {
+      "runId": "2026-09-14T11-23-13-532Z",
+      "runAt": "2026-09-14T11:23:13.532Z",
+      "finishedAt": "2026-09-14T11:23:18.845Z",
+      "environment": "https://agents.shunyalabs.ai/vap/",
+      "status": "passed",
+      "stats": {
+        "expected": 1,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "durationMs": 5351.25
+      },
+      "executed": 1,
+      "journey": "API Health Check",
+      "rowsByTab": {
+        "QA Registry": [
+          {
+            "testId": "",
+            "title": "validate saved Google SSO session",
+            "rawTitle": "validate saved Google SSO session",
+            "priority": "",
+            "type": "",
+            "tags": "",
+            "specFile": "e2e/auth.setup.ts",
+            "line": 14,
+            "describe": "",
+            "sectionKey": "qa",
+            "module": "QA Registry › ",
+            "preconditions": "Automated E2E run (saved-auth session on the staging app)",
+            "steps": "• Open QA Registry › \n• Verify: “validate saved Google SSO session”\n• This check is automated — exact clicks and assertions are in the linked test code.",
+            "expected": "validate saved Google SSO session",
+            "friendlyReason": "",
+            "techReason": "",
+            "screenshot": "",
+            "status": "Pass",
+            "lastRunAt": "2026-09-14T11:23:13.532Z",
+            "durationSec": "4.64",
+            "reason": "",
+            "environment": "https://agents.shunyalabs.ai/vap/",
+            "runId": "2026-09-14T11-23-13-532Z",
+            "tab": "QA Registry",
+            "journey": "General"
+          }
+        ]
+      }
+    },
+    {
       "runId": "2026-09-14T11-20-32-970Z",
       "runAt": "2026-09-14T11:20:32.970Z",
       "finishedAt": "2026-09-14T11:20:33.542Z",
