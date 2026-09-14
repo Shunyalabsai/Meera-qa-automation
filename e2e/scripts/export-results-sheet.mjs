@@ -387,7 +387,10 @@ export function exportSheetResults(options = {}) {
 
   const runJourney = detectRunJourney(runRows);
 
-  if (!alreadyRecorded) {
+  // Exclude standalone micro API health checks (<= 5 tests) from overriding the Smoke dashboard
+  const isMicroApiProbe = runJourney === "API Health Check" || executed.length <= 5;
+
+  if (!alreadyRecorded && !isMicroApiProbe) {
     sheetHistory.runs.unshift({
       runId: run.runId,
       runAt: run.runAt,
@@ -406,13 +409,15 @@ export function exportSheetResults(options = {}) {
         `  Appended run to sheet history (${sheetHistory.runs.length} run(s) stored)`,
       );
     }
+  } else if (isMicroApiProbe && log) {
+    console.log(`  [dashboard] Micro API health probe (${executed.length} tests) — skipping dashboard history overwrite.`);
   } else if (log) {
     console.log(`  Run ${run.runId} already in sheet history — rebuilding sheet`);
   }
 
   // Lightweight metadata log (no per-test rows)
   const metaHistory = loadJson(historyFile, { runs: [] });
-  if (!metaHistory.runs.some((r) => r.runId === run.runId)) {
+  if (!metaHistory.runs.some((r) => r.runId === run.runId) && !isMicroApiProbe) {
     metaHistory.runs.unshift({
       runId: run.runId,
       runAt: run.runAt,
