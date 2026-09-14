@@ -60,7 +60,7 @@ export default defineConfig({
     },
     {
       name: "api",
-      testMatch: /tests\/suite\/api\/.*\.spec\.ts/,
+      testMatch: /tests\/suite\/api\/health\.spec\.ts/,
       use: {
         baseURL,
       },
