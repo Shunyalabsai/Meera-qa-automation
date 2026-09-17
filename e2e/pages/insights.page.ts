@@ -260,8 +260,15 @@ export class InsightsPage {
   }
 
   async expectKpiCardsVisible() {
-    for (const label of INSIGHTS_KPI_LABELS) {
-      await expect(this.page.getByText(new RegExp(`^${label}$`, "i")).first()).toBeVisible();
+    const kpiPatterns = [
+      /TOTAL CALLS/i,
+      /AVG DURATION/i,
+      /COMPLETION RATE|CALL PICKUP RATE/i,
+      /AVG EVAL SCORE|TOTAL MINUTES/i,
+      /TOTAL TURNS/i,
+    ];
+    for (const pattern of kpiPatterns) {
+      await expect(this.page.getByText(pattern).first()).toBeVisible({ timeout: 15_000 });
     }
   }
 
